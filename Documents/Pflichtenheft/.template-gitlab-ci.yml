@@ -1,0 +1,16 @@
+image: miktex/miktex
+
+build:
+  tags:
+    - PSE
+  only: [master]
+  script:
+    - initexmf --admin --update-fndb
+    - mpm --admin --update-db
+    - pdflatex -shell-escape pflichtenheft.tex
+    #compiling twice so the table of contents renders correctly when using \tableofcontents
+    - pdflatex -shell-escape pflichtenheft.tex
+  artifacts:
+    paths:
+      - "pflichtenheft.pdf"
+      - "pflichtenheft.log"
