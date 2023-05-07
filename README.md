@@ -1,1 +1,1 @@
-# Monorepo für das PSE Projekt
+# Empty
