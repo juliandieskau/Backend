@@ -1,0 +1,6 @@
+[submodule "frontend-web-ui"]
+	path = frontend-web-ui
+	url = git@git.scc.kit.edu:pse-robot-monitoring/frontend-web-ui.git
+[submodule "tui"]
+	path = tui
+	url = git@git.scc.kit.edu:pse-robot-monitoring/tui.git
