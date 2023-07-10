@@ -1,4 +1,5 @@
 cmake_minimum_required(VERSION 3.0.2)
+include(FetchContent)
 project(ects)
 
 ## Compile as C++11, supported in ROS Kinetic and newer
@@ -12,6 +13,8 @@ find_package(catkin REQUIRED COMPONENTS
   sensor_msgs
   std_msgs
 )
+
+
 
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
@@ -135,9 +138,10 @@ include_directories(
 ## The recommended prefix ensures that target names across packages don't collide
 # add_executable(${PROJECT_NAME}_node src/ects_node.cpp)
 
-add_executable(ects src/main.cpp)
-target_link_libraries(ects ${catkin_LIBRARIES})
+add_executable(ects src/main.cpp src/Configuration.cpp)
 
+target_link_libraries(ects ${catkin_LIBRARIES})
+#target_link_libraries(ects PRIVATE nlohmann_json::nlohmann_json)
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
 ## target back to the shorter version for ease of user use
