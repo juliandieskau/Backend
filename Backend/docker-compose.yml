@@ -3,6 +3,7 @@ services:
   ects-ros-dev:
     build: .
     container_name: "ects-ros-dev"
+    user: 1000:1000
     volumes:
       - "./:/workspace"
     command: sleep infinity
