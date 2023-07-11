@@ -1,15 +1,16 @@
 #include "ects/Configuration.hpp"
-#include "nlohmann/json.hpp"
-#include <iostream>
-using json = nlohmann::json;
 
 namespace ects {
-Configuration::Configuration() {}
-Configuration::~Configuration() {}
-auto load_configuration() -> Configuration * {
-  auto cfg = new Configuration();
-  auto j3 = json::parse(R"({"testing": "json", "pi": 3.141})");
-  std::cout << j3.dump() << std::endl;
+auto Configuration::load_configuration(std::string path) -> Configuration * {
+  json j;
+  try {
+    std::ifstream i(path);
+    i >> j;
+  } catch (std::exception &e) {
+    std::cout << "Error loading configuration file: " << e.what() << std::endl;
+    return nullptr;
+  }
+  auto cfg = new Configuration(j);
   return cfg;
 }
 

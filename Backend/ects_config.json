@@ -1,0 +1,6 @@
+{
+    "core": {
+        "robot_name": "spot",
+        "load_plugins": []
+    }
+}
