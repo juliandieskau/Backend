@@ -7,7 +7,8 @@ auto Configuration::load_configuration(std::string path) -> Configuration * {
     std::ifstream i(path);
     i >> j;
   } catch (std::exception &e) {
-    std::cout << "Error loading configuration file: " << e.what() << std::endl;
+    ROS_ERROR("Error loading configuration file:");
+    ROS_ERROR(e.what());
     return nullptr;
   }
   auto cfg = new Configuration(j);
