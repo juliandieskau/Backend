@@ -7,3 +7,8 @@ services:
     volumes:
       - "./:/workspace"
     command: sleep infinity
+      #    network_mode: "host"
+    ulimits:
+      nofile:
+        soft: 8192
+        hard: 8192
