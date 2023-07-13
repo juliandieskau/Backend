@@ -120,6 +120,10 @@ catkin_package(
 ## Your package locations should be listed before other locations
 include_directories(
   include
+
+  #temporary
+  plugins/core
+
   ${catkin_INCLUDE_DIRS}
 )
 
@@ -138,7 +142,14 @@ include_directories(
 ## The recommended prefix ensures that target names across packages don't collide
 # add_executable(${PROJECT_NAME}_node src/ects_node.cpp)
 
-add_executable(ects src/main.cpp src/Configuration.cpp)
+add_executable(ects 
+src/main.cpp
+src/Configuration.cpp
+src/PluginLoader.cpp
+
+#temp
+plugins/core/PluginCore.cpp
+)
 
 target_link_libraries(ects ${catkin_LIBRARIES})
 #target_link_libraries(ects PRIVATE nlohmann_json::nlohmann_json)
