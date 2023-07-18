@@ -1,9 +1,16 @@
 #pragma once
 #include "Configuration.hpp"
-#include "RosNode.hpp"
+#include "RosNetworking.hpp"
 #include "TimerManager.hpp"
 namespace ects {
 class ECTS {
-  ECTS(Configuration config, RosNode rosNode, TimerManager timerManager);
+public:
+  ECTS(Configuration *config, RosInterface *rosIf, TimerManager *timerManager)
+      : m_config(config), m_rosIf(rosIf), m_timerManager(timerManager) {}
+
+private:
+  Configuration *m_config;
+  RosInterface *m_rosIf;
+  TimerManager *m_timerManager;
 };
 } // namespace ects

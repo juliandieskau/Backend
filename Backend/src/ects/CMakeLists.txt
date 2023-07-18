@@ -12,6 +12,7 @@ find_package(catkin REQUIRED COMPONENTS
   roscpp
   sensor_msgs
   std_msgs
+  message_generation
 )
 
 
@@ -50,11 +51,10 @@ find_package(catkin REQUIRED COMPONENTS
 ##   * add every package in MSG_DEP_SET to generate_messages(DEPENDENCIES ...)
 
 ## Generate messages in the 'msg' folder
-# add_message_files(
-#   FILES
-#   Message1.msg
-#   Message2.msg
-# )
+add_message_files(
+   FILES
+   ForceRetransmit.msg
+)
 
 ## Generate services in the 'srv' folder
 # add_service_files(
@@ -70,11 +70,13 @@ find_package(catkin REQUIRED COMPONENTS
 #   Action2.action
 # )
 
-## Generate added messages and services with any dependencies listed here
-# generate_messages(
-#   DEPENDENCIES
-#   sensor_msgs#   std_msgs
-# )
+# Generate added messages and services with any dependencies listed here
+ generate_messages(
+   DEPENDENCIES
+   std_msgs
+   sensor_msgs
+
+ )
 
 ################################################
 ## Declare ROS dynamic reconfigure parameters ##
@@ -142,10 +144,12 @@ include_directories(
 ## The recommended prefix ensures that target names across packages don't collide
 # add_executable(${PROJECT_NAME}_node src/ects_node.cpp)
 
+
 add_executable(ects 
 src/main.cpp
 src/Configuration.cpp
 src/PluginLoader.cpp
+src/RosNetworking.cpp
 
 #temp
 plugins/core/PluginCore.cpp

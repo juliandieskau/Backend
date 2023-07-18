@@ -1,4 +1,4 @@
 #pragma once
 namespace ects {
-class TimerManager;
+class TimerManager {};
 } // namespace ects

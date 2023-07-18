@@ -3,12 +3,14 @@
  */
 #include "ects/Configuration.hpp"
 #include "ects/ECTS.hpp"
+#include "ects/ForceRetransmit.h"
 #include "ects/PluginLoader.hpp"
-#include "ects/RosNode.hpp"
+#include "ects/RosNetworking.hpp"
 #include "ects/TimerManager.hpp"
 
 #include "ros/ros.h"
 #include "std_msgs/String.h"
+
 #include <iostream>
 #include <limits.h>
 #include <sstream>
@@ -22,14 +24,21 @@ auto main(int argc, char **argv) -> int {
     return -1;
   }
   ROS_INFO_STREAM("Starting ECTS with config file " << argv[1]);
-  auto config = Configuration::load_configuration(argv[1]);
+  auto *config = Configuration::load_configuration(argv[1]);
   if (config == nullptr) {
     ROS_FATAL("Can not continue without valid Configuration.");
     return -1;
   }
   ROS_INFO_STREAM("Running with config" << config->dump());
 
+  ros::init(argc, argv, "ects");
+  ROS_INFO("Initialized ROS node");
+
+  auto *rosIf = new RosInterface();
+  auto *ects = new ECTS(config, rosIf, nullptr);
+
   PluginLoader pluginLoader;
+  std::vector<Plugin *> plugins;
   for (auto plugin_json :
        config->get_value<json::array_t>("/core/load_plugins")) {
     auto plugin_name = plugin_json.get<std::string>();
@@ -38,10 +47,16 @@ auto main(int argc, char **argv) -> int {
     if (plugin == nullptr) {
       ROS_ERROR_STREAM("Could not load plugin " << plugin_name);
     }
+    plugins.push_back(plugin);
   }
 
-  ros::init(argc, argv, "ects");
-  ROS_INFO("Initialized ROS node");
+  for (auto plugin : plugins) {
+    plugin->init(ects);
+  }
+
+  ROS_INFO("Listening for callbacks.");
+  ros::spin();
+
   //   while (ros::ok()) {
   //     ros::spinOnce();
   //     loop_rate.sleep();
