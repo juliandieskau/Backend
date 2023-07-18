@@ -6,7 +6,7 @@
 #include "ects/ForceRetransmit.h"
 #include "ects/PluginLoader.hpp"
 #include "ects/RosNetworking.hpp"
-#include "ects/TimerManager.hpp"
+#include "ects/Timer.hpp"
 
 #include "ros/ros.h"
 #include "std_msgs/String.h"

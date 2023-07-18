@@ -1,7 +1,7 @@
 #pragma once
 #include "Configuration.hpp"
 #include "RosNetworking.hpp"
-#include "TimerManager.hpp"
+#include "Timer.hpp"
 namespace ects {
 class ECTS {
 public:
