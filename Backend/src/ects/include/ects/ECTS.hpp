@@ -8,7 +8,7 @@ public:
   ECTS(Configuration *config, RosInterface *rosIf, TimerManager *timerManager)
       : m_config(config), m_rosIf(rosIf), m_timerManager(timerManager) {}
 
-private:
+  // private:
   Configuration *m_config;
   RosInterface *m_rosIf;
   TimerManager *m_timerManager;

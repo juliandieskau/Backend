@@ -150,7 +150,6 @@ src/main.cpp
 src/Configuration.cpp
 src/PluginLoader.cpp
 src/RosNetworking.cpp
-src/Timer.cpp
 
 #temp
 plugins/core/PluginCore.cpp
