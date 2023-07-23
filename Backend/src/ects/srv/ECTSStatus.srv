@@ -1,0 +1,5 @@
+
+---
+string    version
+string[]  plugins_loaded
+string    robot_name

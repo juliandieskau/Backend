@@ -1,0 +1,4 @@
+Header header
+
+uint64 index_to_replace
+Waypoint replacement_waypoint

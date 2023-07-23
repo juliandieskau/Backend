@@ -1,0 +1,5 @@
+---
+Header header
+# The same indices refer to the same mountpoint
+string[]   rosname    # ROS topic path name (replaces '/')  eg. ['root','tmp']
+string[]   mountpoint # actual unix fs mountpoint           eg. ['/', '/tmp']

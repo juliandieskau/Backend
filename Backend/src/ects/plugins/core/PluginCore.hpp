@@ -13,5 +13,6 @@ public:
 
 private:
   std::shared_ptr<ects::Timer> m_timer;
+  RosServer m_statusServer;
 };
 } // namespace ects::plugins::core

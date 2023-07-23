@@ -1,0 +1,6 @@
+
+---
+
+string[] filenames
+bool success
+string error_message
