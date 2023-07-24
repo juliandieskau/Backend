@@ -5,12 +5,12 @@
 namespace ects {
 class ECTS {
 public:
-  ECTS(Configuration *config, RosInterface *rosIf, TimerManager *timerManager)
-      : m_config(config), m_rosIf(rosIf), m_timerManager(timerManager) {}
+  ECTS(Configuration *config, TimerManager *timerManager)
+      : m_config(config), m_timerManager(timerManager) {}
 
   // private:
   Configuration *m_config;
-  RosInterface *m_rosIf;
+  // RosInterface *m_rosIf;
   TimerManager *m_timerManager;
 };
 } // namespace ects

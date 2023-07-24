@@ -34,8 +34,8 @@ auto main(int argc, char **argv) -> int {
   ros::init(argc, argv, "ects");
   ROS_INFO("Initialized ROS node");
 
-  auto *rosIf = new RosInterface();
-  auto *ects = new ECTS(config, rosIf, nullptr);
+  // auto *rosIf = new RosInterface();
+  auto *ects = new ECTS(config, nullptr);
 
   PluginLoader pluginLoader;
   std::vector<Plugin *> plugins;

@@ -1,3 +1,3 @@
 ---
 Header header
-string[]   # adapter names, eg. ["eth0", "wlo0"]
+string[]   adapters # adapter names, eg. ["eth0", "wlo0"]
