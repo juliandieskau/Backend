@@ -2,6 +2,7 @@
 
 #include <string>
 #include <functional>
+#include <utility>
 #include "message_interface.h"
 #include "ros/ros.h"
 
@@ -12,31 +13,26 @@ struct ros_node;
 template<from_ros_message internal_t>
 struct subscriber {
     void subscribe(std::function<void(internal_t)> callback) {
-        if (m_callback.has_value()) {
-            ROS_ERROR("subscriber: subscribing multiple times on this subscriber (for '%s') not supported", m_subscriber.getTopic().c_str());
+        if (m_subscriber.has_value()) {
+            ROS_ERROR("subscriber: subscribing multiple times on this subscriber (for '%s') not supported", m_topic_name.c_str());
             return;
         }
-        m_callback = callback;
-    }
-    void unsubscribe() {
-        m_callback.reset();
-    }
-private:
-    subscriber(std::string topic_name, ros::NodeHandle handle) {
-        std::function<void(const typename internal_t::from_ros_t::ConstPtr&)> callback = [this](const internal_t::from_ros_t::ConstPtr& ros_input) {
-            ROS_INFO_STREAM("cal " << this->m_subscriber.getTopic() << " " << this->m_callback.has_value());
-            if (!this->m_callback.has_value()) {
-                ROS_WARN("subscriber: topic '%s' called, but no callback registered", m_subscriber.getTopic().c_str());
-                return;
-            }
-            (*m_callback)(internal_t::from_ros(*ros_input));
+        auto internal_callback = [=](const internal_t::from_ros_t::ConstPtr& ros_input) {
+            callback(internal_t::from_ros(*ros_input));
         };
-        m_subscriber = handle.subscribe<typename internal_t::from_ros_t>(topic_name, 1000, callback);
+        m_subscriber = m_handle.subscribe<typename internal_t::from_ros_t>(m_topic_name, 1000, internal_callback);
+    }
+
+private:
+    subscriber(std::string topic_name, ros::NodeHandle handle)
+            : m_topic_name(std::move(topic_name)), m_handle(handle), m_subscriber(std::nullopt) {
+
     }
     friend ros_node;
-public://FIXME
-    ros::Subscriber m_subscriber;
-    std::optional<std::function<void(internal_t)>> m_callback;
+
+    std::string m_topic_name;
+    ros::NodeHandle m_handle;
+    std::optional<ros::Subscriber> m_subscriber;
 };
 
 template<to_ros_message internal_t>
