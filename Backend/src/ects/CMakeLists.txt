@@ -3,7 +3,7 @@ include(FetchContent)
 project(ects)
 
 ## Compile as C++11, supported in ROS Kinetic and newer
-# add_compile_options(-std=c++11)
+add_compile_options(-std=c++2a)
 
 ## Find catkin macros and libraries
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
@@ -107,9 +107,9 @@ add_service_files(
 ## CATKIN_DEPENDS: catkin_packages dependent projects also need
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
-#  INCLUDE_DIRS include
+  INCLUDE_DIRS include
 #  LIBRARIES ects
-#  CATKIN_DEPENDS roscpp sensor_msgs std_msgs
+  CATKIN_DEPENDS roscpp sensor_msgs std_msgs message_runtime
 #  DEPENDS system_lib
 )
 
@@ -144,15 +144,13 @@ include_directories(
 # add_executable(${PROJECT_NAME}_node src/ects_node.cpp)
 
 
-add_executable(ects 
-src/main.cpp
-src/Configuration.cpp
-src/PluginLoader.cpp
-src/RosNetworking.cpp
-
+add_executable(${PROJECT_NAME}
+        src/main.cpp
+        src/Configuration.cpp
+        src/PluginLoader.cpp
 #temp
 plugins/core/PluginCore.cpp
-)
+        )
 
 target_link_libraries(ects ${catkin_LIBRARIES})
 #target_link_libraries(ects PRIVATE nlohmann_json::nlohmann_json)
@@ -164,7 +162,7 @@ target_link_libraries(ects ${catkin_LIBRARIES})
 
 ## Add cmake target dependencies of the executable
 ## same as for the library above
-# add_dependencies(${PROJECT_NAME}_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+add_dependencies(${PROJECT_NAME} ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
 ## Specify libraries to link a library or executable target against
 # target_link_libraries(${PROJECT_NAME}_node
