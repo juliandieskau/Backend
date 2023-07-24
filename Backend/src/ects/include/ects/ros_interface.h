@@ -56,32 +56,29 @@ struct server {
     using response_to_ros = server_traits<internal_t>::response_to_ros_t;
 
     void register_service(std::function<response_to_ros(request_from_ros)> callback) {
-        if (m_callback.has_value()) {
-            ROS_ERROR("server: server (for '%s') can only be registered once", m_server.getService().c_str());
+        if (m_server.has_value()) {
+            ROS_ERROR("server: server (for '%s') can only be registered once", m_service_name.c_str());
             return;
         }
-        m_callback = callback;
-    }
-private:
-    server(std::string service_name, ros::NodeHandle handle) {
         using from_ros_t = request_from_ros::from_ros_t;
         using to_ros_t = response_to_ros::to_ros_t;
-        auto service = [this](from_ros_t& ros_input, to_ros_t& ros_output) -> bool {
-            if (!m_callback.has_value()) {
-                ROS_WARN("server: service '%s' called, but no callback registered", m_server.getService().c_str());
-                return false;
-            }
-            ros_output = response_to_ros::to_ros((*m_callback)(request_from_ros::from_ros(ros_input)));
+        auto service = [=](from_ros_t& ros_input, to_ros_t& ros_output) -> bool {
+            ros_output = response_to_ros::to_ros((callback)(request_from_ros::from_ros(ros_input)));
             return true;
         };
         //without the boost function template argument deduction fails for all overloads
         const boost::function<bool(from_ros_t&, to_ros_t&)> s = service;
-        m_server = handle.template advertiseService(service_name, s);
+        m_server = m_handle.advertiseService(m_service_name, s);
+    }
+private:
+    server(std::string service_name, ros::NodeHandle handle)
+            : m_service_name(std::move(service_name)), m_handle(handle), m_server(std::nullopt) {
     }
     friend ros_node;
 
-    ros::ServiceServer m_server;
-    std::optional<std::function<response_to_ros(request_from_ros)>> m_callback;
+    std::string m_service_name;
+    ros::NodeHandle m_handle;
+    std::optional<ros::ServiceServer> m_server;
 };
 
 template<client_messages internal_t>
