@@ -3,16 +3,22 @@
 namespace ects::plugins::core {
 auto PluginCore::init(ects::ECTS *ects) -> void {
     ROS_INFO_STREAM("Initializing PluginCore");
-    ROS_INFO("Timer created");
     data = {
             ects->m_timerManager->createTimer(30.0, [] { ROS_INFO("Timer callback"); }),
-            ects->m_rosIf.create_subscriber<retransmit>("/ects/retransmit")
+            ects->m_rosIf.create_subscriber<retransmit>("/ects/retransmit"),
+                    ects->m_rosIf.create_server<ects_status_service>("/ects/ects_status")
                     };
     data->retransmit_subscriber.subscribe([](retransmit r) {
+        //TODO implement
         if (r.get_topic().has_value())
             ROS_INFO_STREAM("retransmit topic: " << *r.get_topic());
         else
             ROS_INFO("retransmit all");
+    });
+    data->status_server.register_service([](ects_status_service_request) -> ects_status {
+        ROS_INFO("service called");
+        //TODO implement
+        return ects_status({"plug1", "plug2"}, "name", "ver");
     });
 };
 
@@ -23,17 +29,5 @@ auto PluginCore::transmit_all() -> void {
 auto PluginCore::transmit(std::string &topic_name) -> void {
     ROS_INFO_STREAM("Transmitting " << topic_name);
 };
-
-retransmit retransmit::from_ros(retransmit::from_ros_t ros_input) {
-    return {ros_input.reload_all ? std::nullopt : std::optional(ros_input.topic)};
-}
-
-std::optional<std::string> retransmit::get_topic() {
-    return topic_name;
-}
-
-retransmit::retransmit(std::optional<std::string> topic_name)
-        : topic_name(topic_name) {
-}
 
 }; // namespace ects::plugins::core

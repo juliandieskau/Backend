@@ -148,6 +148,7 @@ add_executable(${PROJECT_NAME}
         src/main.cpp
         src/Configuration.cpp
         src/PluginLoader.cpp
+        plugins/core/core_messages.cpp
 #temp
 plugins/core/PluginCore.cpp
         )
