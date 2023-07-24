@@ -51,7 +51,7 @@ private:
 
 template<server_messages internal_t>
 struct server {
-    using ros_t = server_traits<internal_t>::to_ros_t;
+    using ros_t = server_traits<internal_t>::ros_t;
     using request_from_ros = server_traits<internal_t>::request_from_ros_t;
     using response_to_ros = server_traits<internal_t>::response_to_ros_t;
 
@@ -62,26 +62,26 @@ struct server {
         }
         m_callback = callback;
     }
-    void unregister() {
-        m_callback.reset();
-    }
 private:
     server(std::string service_name, ros::NodeHandle handle) {
         using from_ros_t = request_from_ros::from_ros_t;
         using to_ros_t = response_to_ros::to_ros_t;
-        auto service = [this](from_ros_t ros_input) -> to_ros_t {
+        auto service = [this](from_ros_t& ros_input, to_ros_t& ros_output) -> bool {
             if (!m_callback.has_value()) {
                 ROS_WARN("server: service '%s' called, but no callback registered", m_server.getService().c_str());
-                return;
+                return false;
             }
-            return (*m_callback)(from_ros_t::from_ros(ros_input));
+            ros_output = response_to_ros::to_ros((*m_callback)(request_from_ros::from_ros(ros_input)));
+            return true;
         };
-        m_server = handle.advertiseService(service, service_name);
+        //without the boost function template argument deduction fails for all overloads
+        const boost::function<bool(from_ros_t&, to_ros_t&)> s = service;
+        m_server = handle.template advertiseService(service_name, s);
     }
     friend ros_node;
 
     ros::ServiceServer m_server;
-    std::function<response_to_ros(request_from_ros)> m_callback;
+    std::optional<std::function<response_to_ros(request_from_ros)>> m_callback;
 };
 
 template<client_messages internal_t>
