@@ -5,16 +5,16 @@
 #include "ects/ECTS.hpp"
 #include "ects/ForceRetransmit.h"
 #include "ects/PluginLoader.hpp"
-#include "ects/RosNetworking.hpp"
 #include "ects/Timer.hpp"
 
 #include "ros/ros.h"
 #include "std_msgs/String.h"
+#include "ects/ros_interface.h"
 
 #include <iostream>
-#include <limits.h>
+#include <climits>
 #include <sstream>
-#include <stdio.h>
+#include <cstdio>
 #include <unistd.h>
 
 using namespace ects;
@@ -34,8 +34,8 @@ auto main(int argc, char **argv) -> int {
   ros::init(argc, argv, "ects");
   ROS_INFO("Initialized ROS node");
 
-  // auto *rosIf = new RosInterface();
-  auto *ects = new ECTS(config, nullptr);
+  ros_node ros;
+  auto *ects = new ECTS(config, ros, nullptr);
 
   PluginLoader pluginLoader;
   std::vector<Plugin *> plugins;

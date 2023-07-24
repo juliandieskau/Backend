@@ -2,6 +2,7 @@
 #include "ros/ros.h"
 #include <functional>
 #include <memory>
+#include <utility>
 namespace ects {
 class Timer {
 public:
@@ -10,15 +11,15 @@ public:
   ~Timer() { stop(); }
 
   Timer(float interval, std::function<void()> fn)
-      : m_interval(interval), m_fn(fn) {
+      : m_interval(interval), m_fn(std::move(fn)) {
     m_nodeHandle = ros::NodeHandle();
     ROS_INFO_STREAM("Creating timer with interval " << m_interval);
-    m_timer = m_nodeHandle.createTimer(ros::Duration(m_interval),
-                                       [=](auto timerEvent) {
-                                         if (this->m_running) {
-                                           m_fn();
-                                         }
-                                       });
+    auto callback = [this](auto timerEvent) {
+        if (m_running) {
+            m_fn();
+        }
+    };
+    m_timer = m_nodeHandle.createTimer(ros::Duration(m_interval), callback);
 
     ROS_INFO_STREAM("Timer created");
     m_running = true;
