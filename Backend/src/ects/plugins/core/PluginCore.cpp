@@ -15,7 +15,7 @@ auto PluginCore::init(ects::ECTS *ects) -> void {
         else
             ROS_INFO("retransmit all");
     });
-    data->status_server.register_service([](ects_status_service_request) -> ects_status {
+    data->status_server.register_service([](empty_status_request) -> ects_status {
         ROS_INFO("service called");
         //TODO implement
         return ects_status({"plug1", "plug2"}, "name", "ver");
