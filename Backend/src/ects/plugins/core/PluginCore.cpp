@@ -1,5 +1,4 @@
 #include "PluginCore.hpp"
-#include "ects/ECTS.hpp"
 
 namespace ects::plugins::core {
 auto PluginCore::init(ects::ECTS *ects) -> void {

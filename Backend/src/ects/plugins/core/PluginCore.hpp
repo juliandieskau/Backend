@@ -10,6 +10,8 @@
 
 #include <optional>
 
+#include "ects/ECTS.hpp"
+#include "ects/ECTSStatus.h"
 namespace ects::plugins::core {
 class PluginCore : public Plugin {
 public:
