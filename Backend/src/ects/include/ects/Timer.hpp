@@ -5,41 +5,40 @@
 #include <utility>
 namespace ects {
 class Timer {
-public:
-  void stop() { m_running = false; }
-  void start() { m_running = true; }
-  ~Timer() { stop(); }
+  public:
+    void stop() { running = false; }
+    void start() { running = true; }
+    ~Timer() { stop(); }
 
-  Timer(float interval, std::function<void()> fn)
-      : m_interval(interval), m_fn(std::move(fn)) {
-    m_nodeHandle = ros::NodeHandle();
-    ROS_INFO_STREAM("Creating timer with interval " << m_interval);
-    auto callback = [this](auto timerEvent) {
-        if (m_running) {
-            m_fn();
-        }
-    };
-    m_timer = m_nodeHandle.createTimer(ros::Duration(m_interval), callback);
+    Timer(float interval, std::function<void()> fn)
+        : interval(interval), fn(std::move(fn)) {
+        ros_handle = ros::NodeHandle();
+        ROS_INFO_STREAM("Creating timer with interval " << interval);
+        auto callback = [this](auto timerEvent) {
+            if (running) {
+                this->fn();
+            }
+        };
+        ros_timer = ros_handle.createTimer(ros::Duration(interval), callback);
 
-    ROS_INFO_STREAM("Timer created");
-    m_running = true;
-  }
+        ROS_INFO_STREAM("Timer created");
+        running = true;
+    }
 
-private:
-  float m_interval;
-  std::function<void()> m_fn;
-  ros::NodeHandle m_nodeHandle;
-  ros::Timer m_timer;
-  bool m_running;
+  private:
+    float interval;
+    std::function<void()> fn;
+    ros::NodeHandle ros_handle;
+    ros::Timer ros_timer;
+    bool running;
 };
 class TimerManager {
-public:
-  auto createTimer(float interval, std::function<void()> fn)
-      -> std::shared_ptr<Timer> {
-    // auto timer = new Timer<F>(interval, fn);
-    // m_timers.push_back(timer);
-    return std::make_shared<Timer>(interval, fn);
-  }
+  public:
+    auto create_timer(float interval, std::function<void()> fn)
+        -> std::shared_ptr<Timer> {
+        // auto timer = new Timer<F>(interval, fn);
+        // m_timers.push_back(timer);
+        return std::make_shared<Timer>(interval, fn);
+    }
 };
-
 } // namespace ects

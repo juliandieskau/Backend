@@ -3,7 +3,7 @@
 
 namespace ects {
 class PluginLoader {
-public:
-  auto load(std::string &plugin_name) -> Plugin *;
+  public:
+    auto load(std::string &plugin_name) -> Plugin *;
 };
 } // namespace ects

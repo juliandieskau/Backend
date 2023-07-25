@@ -152,9 +152,9 @@ add_executable(${PROJECT_NAME}
         src/PluginLoader.cpp
 #temp
         plugins/core/PluginCore.cpp
-        plugins/core/core_messages.cpp
-        plugins/battery/battery_monitor.cpp
-        plugins/battery/battery_messages.cpp)
+        plugins/core/CoreMessages.cpp
+        plugins/battery/BatteryMonitor.cpp
+        plugins/battery/BatteryMessages.cpp)
 
 target_link_libraries(ects ${catkin_LIBRARIES})
 #target_link_libraries(ects PRIVATE nlohmann_json::nlohmann_json)

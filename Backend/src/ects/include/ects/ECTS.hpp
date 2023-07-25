@@ -1,20 +1,22 @@
 #pragma once
 #include "Configuration.hpp"
+#include "RosInterface.h"
 #include "Timer.hpp"
-#include "ros_interface.h"
 namespace ects {
 class ECTS {
-public:
-  ECTS(Configuration &config, ros_node &rosIf, TimerManager &timerManager)
-      : m_config(config), m_rosIf(rosIf), m_timerManager(timerManager) {}
+  public:
+    ECTS(const Configuration &configuration, RosNode &ros_interface,
+         TimerManager &timer_manager)
+        : _config(configuration), _ros_interface(ros_interface),
+          _timer_manager(timer_manager) {}
 
-  Configuration &getConfig() const { return m_config; }
-  ros_node &getRosIf() { return m_rosIf; }
-  TimerManager &getTimerManager() { return m_timerManager; }
+    const Configuration &config() { return _config; }
+    RosNode &ros_interface() { return _ros_interface; }
+    TimerManager &getTimerManager() { return _timer_manager; }
 
-private:
-  Configuration &m_config;
-  ros_node &m_rosIf;
-  TimerManager &m_timerManager;
+  private:
+    const Configuration &_config;
+    RosNode &_ros_interface;
+    TimerManager &_timer_manager;
 };
 } // namespace ects

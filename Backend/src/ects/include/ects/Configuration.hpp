@@ -9,18 +9,18 @@ using json = nlohmann::json;
 
 namespace ects {
 class Configuration {
-public:
-  static auto load_configuration(std::string path) -> Configuration *;
+  public:
+    static auto load_configuration(std::string path) -> Configuration *;
 
-  template <typename T> auto get_value(std::string key) const -> T {
-    return m_config[json::json_pointer(key)].get<T>();
-  }
+    template <typename T> auto get_value(std::string key) const -> T {
+        return config_json[json::json_pointer(key)].get<T>();
+    }
 
-  auto dump() const -> std::string { return m_config.dump(); }
+    auto dump() const -> std::string { return config_json.dump(); }
 
-private:
-  Configuration(json config) : m_config(config) {}
+  private:
+    explicit Configuration(json config_json) : config_json(config_json) {}
 
-  json m_config;
+    json config_json;
 };
 } // namespace ects
