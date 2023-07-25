@@ -124,6 +124,7 @@ include_directories(
 
   #temporary
   plugins/core
+  plugins/battery
 
   ${catkin_INCLUDE_DIRS}
 )
@@ -151,7 +152,7 @@ add_executable(${PROJECT_NAME}
         plugins/core/core_messages.cpp
 #temp
 plugins/core/PluginCore.cpp
-        )
+        plugins/battery/battery_monitor.cpp)
 
 target_link_libraries(ects ${catkin_LIBRARIES})
 #target_link_libraries(ects PRIVATE nlohmann_json::nlohmann_json)
