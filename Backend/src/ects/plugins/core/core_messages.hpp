@@ -14,12 +14,6 @@ struct ects_status_service {
 
 using empty_status_request = empty_message<status_service_t::Request>;
 
-struct ects_status_service_request {
-    using from_ros_t = status_service_t::Request;
-
-    static ects_status_service_request from_ros(from_ros_t);
-};
-
 struct ects_status {
     using to_ros_t = status_service_t::Response;
 
