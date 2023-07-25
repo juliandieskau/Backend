@@ -54,13 +54,25 @@ find_package(catkin REQUIRED COMPONENTS
 ## Generate messages in the 'msg' folder
 add_message_files(
    FILES
+   # core
    ForceRetransmit.msg
+   # waypoints
+   AddWaypoint.msg
+   RemoveWaypoint.msg
+   ReorderWaypoints.msg
+   ReplaceWaypoint.msg
+   Waypoint.msg
+   WaypointList.msg
 )
 
 ## Generate services in the 'srv' folder
 add_service_files(
-  FILES
-  ECTSStatus.srv
+    FILES
+    # core
+    ECTSStatus.srv
+    # waypoints
+    WaypointListDirectory.srv
+    WaypointListFile.srv
 )
 
 ## Generate actions in the 'action' folder
