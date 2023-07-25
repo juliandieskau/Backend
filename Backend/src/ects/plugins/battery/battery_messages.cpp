@@ -24,15 +24,59 @@ battery_state battery_state::from_ros(battery_state::from_ros_t ros_input) {
     return s;
 }
 
+battery_state::to_ros_t battery_state::to_ros(battery_state s) {
+    auto fl = [](auto d) { return static_cast<float>(d); };
+    auto nan = std::numeric_limits<float>::quiet_NaN();
+    battery_state::to_ros_t r{};
+    r.charge = fl(s.charge.charge);
+    for (double current : s.cell_currents)
+        r.current += fl(current);
+    r.current /= fl(s.cell_currents.size());
+    r.voltage = fl(s.average_voltage);
+    r.capacity = nan;
+    for (auto temp : s.cell_temperatures) {
+        r.cell_temperature.push_back(fl(temp));
+        r.cell_voltage.push_back(nan);
+    }
+    r.design_capacity = nan;
+    r.location;
+    r.percentage = fl(s.charge.charge);
+    r.power_supply_health = battery_state::to_ros_t::POWER_SUPPLY_HEALTH_UNKNOWN;
+    r.power_supply_status = battery_state::to_ros_t::POWER_SUPPLY_STATUS_UNKNOWN;
+    r.power_supply_technology = battery_state::to_ros_t::POWER_SUPPLY_TECHNOLOGY_UNKNOWN;
+    r.present = true;
+    r.serial_number;
+    r.temperature = fl(*std::max_element(s.cell_temperatures.begin(), s.cell_temperatures.end()));
+    return r;
+}
+
 charge_percentage battery_state::get_charge() {
     return charge;
+}
+
+charge_percentage::to_ros_t charge_percentage::to_ros(charge_percentage c) {
+    charge_percentage::to_ros_t r{};
+    r.data = static_cast<float>(c.charge);
+    return r;
 }
 
 estimated_runtime battery_state::get_estimated_runtime() {
     return runtime;
 }
 
+estimated_runtime::to_ros_t estimated_runtime::to_ros(estimated_runtime er) {
+    estimated_runtime::to_ros_t r{};
+    r.data = std::chrono::duration_cast<std::chrono::duration<float>>(er.duration).count();
+    return r;
+}
+
 warning battery_state::is_critical() {
     return { charge.charge < 0.15 };
+}
+
+warning::to_ros_t warning::to_ros(warning w) {
+    warning::to_ros_t r{};
+    r.data = w.is_critical;
+    return r;
 }
 }
