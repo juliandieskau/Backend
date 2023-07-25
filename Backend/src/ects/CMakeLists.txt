@@ -170,7 +170,8 @@ add_executable(${PROJECT_NAME}
         plugins/battery/BatteryMonitor.cpp
         plugins/battery/BatteryMessages.cpp
         plugins/waypoint/WaypointManager.cpp
-        plugins/waypoint/Waypoint.cpp)
+        plugins/waypoint/Waypoint.cpp
+        plugins/waypoint/WaypointList.cpp)
 
 target_link_libraries(ects ${catkin_LIBRARIES})
 #target_link_libraries(ects PRIVATE nlohmann_json::nlohmann_json)
