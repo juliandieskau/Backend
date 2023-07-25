@@ -8,6 +8,20 @@
 
 namespace ects {
 
+namespace detail {
+
+    template<typename T>
+    auto try_conversion(std::function<T()> f, const std::string& name) -> std::optional<T> {
+        try {
+            return f();
+        } catch (const std::exception& e) {
+            ROS_WARN_STREAM("ros conversion on '" << name << "' failed: " << e.what());
+        }
+        return std::nullopt;
+    }
+
+}
+
 struct ros_node;
 
 template<from_ros_message internal_t>
@@ -17,8 +31,9 @@ struct subscriber {
             ROS_ERROR("subscriber: subscribing multiple times on this subscriber (for '%s') not supported", m_topic_name.c_str());
             return;
         }
-        auto internal_callback = [=](const internal_t::from_ros_t::ConstPtr& ros_input) {
-            callback(internal_t::from_ros(*ros_input));
+        auto internal_callback = [=, name = m_topic_name](const internal_t::from_ros_t::ConstPtr& ros_input) {
+            auto r = detail::try_conversion<internal_t>([&]{ return internal_t::from_ros(*ros_input); }, name);
+            if (r) callback(*r);
         };
         m_subscriber = m_handle.subscribe<typename internal_t::from_ros_t>(m_topic_name, 1000, internal_callback);
     }
@@ -38,14 +53,18 @@ private:
 template<to_ros_message internal_t>
 struct publisher {
     void publish(internal_t internal_input) {
-        m_publisher.publish(internal_t::to_ros(internal_input));
+        auto r = detail::try_conversion<typename internal_t::to_ros_t>(
+                [&]{ return internal_t::to_ros(internal_input); }, m_topic_name);
+        if (r) m_publisher.publish(*r);
     }
 private:
     publisher(std::string topic_name, ros::NodeHandle handle)
-            : m_publisher(handle.advertise<typename internal_t::to_ros_t>(topic_name, 1000)) {
+            : m_topic_name(std::move(topic_name)),
+            m_publisher(handle.advertise<typename internal_t::to_ros_t>(m_topic_name, 1000)) {
     }
     friend ros_node;
 
+    std::string m_topic_name;
     ros::Publisher m_publisher;
 };
 
@@ -62,8 +81,15 @@ struct server {
         }
         using from_ros_t = request_from_ros::from_ros_t;
         using to_ros_t = response_to_ros::to_ros_t;
-        auto service = [=](from_ros_t& ros_input, to_ros_t& ros_output) -> bool {
-            ros_output = response_to_ros::to_ros((callback)(request_from_ros::from_ros(ros_input)));
+        auto service = [=, name = m_service_name](from_ros_t& ros_input, to_ros_t& ros_output) -> bool {
+            auto r = detail::try_conversion<request_from_ros>(
+                    [&]() { return request_from_ros::from_ros(ros_input); }, name);
+            if (!r) return false;
+            auto internal_output = callback(*r);
+            auto converted_output = detail::try_conversion<to_ros_t>(
+                    [&]{ return response_to_ros::to_ros(internal_output); }, name);
+            if (!converted_output) return false;
+            ros_output = *converted_output;
             return true;
         };
         //without the boost function template argument deduction fails for all overloads
