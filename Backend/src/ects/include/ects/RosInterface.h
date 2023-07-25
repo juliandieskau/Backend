@@ -148,21 +148,25 @@ template <client_messages internal_t> struct Client {
 struct RosNode {
     template <from_ros_message internal_t>
     Subscriber<internal_t> create_subscriber(std::string topic_name) {
+        ROS_INFO_STREAM("Creating subscriber for topic " << topic_name);
         return Subscriber<internal_t>(topic_name, ros_handle);
     }
 
     template <to_ros_message internal_t>
     Publisher<internal_t> create_publisher(std::string topic_name) {
+        ROS_INFO_STREAM("Creating publisher for topic " << topic_name);
         return Publisher<internal_t>(topic_name, ros_handle);
     }
 
     template <server_messages internal_t>
     Server<internal_t> create_server(std::string service_name) {
+        ROS_INFO_STREAM("Creating server for service " << service_name);
         return Server<internal_t>(service_name, ros_handle);
     }
 
     template <client_messages internal_t>
     Client<internal_t> create_client(std::string service_name) {
+        ROS_INFO_STREAM("Creating client for service " << service_name);
         return Client<internal_t>(service_name, ros_handle);
     }
 

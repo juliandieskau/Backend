@@ -1,7 +1,7 @@
 #pragma once
-#include "ects/ECTS.hpp"
-#include <iostream>
+#include <string>
 namespace ects {
+class ECTS;
 class Plugin {
   public:
     virtual auto init(ECTS *) -> void = 0;

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "BatteryMessages.hpp"
+#include "ects/ECTS.hpp"
 #include "ects/Plugin.hpp"
 
 namespace ects::plugins::battery {
