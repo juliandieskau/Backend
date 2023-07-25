@@ -6,7 +6,7 @@ auto PluginCore::init(ects::ECTS *ects) -> void {
     data = {
         ects->ros_interface().create_subscriber<retransmit>("/ects/retransmit"),
         ects->ros_interface().create_server<EctsStatusService>(
-            "/ects/EctsStatus")};
+            "/ects/ects_status")};
     data->retransmit_subscriber.subscribe([](retransmit r) {
         // TODO implement
         if (r.get_topic().has_value())
