@@ -1,6 +1,6 @@
 #pragma once
 #include "ects/Configuration.hpp"
-#include "ects/RosInterface.h"
+#include "ects/RosInterface.hpp"
 #include "ects/Timer.hpp"
 #include <ects/Plugin.hpp>
 #include <string>

@@ -4,7 +4,7 @@
 #include "ects/Configuration.hpp"
 #include "ects/ECTS.hpp"
 #include "ects/PluginLoader.hpp"
-#include "ects/RosInterface.h"
+#include "ects/RosInterface.hpp"
 #include "ects/Timer.hpp"
 #include "ros/ros.h"
 

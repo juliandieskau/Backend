@@ -1,7 +1,7 @@
 #pragma once
 
-#include "ects/EmptyMessage.h"
-#include "ects/MessageInterface.h"
+#include "ects/EmptyMessage.hpp"
+#include "ects/MessageInterface.hpp"
 #include <ects/ECTSStatus.h>
 #include <ects/ForceRetransmit.h>
 #include <std_msgs/Empty.h>
