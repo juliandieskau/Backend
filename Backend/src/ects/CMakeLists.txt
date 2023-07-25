@@ -163,12 +163,14 @@ add_executable(${PROJECT_NAME}
         src/main.cpp
         src/Configuration.cpp
         src/PluginLoader.cpp
+        src/Common.cpp
 #temp
         plugins/core/PluginCore.cpp
         plugins/core/CoreMessages.cpp
         plugins/battery/BatteryMonitor.cpp
         plugins/battery/BatteryMessages.cpp
-        plugins/waypoint/WaypointManager.cpp)
+        plugins/waypoint/WaypointManager.cpp
+        plugins/waypoint/Waypoint.cpp)
 
 target_link_libraries(ects ${catkin_LIBRARIES})
 #target_link_libraries(ects PRIVATE nlohmann_json::nlohmann_json)
