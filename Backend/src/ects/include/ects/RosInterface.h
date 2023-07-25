@@ -69,7 +69,7 @@ template <to_ros_message internal_t> struct Publisher {
     Publisher(std::string topic_name, ros::NodeHandle handle)
         : topic_name(std::move(topic_name)),
           ros_publisher(handle.advertise<typename internal_t::to_ros_t>(
-              topic_name, 1000)) {}
+              this->topic_name, 1000)) {}
     friend RosNode;
 
     std::string topic_name;
