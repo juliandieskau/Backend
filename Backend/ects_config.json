@@ -5,5 +5,8 @@
             "core",
             "battery"
         ]
+    },
+    "battery": {
+        "topic": "/spot/status/battery_states"
     }
 }
