@@ -7,14 +7,14 @@
 #include "ects/PluginLoader.hpp"
 #include "ects/Timer.hpp"
 
+#include "ects/ros_interface.h"
 #include "ros/ros.h"
 #include "std_msgs/String.h"
-#include "ects/ros_interface.h"
 
-#include <iostream>
 #include <climits>
-#include <sstream>
 #include <cstdio>
+#include <iostream>
+#include <sstream>
 #include <unistd.h>
 
 using namespace ects;
@@ -35,10 +35,11 @@ auto main(int argc, char **argv) -> int {
   ROS_INFO("Initialized ROS node");
 
   ros_node ros;
-  auto *ects = new ECTS(config, ros, nullptr);
-
+  TimerManager timerManager;
   PluginLoader pluginLoader;
   std::vector<Plugin *> plugins;
+
+  auto *ects = new ECTS(*config, ros, timerManager);
   for (auto plugin_json :
        config->get_value<json::array_t>("/core/load_plugins")) {
     auto plugin_name = plugin_json.get<std::string>();
