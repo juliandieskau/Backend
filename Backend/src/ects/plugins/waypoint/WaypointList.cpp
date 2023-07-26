@@ -4,7 +4,7 @@
 namespace ects::plugins::waypoints {
 
 Index::Index(size_t index) : index(index) {}
-size_t Index::get() { return index; }
+size_t Index::get() const { return index; }
 
 WaypointList::WaypointList() : waypoints(), cyclic(false) {}
 void WaypointList::add_waypoint(Waypoint w, Index i) {
@@ -65,7 +65,7 @@ WaypointList::ros_t WaypointList::to_ros(const WaypointList &list) {
         r.waypoints.push_back(Waypoint::to_ros(wp));
     return r;
 }
-bool WaypointList::in_bounds(Index i, std::string name) {
+bool WaypointList::in_bounds(Index i, const std::string& name) {
     if (i.get() > size()) {
         ROS_ERROR_STREAM(name << ": index out of bounds [index: " << i.get()
                               << ", size: " << size() << "]");

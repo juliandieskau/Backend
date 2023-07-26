@@ -10,7 +10,7 @@ namespace ects::plugins::waypoints {
 class Index {
   public:
     Index(size_t);
-    size_t get();
+    size_t get() const;
 
   private:
     size_t index;
@@ -36,7 +36,7 @@ class WaypointList {
     static ros_t to_ros(const WaypointList &);
 
   private:
-    bool in_bounds(Index i, std::string name);
+    bool in_bounds(Index i, const std::string& name);
 
     std::vector<Waypoint> waypoints;
     bool cyclic;
