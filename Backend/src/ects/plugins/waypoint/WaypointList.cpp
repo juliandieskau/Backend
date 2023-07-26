@@ -65,8 +65,8 @@ WaypointList::ros_t WaypointList::to_ros(const WaypointList &list) {
         r.waypoints.push_back(Waypoint::to_ros(wp));
     return r;
 }
-bool WaypointList::in_bounds(Index i, const std::string& name) {
-    if (i.get() > size()) {
+bool WaypointList::in_bounds(Index i, const std::string &name) {
+    if (i.get() >= size()) {
         ROS_ERROR_STREAM(name << ": index out of bounds [index: " << i.get()
                               << ", size: " << size() << "]");
         return false;

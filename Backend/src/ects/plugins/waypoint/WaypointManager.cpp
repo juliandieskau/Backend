@@ -1,4 +1,5 @@
 #include "WaypointManager.hpp"
+#include "ects/ECTS.hpp"
 #include "ros/ros.h"
 
 extern "C" auto create_plugin_instance() -> ects::Plugin * {
@@ -6,8 +7,54 @@ extern "C" auto create_plugin_instance() -> ects::Plugin * {
 }
 namespace ects::plugins::waypoints {
 
-void WaypointManager::init(ECTS &ects1) {
+void WaypointManager::init(ECTS &ects) {
     ROS_INFO("Initializing WaypointManager");
+    data = {
+        WaypointList{},
+        ects.ros_interface().create_subscriber<AddWaypointMessage>(
+            add_waypoint_topic_name),
+        ects.ros_interface().create_subscriber<RemoveWaypointMessage>(
+            remove_waypoint_topic_name),
+        ects.ros_interface().create_subscriber<ReplaceWaypointMessage>(
+            replace_waypoint_topic_name),
+        ects.ros_interface().create_subscriber<ReorderWaypointsMessage>(
+            reorder_waypoints_topic_name),
+        ects.ros_interface().create_subscriber<RepeatWaypointsMessage>(
+            repeat_waypoints_topic_name),
+        ects.ros_interface().create_subscriber<ReverseWaypointsMessage>(
+            reverse_waypoints_topic_name),
+    };
+    data->add_waypoint_subscriber.subscribe([this](AddWaypointMessage message) {
+        ROS_INFO_STREAM("called add waypoint subscriber");
+        data->waypoints.add_waypoint(message.get_waypoint(),
+                                     message.get_index());
+    });
+    data->remove_waypoint_subscriber.subscribe(
+        [this](RemoveWaypointMessage message) {
+            ROS_INFO_STREAM("called remove waypoint subscriber");
+            data->waypoints.remove_waypoint(message.get_index());
+        });
+    data->replace_waypoint_subscriber.subscribe(
+        [this](ReplaceWaypointMessage message) {
+            ROS_INFO_STREAM("called replace waypoint subscriber");
+            data->waypoints.replace_waypoint(message.get_index(),
+                                             message.get_waypoint());
+        });
+    data->reorder_waypoints_subscriber.subscribe(
+        [this](ReorderWaypointsMessage message) {
+            ROS_INFO_STREAM("called reorder waypoints subscriber");
+            data->waypoints.reorder_waypoints(message.get_permutation());
+        });
+    data->repeat_waypoints_subscriber.subscribe(
+        [this](RepeatWaypointsMessage message) {
+            ROS_INFO_STREAM("called repeat waypoints subscriber");
+            data->waypoints.set_repeat(message.get_repeat());
+        });
+    data->reverse_waypoints_subscriber.subscribe(
+        [this](ReverseWaypointsMessage message) {
+            ROS_INFO_STREAM("called reverse waypoints subscriber");
+            data->waypoints.reverse_waypoints();
+        });
 }
 void WaypointManager::transmit_all() {}
 void WaypointManager::transmit(const std::string &topic_name) {}
