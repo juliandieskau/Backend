@@ -1,5 +1,6 @@
 #pragma once
 
+#include "JsonHelper.hpp"
 #include "ects/Common.hpp"
 #include "ects/Waypoint.h"
 #include <chrono>
@@ -13,9 +14,12 @@ class Waypoint {
     using from_ros_t = ros_t;
     using to_ros_t = ros_t;
 
+    Waypoint() = default;
     Position2d get_position();
     static Waypoint from_ros(const ros_t &);
     static ros_t to_ros(const Waypoint &);
+    NLOHMANN_DEFINE_TYPE_INTRUSIVE(Waypoint, name, position, heading,
+                                   wait_time);
 
   private:
     Waypoint(std::string name, Position2d position,

@@ -1,7 +1,8 @@
 #pragma once
 
-#include "ects/WaypointList.h"
 #include "Waypoint.hpp"
+#include "ects/WaypointList.h"
+#include "nlohmann/json.hpp"
 
 #include <vector>
 
@@ -22,7 +23,7 @@ class WaypointList {
     using from_ros_t = ros_t;
     using to_ros_t = ros_t;
 
-    WaypointList();
+    WaypointList() = default;
     void add_waypoint(Waypoint, Index);
     void remove_waypoint(Index);
     void replace_waypoint(Index, Waypoint);
@@ -34,9 +35,10 @@ class WaypointList {
 
     static WaypointList from_ros(const ros_t &);
     static ros_t to_ros(const WaypointList &);
+    NLOHMANN_DEFINE_TYPE_INTRUSIVE(WaypointList, waypoints, cyclic);
 
   private:
-    bool in_bounds(Index i, const std::string& name);
+    bool in_bounds(Index i, const std::string &name);
 
     std::vector<Waypoint> waypoints;
     bool cyclic;

@@ -16,6 +16,9 @@ class WaypointListStorage {
     WaypointListStorage(const std::string &directory);
 
   private:
+    auto open(const std::string &filename, std::ios::openmode mode)
+        -> std::fstream;
+
     std::filesystem::path directory;
 };
 

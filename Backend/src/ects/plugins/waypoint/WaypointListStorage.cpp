@@ -1,14 +1,27 @@
 #include "WaypointListStorage.hpp"
 #include "ros/ros.h"
+#include <fstream>
+#include <nlohmann/json.hpp>
+
+using json = nlohmann::json;
 
 namespace ects::plugins::waypoints {
-auto WaypointListStorage::load(const std::string &filename) -> WaypointList {
-    // TODO
-    return {};
+auto WaypointListStorage::open(const std::string &filename,
+                               std::ios::openmode mode) -> std::fstream {
+    std::fstream f{};
+    f.exceptions(std::ios_base::badbit | std::ios_base::failbit);
+    f.open(directory / filename, mode);
+    return f;
+}
+
+auto WaypointListStorage::load(const std::string &filename)
+    -> WaypointList { // ...
+    return json::parse(open(filename, std::ios_base::in));
 }
 auto WaypointListStorage::save(const std::string &filename, WaypointList list)
     -> void {
-    // TODO
+    json j = list;
+    open(filename, std::ios_base::out | std::ios_base::trunc) << j;
 }
 auto WaypointListStorage::list_directory() -> std::vector<std::string> {
     std::vector<std::string> files;
