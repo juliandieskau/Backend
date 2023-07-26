@@ -51,14 +51,14 @@ double WaypointList::total_length() {
     return 0; // TODO
 }
 std::size_t WaypointList::size() { return waypoints.size(); }
-WaypointList WaypointList::from_ros(WaypointList::ros_t ros_input) {
+WaypointList WaypointList::from_ros(const WaypointList::ros_t &ros_input) {
     WaypointList list;
     list.set_repeat(ros_input.cyclic);
     for (const auto &ros_wp : ros_input.waypoints)
         list.waypoints.push_back(Waypoint::from_ros(ros_wp));
     return list;
 }
-WaypointList::ros_t WaypointList::to_ros(WaypointList list) {
+WaypointList::ros_t WaypointList::to_ros(const WaypointList &list) {
     WaypointList::ros_t r{};
     r.cyclic = list.cyclic;
     for (const auto &wp : list.waypoints)

@@ -32,8 +32,8 @@ class WaypointList {
     double total_length();
     std::size_t size();
 
-    static WaypointList from_ros(ros_t);
-    static ros_t to_ros(WaypointList);
+    static WaypointList from_ros(const ros_t &);
+    static ros_t to_ros(const WaypointList &);
 
   private:
     bool in_bounds(Index i, std::string name);

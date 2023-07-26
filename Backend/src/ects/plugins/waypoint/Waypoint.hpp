@@ -14,8 +14,8 @@ class Waypoint {
     using to_ros_t = ros_t;
 
     Position2d get_position();
-    static Waypoint from_ros(ros_t);
-    static ros_t to_ros(Waypoint);
+    static Waypoint from_ros(const ros_t &);
+    static ros_t to_ros(const Waypoint &);
 
   private:
     Waypoint(std::string name, Position2d position,

@@ -16,7 +16,7 @@ using empty_status_request = EmptyMessage<status_service_t::Request>;
 struct EctsStatus {
     using to_ros_t = status_service_t::Response;
 
-    static to_ros_t to_ros(EctsStatus);
+    static to_ros_t to_ros(const EctsStatus &);
     EctsStatus(std::vector<std::string> loaded_plugins, std::string robot_name,
                std::string version);
 
@@ -29,7 +29,7 @@ struct EctsStatus {
 struct retransmit {
     using from_ros_t = ects::ForceRetransmit;
 
-    static retransmit from_ros(from_ros_t);
+    static retransmit from_ros(const from_ros_t &);
     std::optional<std::string> get_topic();
 
   private:

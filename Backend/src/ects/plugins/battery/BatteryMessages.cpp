@@ -3,7 +3,7 @@
 
 namespace ects::plugins::battery {
 
-BatteryState BatteryState::from_ros(BatteryState::from_ros_t ros_input) {
+BatteryState BatteryState::from_ros(const BatteryState::from_ros_t &ros_input) {
     if (ros_input.battery_states.empty())
         throw std::runtime_error("no batteries in battery state list");
     BatteryState s{};
@@ -26,7 +26,7 @@ BatteryState BatteryState::from_ros(BatteryState::from_ros_t ros_input) {
     return s;
 }
 
-BatteryState::to_ros_t BatteryState::to_ros(BatteryState s) {
+BatteryState::to_ros_t BatteryState::to_ros(const BatteryState &s) {
     auto fl = [](auto d) { return static_cast<float>(d); };
     auto nan = std::numeric_limits<float>::quiet_NaN();
     BatteryState::to_ros_t r{};
@@ -56,7 +56,7 @@ BatteryState::to_ros_t BatteryState::to_ros(BatteryState s) {
 
 ChargePercentage BatteryState::get_charge() { return charge; }
 
-ChargePercentage::to_ros_t ChargePercentage::to_ros(ChargePercentage c) {
+ChargePercentage::to_ros_t ChargePercentage::to_ros(const ChargePercentage &c) {
     ChargePercentage::to_ros_t r{};
     r.data = static_cast<float>(c.charge);
     return r;
@@ -64,7 +64,7 @@ ChargePercentage::to_ros_t ChargePercentage::to_ros(ChargePercentage c) {
 
 EstimatedRuntime BatteryState::get_estimated_runtime() { return runtime; }
 
-EstimatedRuntime::to_ros_t EstimatedRuntime::to_ros(EstimatedRuntime er) {
+EstimatedRuntime::to_ros_t EstimatedRuntime::to_ros(const EstimatedRuntime &er) {
     EstimatedRuntime::to_ros_t r{};
     r.data =
         std::chrono::duration_cast<std::chrono::duration<float>>(er.duration)
@@ -74,7 +74,7 @@ EstimatedRuntime::to_ros_t EstimatedRuntime::to_ros(EstimatedRuntime er) {
 
 Warning BatteryState::is_critical() { return {charge.charge < 0.15}; }
 
-Warning::to_ros_t Warning::to_ros(Warning w) {
+Warning::to_ros_t Warning::to_ros(const Warning &w) {
     Warning::to_ros_t r{};
     r.data = w.is_critical;
     return r;

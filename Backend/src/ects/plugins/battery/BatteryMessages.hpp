@@ -10,7 +10,7 @@ namespace ects::plugins::battery {
 struct ChargePercentage {
     using to_ros_t = std_msgs::Float32;
 
-    static to_ros_t to_ros(ChargePercentage);
+    static to_ros_t to_ros(const ChargePercentage &);
 
     double charge;
 };
@@ -18,7 +18,7 @@ struct ChargePercentage {
 struct EstimatedRuntime {
     using to_ros_t = std_msgs::Float32;
 
-    static to_ros_t to_ros(EstimatedRuntime);
+    static to_ros_t to_ros(const EstimatedRuntime &);
 
     std::chrono::duration<double> duration;
 };
@@ -26,7 +26,7 @@ struct EstimatedRuntime {
 struct Warning {
     using to_ros_t = std_msgs::Bool;
 
-    static to_ros_t to_ros(Warning);
+    static to_ros_t to_ros(const Warning &);
 
     bool is_critical;
 };
@@ -39,8 +39,8 @@ struct BatteryState {
     EstimatedRuntime get_estimated_runtime();
     Warning is_critical();
 
-    static BatteryState from_ros(from_ros_t ros_input);
-    static to_ros_t to_ros(BatteryState);
+    static BatteryState from_ros(const from_ros_t &ros_input);
+    static to_ros_t to_ros(const BatteryState &);
 
   private:
     ChargePercentage charge;
