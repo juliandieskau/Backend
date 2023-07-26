@@ -18,5 +18,5 @@ auto PluginLoader::load(std::string &plugin_name) -> Plugin * {
         return nullptr;
     }
     return create_plugin();
-};
+}
 } // namespace ects

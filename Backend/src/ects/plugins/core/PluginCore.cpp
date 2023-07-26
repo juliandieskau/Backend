@@ -34,10 +34,10 @@ auto PluginCore::init(ECTS &ects) -> void {
             // TODO: determine version information
             return EctsStatus(plugins, name, "0.0.1-dev");
         });
-};
+}
 
-auto PluginCore::transmit_all() -> void{};
+auto PluginCore::transmit_all() -> void{}
 
-auto PluginCore::transmit(const std::string &topic_name) -> void{};
+auto PluginCore::transmit(const std::string &topic_name) -> void{}
 
-}; // namespace ects::plugins::core
+} // namespace ects::plugins::core
