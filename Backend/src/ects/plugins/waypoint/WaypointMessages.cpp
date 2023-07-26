@@ -48,4 +48,15 @@ auto RepeatWaypointsMessage::from_ros(
     return {static_cast<bool>(ros_input.data)};
 }
 RepeatWaypointsMessage::RepeatWaypointsMessage(bool repeat) : repeat(repeat) {}
+
+NumberOfWaypointsMessage::NumberOfWaypointsMessage(size_t waypoints)
+    : count(waypoints) {}
+auto NumberOfWaypointsMessage::to_ros(
+    const NumberOfWaypointsMessage &internal_input)
+    -> NumberOfWaypointsMessage::ros_t {
+    NumberOfWaypointsMessage::ros_t r{};
+    r.data = internal_input.count;
+    return r;
+}
+
 } // namespace ects::plugins::waypoints

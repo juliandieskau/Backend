@@ -4,6 +4,7 @@
 #include "WaypointList.hpp"
 #include <std_msgs/Bool.h>
 #include <std_msgs/Empty.h>
+#include <std_msgs/UInt32.h>
 
 #include "ects/AddWaypoint.h"
 #include "ects/EmptyMessage.hpp"
@@ -86,5 +87,17 @@ class RepeatWaypointsMessage {
 };
 
 using ReverseWaypointsMessage = EmptyMessage<std_msgs::Empty>;
+
+class NumberOfWaypointsMessage {
+  public:
+    using ros_t = std_msgs::UInt32;
+    using to_ros_t = ros_t;
+
+    NumberOfWaypointsMessage(size_t waypoints);
+    static auto to_ros(const NumberOfWaypointsMessage &) -> ros_t;
+
+  private:
+    size_t count;
+};
 
 } // namespace ects::plugins::waypoints
