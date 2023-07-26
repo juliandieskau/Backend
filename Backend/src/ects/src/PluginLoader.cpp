@@ -1,7 +1,5 @@
 #include "ects/PluginLoader.hpp"
-#include "BatteryMonitor.hpp"
-#include "PluginCore.hpp"
-#include "WaypointManager.hpp"
+#include "ros/ros.h"
 #include <dlfcn.h>
 
 namespace ects {
