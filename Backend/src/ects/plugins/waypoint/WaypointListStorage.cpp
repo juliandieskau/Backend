@@ -2,19 +2,19 @@
 #include "ros/ros.h"
 
 namespace ects::plugins::waypoints {
-auto WaypointListStorage::load(std::string filename) -> WaypointList {
+auto WaypointListStorage::load(const std::string &filename) -> WaypointList {
     // TODO
-    return WaypointList();
+    return {};
 }
-auto WaypointListStorage::save(std::string filename, WaypointList list)
+auto WaypointListStorage::save(const std::string &filename, WaypointList list)
     -> void {
     // TODO
 }
 auto WaypointListStorage::list_directory() -> std::vector<std::string> {
     std::vector<std::string> files;
-    for (const auto &e : directory) {
+    for (const auto &e : std::filesystem::directory_iterator(directory)) {
         if (is_regular_file(e))
-            files.push_back(e.string());
+            files.push_back(e.path().filename().string());
     }
     return files;
 }

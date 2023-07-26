@@ -9,8 +9,11 @@ namespace ects::plugins::waypoints {
 
 void WaypointManager::init(ECTS &ects) {
     ROS_INFO("Initializing WaypointManager");
+
     data = {
         WaypointList{},
+        WaypointListStorage{ects.config().get_value<std::string>(
+            "/waypoints/storage_directory")},
         ects.ros_interface().create_subscriber<AddWaypointMessage>(
             add_waypoint_topic_name),
         ects.ros_interface().create_subscriber<RemoveWaypointMessage>(
@@ -23,6 +26,12 @@ void WaypointManager::init(ECTS &ects) {
             repeat_waypoints_topic_name),
         ects.ros_interface().create_subscriber<ReverseWaypointsMessage>(
             reverse_waypoints_topic_name),
+        ects.ros_interface().create_server<FileListService>(
+            list_files_service_name),
+        ects.ros_interface().create_server<WaypointListFileService>(
+            save_waypoints_service_name),
+        ects.ros_interface().create_server<WaypointListFileService>(
+            load_waypoints_service_name),
     };
     data->add_waypoint_subscriber.subscribe([this](AddWaypointMessage message) {
         ROS_INFO_STREAM("called add waypoint subscriber");
@@ -54,6 +63,23 @@ void WaypointManager::init(ECTS &ects) {
         [this](ReverseWaypointsMessage message) {
             ROS_INFO_STREAM("called reverse waypoints subscriber");
             data->waypoints.reverse_waypoints();
+        });
+    data->list_files_server.register_service(
+        [this](FileListRequest) -> FileListResponse {
+            ROS_INFO_STREAM("called list files server");
+            return FileListResponse{data->storage.list_directory()};
+        });
+    data->save_waypoints_server.register_service(
+        [this](FileRequest file) -> FileResponse {
+            ROS_INFO_STREAM("called save waypoints server");
+            data->storage.save(file.get_filename(), data->waypoints);
+            return FileResponse{};
+        });
+    data->load_waypoints_server.register_service(
+        [this](FileRequest file) -> FileResponse {
+            ROS_INFO_STREAM("called load waypoints server");
+            data->waypoints = data->storage.load(file.get_filename());
+            return FileResponse{};
         });
 }
 void WaypointManager::transmit_all() {}

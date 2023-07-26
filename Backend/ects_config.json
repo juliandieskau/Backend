@@ -9,5 +9,8 @@
     },
     "battery": {
         "topic": "/spot/status/battery_states"
+    },
+    "waypoints": {
+        "storage_directory": "/workspace/waypoints"
     }
 }
