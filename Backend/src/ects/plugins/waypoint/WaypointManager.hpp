@@ -33,17 +33,17 @@ class WaypointManager : public Plugin {
     };
     std::optional<data> data;
     static constexpr auto add_waypoint_topic_name =
-        "/ects/waypoint/add_waypoint";
+        "/ects/waypoints/add_waypoint";
     static constexpr auto remove_waypoint_topic_name =
-        "/ects/waypoint/remove_waypoint";
+        "/ects/waypoints/remove_waypoint";
     static constexpr auto replace_waypoint_topic_name =
-        "/ects/waypoint/replace_waypoint";
+        "/ects/waypoints/replace_waypoint";
     static constexpr auto reorder_waypoints_topic_name =
-        "/ects/waypoint/reorder_waypoints";
+        "/ects/waypoints/reorder_waypoints";
     static constexpr auto repeat_waypoints_topic_name =
-        "/ects/waypoint/repeat_waypoints";
+        "/ects/waypoints/repeat_waypoints";
     static constexpr auto reverse_waypoints_topic_name =
-        "/ects/waypoint/reverse_waypoints";
+        "/ects/waypoints/reverse_waypoints";
     static constexpr auto list_files_service_name =
         "/ects/waypoints/saved_lists";
     static constexpr auto save_waypoints_service_name =
