@@ -6,10 +6,12 @@ namespace ects::plugins::waypoints {
 Index::Index(size_t index) : index(index) {}
 size_t Index::get() const { return index; }
 
-WaypointList::WaypointList() : waypoints(), cyclic(false) {}
 void WaypointList::add_waypoint(Waypoint w, Index i) {
-    if (!in_bounds(i, "add"))
+    if (i.get() > size()) {
+        ROS_ERROR_STREAM("add: index out of bounds [index: "
+                         << i.get() << ", size: " << size() << "]");
         return;
+    }
     waypoints.insert(waypoints.begin() + i.get(), w);
 }
 void WaypointList::remove_waypoint(Index i) {
