@@ -72,14 +72,26 @@ void WaypointManager::init(ECTS &ects) {
     data->save_waypoints_server.register_service(
         [this](FileRequest file) -> FileResponse {
             ROS_INFO_STREAM("called save waypoints server");
-            data->storage.save(file.get_filename(), data->waypoints);
-            return FileResponse{};
+            try {
+                data->storage.save(file.get_filename(), data->waypoints);
+            } catch (std::exception &e) {
+                ROS_INFO_STREAM("failed to load file " << file.get_filename()
+                                                       << ": " << e.what());
+                return FileResponse{e.what()};
+            }
+            return {};
         });
     data->load_waypoints_server.register_service(
         [this](FileRequest file) -> FileResponse {
             ROS_INFO_STREAM("called load waypoints server");
-            data->waypoints = data->storage.load(file.get_filename());
-            return FileResponse{};
+            try {
+                data->waypoints = data->storage.load(file.get_filename());
+            } catch (std::exception &e) {
+                ROS_INFO_STREAM("failed to load file " << file.get_filename()
+                                                       << ": " << e.what());
+                return FileResponse{e.what()};
+            }
+            return {};
         });
 }
 void WaypointManager::transmit_all() {}
