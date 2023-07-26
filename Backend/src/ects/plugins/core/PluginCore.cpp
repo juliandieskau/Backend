@@ -32,7 +32,7 @@ auto PluginCore::init(ECTS &ects) -> void {
             auto name =
                 ects.config().get_value<std::string>("/core/robot_name");
             // TODO: determine version information
-            return EctsStatus(plugins, name, "0.0.1-dev");
+            return {plugins, name, "0.0.1-dev"};
         });
 }
 
