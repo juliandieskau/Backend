@@ -21,8 +21,8 @@ auto main(int argc, char **argv) -> int {
         return -1;
     }
     ROS_INFO_STREAM("Starting ECTS with config file " << argv[1]);
-    auto *config = Configuration::load_configuration(argv[1]);
-    if (config == nullptr) {
+    auto config = Configuration::load_configuration(argv[1]);
+    if (!config) {
         ROS_FATAL("Can not continue without valid Configuration.");
         return -1;
     }
