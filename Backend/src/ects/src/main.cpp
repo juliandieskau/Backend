@@ -40,10 +40,10 @@ auto main(int argc, char **argv) -> int {
         auto plugin_name = plugin_json.get<std::string>();
         ROS_INFO_STREAM("Loading plugin " << plugin_name);
         auto plugin = plugin_loader.load(plugin_name);
-        if (plugin == nullptr) {
+        if (plugin == nullptr)
             ROS_ERROR_STREAM("Could not load plugin " << plugin_name);
-        }
-        ects->add_plugin(plugin);
+        else
+            ects->add_plugin(plugin);
     }
 
     for (auto plugin : ects->get_plugins()) {

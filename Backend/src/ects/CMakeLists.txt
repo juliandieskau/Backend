@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.0.2)
 include(FetchContent)
-project(ects)
+project(ects VERSION 0.0.1 DESCRIPTION "Extensible Control and Telemetry System")
 
 ## Compile as C++11, supported in ROS Kinetic and newer
 add_compile_options(-std=c++2a)
@@ -121,7 +121,7 @@ add_service_files(
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
   INCLUDE_DIRS include
-#  LIBRARIES ects
+  LIBRARIES ects_plugin_core ects_plugin_battery ects_plugin_waypoints
   CATKIN_DEPENDS roscpp sensor_msgs std_msgs message_runtime
 #  DEPENDS system_lib
 )
@@ -158,22 +158,30 @@ include_directories(
 ## The recommended prefix ensures that target names across packages don't collide
 # add_executable(${PROJECT_NAME}_node src/ects_node.cpp)
 
+add_library(ects_plugin_core SHARED 
+        plugins/core/PluginCore.cpp
+        plugins/core/CoreMessages.cpp
+)
+
+add_library(ects_plugin_battery SHARED 
+        plugins/battery/BatteryMonitor.cpp
+        plugins/battery/BatteryMessages.cpp
+)
+
+add_library(ects_plugin_waypoints SHARED
+        plugins/waypoint/WaypointManager.cpp
+        plugins/waypoint/Waypoint.cpp
+        plugins/waypoint/WaypointList.cpp)
+
+set_target_properties(ects_plugin_core PROPERTIES PUBLIC_HEADER "include/Plugin.hpp")
 
 add_executable(${PROJECT_NAME}
         src/main.cpp
         src/Configuration.cpp
         src/PluginLoader.cpp
         src/Common.cpp
-#temp
-        plugins/core/PluginCore.cpp
-        plugins/core/CoreMessages.cpp
-        plugins/battery/BatteryMonitor.cpp
-        plugins/battery/BatteryMessages.cpp
-        plugins/waypoint/WaypointManager.cpp
-        plugins/waypoint/Waypoint.cpp
-        plugins/waypoint/WaypointList.cpp)
-
-target_link_libraries(ects ${catkin_LIBRARIES})
+)
+target_link_libraries(ects ${catkin_LIBRARIES} dl)
 #target_link_libraries(ects PRIVATE nlohmann_json::nlohmann_json)
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
@@ -212,11 +220,11 @@ add_dependencies(${PROJECT_NAME} ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EX
 
 ## Mark libraries for installation
 ## See http://docs.ros.org/melodic/api/catkin/html/howto/format1/building_libraries.html
-# install(TARGETS ${PROJECT_NAME}
-#   ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
-#   LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
-#   RUNTIME DESTINATION ${CATKIN_GLOBAL_BIN_DESTINATION}
-# )
+install(TARGETS ${PROJECT_NAME}
+  ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+  LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+  RUNTIME DESTINATION ${CATKIN_GLOBAL_BIN_DESTINATION}
+)
 
 ## Mark cpp header files for installation
 # install(DIRECTORY include/${PROJECT_NAME}/

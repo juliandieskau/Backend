@@ -1,6 +1,10 @@
 #include "PluginCore.hpp"
 
+extern "C" auto create_plugin_instance() -> ects::Plugin * {
+    return new ects::plugins::core::PluginCore();
+}
 namespace ects::plugins::core {
+
 auto PluginCore::init(ects::ECTS *ects) -> void {
     ROS_INFO_STREAM("Initializing PluginCore");
     data = {

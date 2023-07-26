@@ -1,5 +1,8 @@
 #include "BatteryMonitor.hpp"
 
+extern "C" auto create_plugin_instance() -> ects::Plugin * {
+    return new ects::plugins::battery::BatteryMonitor();
+}
 namespace ects::plugins::battery {
 
 auto BatteryMonitor::init(ECTS *ects) -> void {

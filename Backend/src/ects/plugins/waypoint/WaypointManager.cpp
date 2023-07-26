@@ -1,6 +1,9 @@
 #include "WaypointManager.hpp"
 #include "ros/ros.h"
 
+extern "C" auto create_plugin_instance() -> ects::Plugin * {
+    return new ects::plugins::waypoints::WaypointManager();
+}
 namespace ects::plugins::waypoints {
 
 void WaypointManager::init(ECTS *ects1) {
