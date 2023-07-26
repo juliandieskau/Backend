@@ -6,7 +6,7 @@ extern "C" auto create_plugin_instance() -> ects::Plugin * {
 }
 namespace ects::plugins::waypoints {
 
-void WaypointManager::init(ECTS *ects1) {
+void WaypointManager::init(ECTS &ects1) {
     ROS_INFO("Initializing WaypointManager");
 }
 void WaypointManager::transmit_all() {}

@@ -5,20 +5,20 @@ extern "C" auto create_plugin_instance() -> ects::Plugin * {
 }
 namespace ects::plugins::battery {
 
-auto BatteryMonitor::init(ECTS *ects) -> void {
+auto BatteryMonitor::init(ECTS &ects) -> void {
     ROS_INFO("Initializing Plugin BatteryMonitor");
     auto robot_battery_topic =
-        ects->config().get_value<std::string>("/battery/topic");
+        ects.config().get_value<std::string>("/battery/topic");
     data = {
         std::nullopt,
-        ects->ros_interface().create_subscriber<BatteryState>(
+        ects.ros_interface().create_subscriber<BatteryState>(
             robot_battery_topic),
-        ects->ros_interface().create_publisher<BatteryState>(
+        ects.ros_interface().create_publisher<BatteryState>(
             battery_state_topic),
-        ects->ros_interface().create_publisher<ChargePercentage>(
+        ects.ros_interface().create_publisher<ChargePercentage>(
             percentage_topic),
-        ects->ros_interface().create_publisher<EstimatedRuntime>(runtime_topic),
-        ects->ros_interface().create_publisher<Warning>(warning_topic),
+        ects.ros_interface().create_publisher<EstimatedRuntime>(runtime_topic),
+        ects.ros_interface().create_publisher<Warning>(warning_topic),
     };
     data->battery_subscriber.subscribe([this](BatteryState state) {
         data->state = state;

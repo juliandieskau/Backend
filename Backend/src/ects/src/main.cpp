@@ -34,7 +34,7 @@ auto main(int argc, char **argv) -> int {
     RosNode ros;
     TimerManager timer_manager;
     PluginLoader plugin_loader;
-    auto *ects = new ECTS(*config, ros, timer_manager);
+    ECTS ects{*config, ros, timer_manager};
     for (auto plugin_json :
          config->get_value<json::array_t>("/core/load_plugins")) {
         auto plugin_name = plugin_json.get<std::string>();
@@ -43,10 +43,10 @@ auto main(int argc, char **argv) -> int {
         if (plugin == nullptr)
             ROS_ERROR_STREAM("Could not load plugin " << plugin_name);
         else
-            ects->add_plugin(plugin);
+            ects.add_plugin(plugin);
     }
 
-    for (auto plugin : ects->get_plugins()) {
+    for (auto plugin : ects.get_plugins()) {
         plugin->init(ects);
     }
 

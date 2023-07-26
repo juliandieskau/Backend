@@ -11,7 +11,7 @@
 namespace ects::plugins::core {
 class PluginCore : public Plugin {
   public:
-    auto init(ECTS *) -> void override;
+    auto init(ECTS &) -> void override;
 
     auto transmit_all() -> void override;
 

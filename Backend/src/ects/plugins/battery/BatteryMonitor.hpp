@@ -8,7 +8,7 @@ namespace ects::plugins::battery {
 
 class BatteryMonitor : public Plugin {
   public:
-    auto init(ECTS *) -> void override;
+    auto init(ECTS &) -> void override;
     auto transmit_all() -> void override;
     auto transmit(const std::string &topic_name) -> void override;
     auto name() const -> const std::string override { return "battery"; }
