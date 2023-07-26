@@ -7,7 +7,6 @@
 namespace ects {
 typedef Plugin *(*plugin_creator)();
 auto PluginLoader::load(std::string &plugin_name) -> Plugin * {
-    // TODO: Implement modular loading
     auto plugin_so_name = "libects_plugin_" + plugin_name + ".so";
     void *so = dlopen(plugin_so_name.c_str(), RTLD_NOW);
     if (so == nullptr) {
