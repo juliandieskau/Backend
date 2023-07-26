@@ -15,7 +15,8 @@ class PluginCore : public Plugin {
 
     auto transmit_all() -> void override;
 
-    auto transmit(std::string &topic_name) -> void override;
+    auto transmit(const std::string &topic_name) -> void override;
+    auto name() const -> const std::string override { return "core"; }
 
   private:
     struct data {

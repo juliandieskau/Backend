@@ -7,27 +7,33 @@ auto PluginCore::init(ects::ECTS *ects) -> void {
         ects->ros_interface().create_subscriber<retransmit>("/ects/retransmit"),
         ects->ros_interface().create_server<EctsStatusService>(
             "/ects/ects_status")};
-    data->retransmit_subscriber.subscribe([](retransmit r) {
-        // TODO implement
+    data->retransmit_subscriber.subscribe([=](retransmit r) {
+        for (auto &p : ects->get_plugins()) {
+            if (r.get_topic().has_value())
+                p->transmit(*r.get_topic());
+            else
+                p->transmit_all();
+        }
         if (r.get_topic().has_value())
-            ROS_INFO_STREAM("retransmit topic: " << *r.get_topic());
+            ROS_INFO_STREAM("retransmitted topic: " << *r.get_topic());
         else
-            ROS_INFO("retransmit all");
+            ROS_INFO("retransmitted all");
     });
     data->status_server.register_service(
-        [](empty_status_request) -> EctsStatus {
-            ROS_INFO("service called");
-            // TODO implement
-            return EctsStatus({"plug1", "plug2"}, "name", "ver");
+        [=](empty_status_request) -> EctsStatus {
+            std::vector<std::string> plugins;
+            for (auto &p : ects->get_plugins()) {
+                plugins.push_back(p->name());
+            }
+            auto name =
+                ects->config().get_value<std::string>("/core/robot_name");
+            // TODO: determine version information
+            return EctsStatus(plugins, name, "0.0.1-dev");
         });
 };
 
-auto PluginCore::transmit_all() -> void {
-    ROS_INFO_STREAM("Transmitting all");
-};
+auto PluginCore::transmit_all() -> void{};
 
-auto PluginCore::transmit(std::string &topic_name) -> void {
-    ROS_INFO_STREAM("Transmitting " << topic_name);
-};
+auto PluginCore::transmit(const std::string &topic_name) -> void{};
 
 }; // namespace ects::plugins::core

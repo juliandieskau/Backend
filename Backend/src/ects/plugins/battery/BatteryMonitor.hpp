@@ -10,7 +10,8 @@ class BatteryMonitor : public Plugin {
   public:
     auto init(ECTS *) -> void override;
     auto transmit_all() -> void override;
-    auto transmit(std::string &topic_name) -> void override;
+    auto transmit(const std::string &topic_name) -> void override;
+    auto name() const -> const std::string override { return "battery"; }
 
   private:
     auto publish_battery_state() -> void;

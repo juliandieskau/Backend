@@ -32,7 +32,7 @@ auto BatteryMonitor::transmit_all() -> void {
     }
 }
 
-auto BatteryMonitor::transmit(std::string &topic_name) -> void {
+auto BatteryMonitor::transmit(const std::string &topic_name) -> void {
     if (data->state.has_value()) {
         if (topic_name == battery_state_topic)
             publish_battery_state();
