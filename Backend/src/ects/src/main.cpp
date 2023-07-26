@@ -8,8 +8,6 @@
 #include "ects/Timer.hpp"
 #include "ros/ros.h"
 
-#include <climits>
-#include <cstdio>
 #include <iostream>
 #include <sstream>
 #include <unistd.h>
