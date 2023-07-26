@@ -21,3 +21,13 @@ Finally use:
 ```bash
 catkin_make && rosrun ects ects /workspace/ects_config.json
 ```
+
+### Testing
+Publish a message
+```
+rostopic pub /ects/retransmit ects/ForceRetransmit '{header: auto, reload_all: false, topic: "/ects/sometopic"}
+```
+Call a service
+```
+rosservice call /ects/ects_status
+```
