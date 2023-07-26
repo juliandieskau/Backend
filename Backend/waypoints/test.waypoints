@@ -1,0 +1,1 @@
+{"cyclic":false,"waypoints":[{"heading":{"accuracy":2.0,"heading":0.0},"name":"first wp","position":{"radius":1.0,"x":15.0,"y":16.0},"wait_time":5.0},{"heading":null,"name":"second wp","position":{"radius":1.0,"x":22.0,"y":8.0},"wait_time":1.0}]}
