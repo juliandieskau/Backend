@@ -171,7 +171,8 @@ add_library(ects_plugin_battery SHARED
 add_library(ects_plugin_waypoints SHARED
         plugins/waypoint/WaypointManager.cpp
         plugins/waypoint/Waypoint.cpp
-        plugins/waypoint/WaypointList.cpp)
+        plugins/waypoint/WaypointList.cpp
+        plugins/waypoint/WaypointMessages.cpp)
 
 set_target_properties(ects_plugin_core PROPERTIES PUBLIC_HEADER "include/Plugin.hpp")
 
