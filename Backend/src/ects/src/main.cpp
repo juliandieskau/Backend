@@ -45,7 +45,14 @@ auto main(int argc, char **argv) -> int {
     }
 
     for (auto &plugin : ects.get_plugins()) {
-        plugin->init(ects);
+        try {
+            plugin->init(ects);
+        } catch (std::exception &e) {
+            ROS_ERROR_STREAM("failed to initialize " << plugin->name() << ": "
+                                                     << e.what());
+            // TODO: perhaps continue with the rest of plugins
+            return -1;
+        }
     }
 
     ROS_INFO("Listening for callbacks.");
