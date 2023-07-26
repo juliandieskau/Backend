@@ -18,6 +18,9 @@ class WaypointManager : public Plugin {
     auto name() const -> const std::string override { return "waypoints"; }
 
   private:
+    auto publish_waypoint_list() -> void;
+    auto publish_waypoint_count() -> void;
+
     struct data {
         WaypointList waypoints;
         WaypointListStorage storage;
@@ -30,6 +33,8 @@ class WaypointManager : public Plugin {
         Server<FileListService> list_files_server;
         Server<WaypointListFileService> save_waypoints_server;
         Server<WaypointListFileService> load_waypoints_server;
+        Publisher<WaypointList> waypoint_list_publisher;
+        Publisher<NumberOfWaypointsMessage> waypoint_count_publisher;
     };
     std::optional<data> data;
     static constexpr auto add_waypoint_topic_name =
@@ -50,6 +55,10 @@ class WaypointManager : public Plugin {
         "/ects/waypoints/save_waypoint_list";
     static constexpr auto load_waypoints_service_name =
         "/ects/waypoints/load_waypoint_list";
+    static constexpr auto waypoint_list_topic_name =
+        "/ects/waypoints/waypoint_list";
+    static constexpr auto waypoint_count_topic_name =
+        "/ects/waypoints/number_of_waypoints";
 };
 
 } // namespace ects::plugins::waypoints
