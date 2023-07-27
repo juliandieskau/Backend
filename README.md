@@ -31,3 +31,8 @@ Call a service
 ```
 rosservice call /ects/ects_status
 ```
+
+### Run Backend Unit Tests
+```
+catkin_make run_tests
+```

@@ -183,12 +183,14 @@ add_dependencies(ects_plugin_battery ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catki
 set_target_properties(ects_plugin_waypoints PROPERTIES PUBLIC_HEADER "include/Plugin.hpp")
 add_dependencies(ects_plugin_waypoints ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
-add_executable(${PROJECT_NAME}
-        src/main.cpp
+set(ECTS_SOURCES 
         src/Configuration.cpp
         src/PluginLoader.cpp
         src/Common.cpp
 )
+
+add_executable(${PROJECT_NAME} src/main.cpp ${ECTS_SOURCES})
+
 target_link_libraries(ects ${catkin_LIBRARIES} dl)
 #target_link_libraries(ects PRIVATE nlohmann_json::nlohmann_json)
 ## Rename C++ executable without prefix
@@ -253,10 +255,10 @@ install(TARGETS ${PROJECT_NAME}
 #############
 
 ## Add gtest based cpp test target and link libraries
-# catkin_add_gtest(${PROJECT_NAME}-test test/test_ects.cpp)
-# if(TARGET ${PROJECT_NAME}-test)
-#   target_link_libraries(${PROJECT_NAME}-test ${PROJECT_NAME})
-# endif()
+catkin_add_gtest(${PROJECT_NAME}-test test/TestEcts.cpp ${ECTS_SOURCES})
+if(TARGET ${PROJECT_NAME}-test)
+  target_link_libraries(${PROJECT_NAME}-test ${catkin_LIBRARIES} dl)
+endif()
 
 ## Add folders to be run by python nosetests
 # catkin_add_nosetests(test)
