@@ -177,6 +177,11 @@ add_library(ects_plugin_waypoints SHARED
         plugins/waypoint/WaypointListFileMessages.cpp)
 
 set_target_properties(ects_plugin_core PROPERTIES PUBLIC_HEADER "include/Plugin.hpp")
+add_dependencies(ects_plugin_core ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+set_target_properties(ects_plugin_battery PROPERTIES PUBLIC_HEADER "include/Plugin.hpp")
+add_dependencies(ects_plugin_battery ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+set_target_properties(ects_plugin_waypoints PROPERTIES PUBLIC_HEADER "include/Plugin.hpp")
+add_dependencies(ects_plugin_waypoints ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
 add_executable(${PROJECT_NAME}
         src/main.cpp
