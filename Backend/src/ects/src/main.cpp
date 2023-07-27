@@ -50,17 +50,10 @@ auto main(int argc, char **argv) -> int {
         } catch (std::exception &e) {
             ROS_ERROR_STREAM("failed to initialize " << plugin->name() << ": "
                                                      << e.what());
-            // TODO: perhaps continue with the rest of plugins
-            return -1;
         }
     }
 
     ROS_INFO("Listening for callbacks.");
     ros::spin();
-
-    //   while (ros::ok()) {
-    //     ros::spinOnce();
-    //     loop_rate.sleep();
-    //   }
     return 0;
 }
