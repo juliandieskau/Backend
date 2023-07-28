@@ -38,7 +38,7 @@ class WaypointList {
     NLOHMANN_DEFINE_TYPE_INTRUSIVE(WaypointList, waypoints, cyclic);
 
   private:
-    bool in_bounds(Index i, const std::string &name);
+    auto check_bounds(Index i) -> void;
 
     std::vector<Waypoint> waypoints;
     bool cyclic;

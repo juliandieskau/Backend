@@ -21,6 +21,24 @@ auto try_conversion(std::function<T()> f, const std::string &name)
     }
     return std::nullopt;
 }
+template <typename T>
+inline auto try_service(std::function<T()> f, const std::string &name)
+    -> std::optional<T> {
+    try {
+        return f();
+    } catch (const std::exception &e) {
+        ROS_WARN_STREAM(name << ": " << e.what());
+    }
+    return std::nullopt;
+}
+inline auto try_callback(std::function<void()> f, const std::string &name)
+    -> void {
+    try {
+        f();
+    } catch (const std::exception &e) {
+        ROS_WARN_STREAM(name << ": " << e.what());
+    }
+}
 
 } // namespace detail
 
@@ -40,7 +58,7 @@ template <from_ros_message internal_t> struct Subscriber {
                 auto r = detail::try_conversion<internal_t>(
                     [&] { return internal_t::from_ros(*ros_input); }, name);
                 if (r)
-                    callback(*r);
+                    detail::try_callback([&] { callback(*r); }, name);
             };
         ros_subscriber = ros_handle.subscribe<typename internal_t::from_ros_t>(
             topic_name, 1000, internal_callback);
@@ -96,9 +114,13 @@ template <server_messages internal_t> struct Server {
                 [&]() { return request_from_ros::from_ros(ros_input); }, name);
             if (!r)
                 return false;
-            auto internal_output = callback(*r);
+            auto internal_output = detail::try_service<response_to_ros>(
+                [&] { return callback(*r); }, name);
+            if (!internal_output)
+                return false;
             auto converted_output = detail::try_conversion<to_ros_t>(
-                [&] { return response_to_ros::to_ros(internal_output); }, name);
+                [&] { return response_to_ros::to_ros(*internal_output); },
+                name);
             if (!converted_output)
                 return false;
             ros_output = *converted_output;

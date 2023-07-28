@@ -8,37 +8,36 @@ size_t Index::get() const { return index; }
 
 void WaypointList::add_waypoint(Waypoint w, Index i) {
     if (i.get() > size()) {
-        ROS_ERROR_STREAM("add: index out of bounds [index: "
-                         << i.get() << ", size: " << size() << "]");
-        return;
+        std::stringstream s;
+        s << "index out of bounds [index: " << i.get() << ", size: " << size()
+          << "]";
+        throw std::runtime_error(s.str());
     }
     waypoints.insert(waypoints.begin() + i.get(), w);
 }
 void WaypointList::remove_waypoint(Index i) {
-    if (!in_bounds(i, "remove"))
-        return;
+    check_bounds(i);
     waypoints.erase(waypoints.begin() + i.get());
 }
 void WaypointList::replace_waypoint(Index i, Waypoint w) {
-    if (!in_bounds(i, "replace"))
-        return;
-    waypoints[i.get()] = w;
+    check_bounds(i);
+    waypoints[i.get()] = std::move(w);
 }
 void WaypointList::reorder_waypoints(std::vector<Index> permutation) {
     if (permutation.size() != size()) {
-        ROS_ERROR_STREAM("permutation size mismatch [permutation size: "
-                         << permutation.size() << ", waypoints: " << size()
-                         << "]");
-        return;
+        std::stringstream s;
+        s << "permutation size mismatch [permutation size: "
+          << permutation.size() << ", waypoints: " << size() << "]";
+        throw std::runtime_error(s.str());
     }
     std::vector<std::optional<Waypoint>> reordered(size());
     for (size_t i = 0; i < size(); ++i) {
         Index idx = permutation[i];
-        if (!in_bounds(idx, "reorder"))
-            return;
+        check_bounds(idx);
         if (reordered[idx.get()].has_value()) {
-            ROS_ERROR_STREAM("permutation has duplicate index " << idx.get());
-            return;
+            std::stringstream s;
+            s << "permutation has duplicate index " << idx.get();
+            throw std::runtime_error(s.str());
         }
         reordered[idx.get()] = waypoints[i];
     }
@@ -67,13 +66,13 @@ WaypointList::ros_t WaypointList::to_ros(const WaypointList &list) {
         r.waypoints.push_back(Waypoint::to_ros(wp));
     return r;
 }
-bool WaypointList::in_bounds(Index i, const std::string &name) {
+auto WaypointList::check_bounds(Index i) -> void {
     if (i.get() >= size()) {
-        ROS_ERROR_STREAM(name << ": index out of bounds [index: " << i.get()
-                              << ", size: " << size() << "]");
-        return false;
+        std::stringstream s;
+        s << "index out of bounds [index: " << i.get() << ", size: " << size()
+          << "]";
+        throw std::runtime_error(s.str());
     }
-    return true;
 }
 
 } // namespace ects::plugins::waypoints
