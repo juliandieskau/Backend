@@ -33,6 +33,7 @@ auto main(int argc, char **argv) -> int {
     TimerManager timer_manager;
     PluginLoader plugin_loader;
     ECTS ects{*config, ros, timer_manager};
+    std::vector<std::unique_ptr<Plugin>> uninitialized_plugins;
     for (const auto &plugin_json :
          config->get_value<json::array_t>("/core/load_plugins")) {
         auto plugin_name = plugin_json.get<std::string>();
@@ -41,17 +42,20 @@ auto main(int argc, char **argv) -> int {
         if (!plugin)
             ROS_ERROR_STREAM("Could not load plugin " << plugin_name);
         else
-            ects.add_plugin(std::move(plugin));
+            uninitialized_plugins.push_back(std::move(plugin));
     }
 
-    for (auto &plugin : ects.get_plugins()) {
+    for (auto &plugin : uninitialized_plugins) {
         try {
             plugin->init(ects);
+            ects.add_plugin(std::move(plugin));
         } catch (std::exception &e) {
             ROS_ERROR_STREAM("failed to initialize " << plugin->name() << ": "
                                                      << e.what());
         }
     }
+    // clean up all plugins which failed to initialize
+    uninitialized_plugins.clear();
 
     ROS_INFO("Listening for callbacks.");
     ros::spin();
