@@ -1,12 +1,14 @@
 #include "WaypointList.hpp"
+
 #include "ros/ros.h"
+#include <utility>
 
 namespace ects::plugins::waypoints {
 
 Index::Index(size_t index) : index(index) {}
 size_t Index::get() const { return index; }
 
-void WaypointList::add_waypoint(Waypoint w, Index i) {
+auto WaypointList::add_waypoint(Waypoint w, Index i) -> void {
     if (i.get() > size()) {
         std::stringstream s;
         s << "index out of bounds [index: " << i.get() << ", size: " << size()
@@ -15,15 +17,15 @@ void WaypointList::add_waypoint(Waypoint w, Index i) {
     }
     waypoints.insert(waypoints.begin() + i.get(), w);
 }
-void WaypointList::remove_waypoint(Index i) {
+auto WaypointList::remove_waypoint(Index i) -> void {
     check_bounds(i);
     waypoints.erase(waypoints.begin() + i.get());
 }
-void WaypointList::replace_waypoint(Index i, Waypoint w) {
+auto WaypointList::replace_waypoint(Index i, Waypoint w) -> void {
     check_bounds(i);
     waypoints[i.get()] = std::move(w);
 }
-void WaypointList::reorder_waypoints(std::vector<Index> permutation) {
+auto WaypointList::reorder_waypoints(std::vector<Index> permutation) -> void {
     if (permutation.size() != size()) {
         std::stringstream s;
         s << "permutation size mismatch [permutation size: "
@@ -44,22 +46,27 @@ void WaypointList::reorder_waypoints(std::vector<Index> permutation) {
     for (size_t i = 0; i < size(); ++i)
         waypoints[i] = *reordered[i];
 }
-void WaypointList::reverse_waypoints() {
+auto WaypointList::reverse_waypoints() -> void {
     std::reverse(waypoints.begin(), waypoints.end());
 }
-void WaypointList::set_repeat(bool repeat) { cyclic = repeat; }
-double WaypointList::total_length() {
+auto WaypointList::set_repeat(bool repeat) -> void { cyclic = repeat; }
+auto WaypointList::total_length() -> double {
     return 0; // TODO
 }
-std::size_t WaypointList::size() { return waypoints.size(); }
-WaypointList WaypointList::from_ros(const WaypointList::ros_t &ros_input) {
+auto WaypointList::size() -> std::size_t { return waypoints.size(); }
+auto WaypointList::get_waypoint(Index i) -> Waypoint {
+    check_bounds(i);
+    return waypoints[i.get()];
+}
+auto WaypointList::from_ros(const WaypointList::ros_t &ros_input)
+    -> WaypointList {
     WaypointList list;
     list.set_repeat(ros_input.cyclic);
     for (const auto &ros_wp : ros_input.waypoints)
         list.waypoints.push_back(Waypoint::from_ros(ros_wp));
     return list;
 }
-WaypointList::ros_t WaypointList::to_ros(const WaypointList &list) {
+auto WaypointList::to_ros(const WaypointList &list) -> WaypointList::ros_t {
     WaypointList::ros_t r{};
     r.cyclic = list.cyclic;
     for (const auto &wp : list.waypoints)

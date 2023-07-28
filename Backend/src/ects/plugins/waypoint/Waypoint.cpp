@@ -4,7 +4,8 @@
 
 namespace ects::plugins::waypoints {
 
-Position2d Waypoint::get_position() { return position; }
+auto Waypoint::get_position() -> Position2d { return position; }
+auto Waypoint::get_name() -> std::string { return name; }
 Waypoint Waypoint::from_ros(const Waypoint::ros_t &ros_input) {
     auto wait = std::chrono::duration<double>(ros_input.wait_time);
     std::optional<Heading2d> heading = std::nullopt;
@@ -14,7 +15,7 @@ Waypoint Waypoint::from_ros(const Waypoint::ros_t &ros_input) {
 
     return {ros_input.name, pos, heading, wait};
 }
-Waypoint::ros_t Waypoint::to_ros(const Waypoint &wp) {
+auto Waypoint::to_ros(const Waypoint &wp) -> Waypoint::ros_t {
     Waypoint::ros_t r;
     auto heading = wp.heading.value_or(Heading2d{0, 0});
     Waypoint::ros_t::_pose_type p;

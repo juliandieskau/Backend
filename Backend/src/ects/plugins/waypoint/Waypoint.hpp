@@ -15,9 +15,10 @@ class Waypoint {
     using to_ros_t = ros_t;
 
     Waypoint() = default;
-    Position2d get_position();
-    static Waypoint from_ros(const ros_t &);
-    static ros_t to_ros(const Waypoint &);
+    auto get_position() -> Position2d;
+    auto get_name() -> std::string;
+    static auto from_ros(const ros_t &) -> Waypoint;
+    static auto to_ros(const Waypoint &) -> ros_t;
     NLOHMANN_DEFINE_TYPE_INTRUSIVE(Waypoint, name, position, heading,
                                    wait_time);
 

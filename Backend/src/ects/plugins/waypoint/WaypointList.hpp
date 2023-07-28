@@ -24,17 +24,18 @@ class WaypointList {
     using to_ros_t = ros_t;
 
     WaypointList() = default;
-    void add_waypoint(Waypoint, Index);
-    void remove_waypoint(Index);
-    void replace_waypoint(Index, Waypoint);
-    void reorder_waypoints(std::vector<Index> permutation);
-    void reverse_waypoints();
-    void set_repeat(bool);
-    double total_length();
-    std::size_t size();
+    auto add_waypoint(Waypoint, Index) -> void;
+    auto remove_waypoint(Index) -> void;
+    auto replace_waypoint(Index, Waypoint) -> void;
+    auto reorder_waypoints(std::vector<Index> permutation) -> void;
+    auto reverse_waypoints() -> void;
+    auto set_repeat(bool) -> void;
+    auto total_length() -> double;
+    auto size() -> std::size_t;
+    auto get_waypoint(Index) -> Waypoint;
 
-    static WaypointList from_ros(const ros_t &);
-    static ros_t to_ros(const WaypointList &);
+    static auto from_ros(const ros_t &) -> WaypointList;
+    static auto to_ros(const WaypointList &) -> ros_t;
     NLOHMANN_DEFINE_TYPE_INTRUSIVE(WaypointList, waypoints, cyclic);
 
   private:
