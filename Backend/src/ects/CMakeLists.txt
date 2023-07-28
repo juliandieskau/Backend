@@ -168,13 +168,16 @@ add_library(ects_plugin_battery SHARED
         plugins/battery/BatteryMessages.cpp
 )
 
-add_library(ects_plugin_waypoints SHARED
+set(ECTS_PLUGIN_WAYPOINT_SOURCES
         plugins/waypoint/WaypointManager.cpp
         plugins/waypoint/Waypoint.cpp
         plugins/waypoint/WaypointList.cpp
         plugins/waypoint/WaypointMessages.cpp
         plugins/waypoint/WaypointListStorage.cpp
-        plugins/waypoint/WaypointListFileMessages.cpp)
+        plugins/waypoint/WaypointListFileMessages.cpp
+)
+
+add_library(ects_plugin_waypoints SHARED ${ECTS_PLUGIN_WAYPOINT_SOURCES})
 
 set_target_properties(ects_plugin_core PROPERTIES PUBLIC_HEADER "include/Plugin.hpp")
 add_dependencies(ects_plugin_core ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
@@ -255,7 +258,11 @@ install(TARGETS ${PROJECT_NAME}
 #############
 
 ## Add gtest based cpp test target and link libraries
-catkin_add_gtest(${PROJECT_NAME}-test test/TestEcts.cpp ${ECTS_SOURCES})
+catkin_add_gtest(${PROJECT_NAME}-test
+        test/TestEcts.cpp
+        test/WaypointListTest.cpp
+        ${ECTS_PLUGIN_WAYPOINT_SOURCES}
+        ${ECTS_SOURCES})
 if(TARGET ${PROJECT_NAME}-test)
   target_link_libraries(${PROJECT_NAME}-test ${catkin_LIBRARIES} dl)
 endif()
