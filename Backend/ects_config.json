@@ -4,11 +4,15 @@
         "load_plugins": [
             "core",
             "battery",
-            "waypoints"
+            "waypoints",
+            "control"
         ]
     },
     "battery": {
         "topic": "/spot/status/battery_states"
+    },
+    "control": {
+        "topic": "/spot/cmd_vel"
     },
     "waypoints": {
         "storage_directory": "/workspace/waypoints"

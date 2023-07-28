@@ -123,7 +123,7 @@ add_service_files(
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
   INCLUDE_DIRS include
-  LIBRARIES ects_plugin_core ects_plugin_battery ects_plugin_waypoints
+  LIBRARIES ects_plugin_core ects_plugin_battery ects_plugin_control ects_plugin_waypoints
   CATKIN_DEPENDS roscpp sensor_msgs std_msgs message_runtime
 #  DEPENDS system_lib
 )
@@ -170,6 +170,10 @@ add_library(ects_plugin_battery SHARED
         plugins/battery/BatteryMessages.cpp
 )
 
+add_library(ects_plugin_control SHARED
+        plugins/control/Control.cpp
+)
+
 set(ECTS_PLUGIN_WAYPOINT_SOURCES
         plugins/waypoint/WaypointManager.cpp
         plugins/waypoint/Waypoint.cpp
@@ -185,6 +189,8 @@ set_target_properties(ects_plugin_core PROPERTIES PUBLIC_HEADER "include/Plugin.
 add_dependencies(ects_plugin_core ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 set_target_properties(ects_plugin_battery PROPERTIES PUBLIC_HEADER "include/Plugin.hpp")
 add_dependencies(ects_plugin_battery ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+set_target_properties(ects_plugin_control PROPERTIES PUBLIC_HEADER "include/Plugin.hpp")
+add_dependencies(ects_plugin_control ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 set_target_properties(ects_plugin_waypoints PROPERTIES PUBLIC_HEADER "include/Plugin.hpp")
 add_dependencies(ects_plugin_waypoints ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
