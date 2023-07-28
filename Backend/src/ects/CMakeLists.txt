@@ -13,6 +13,7 @@ find_package(catkin REQUIRED COMPONENTS
   sensor_msgs
   std_msgs
   spot_msgs
+  iosb_localization_filter
   message_generation
 )
 
@@ -87,7 +88,8 @@ add_service_files(
    DEPENDENCIES
    std_msgs
    sensor_msgs
-
+   spot_msgs
+   iosb_localization_filter
  )
 
 ################################################
