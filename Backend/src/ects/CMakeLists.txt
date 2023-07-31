@@ -136,12 +136,6 @@ catkin_package(
 ## Your package locations should be listed before other locations
 include_directories(
   include
-
-  #temporary
-  plugins/core
-  plugins/battery
-  plugins/waypoint
-
   ${catkin_INCLUDE_DIRS}
 )
 
@@ -203,7 +197,6 @@ set(ECTS_SOURCES
 add_executable(${PROJECT_NAME} src/main.cpp ${ECTS_SOURCES})
 
 target_link_libraries(ects ${catkin_LIBRARIES} dl)
-#target_link_libraries(ects PRIVATE nlohmann_json::nlohmann_json)
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
 ## target back to the shorter version for ease of user use
