@@ -1,4 +1,3 @@
-Header      header
-
-float32     averaging_duration  # in seconds
-CpuUsage[]  measurements
+Header       header
+Aggregation  aggregation
+CpuUsage[]   measurements

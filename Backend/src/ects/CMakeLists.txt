@@ -64,6 +64,21 @@ add_message_files(
    ReplaceWaypoint.msg
    Waypoint.msg
    WaypointList.msg
+
+   # systemmonitor
+   Aggregation.msg
+   CpuPercentage.msg
+   CpuUsage.msg
+   CpuUsageHistory.msg
+   DiskUsage.msg
+   DiskUsageHistory.msg
+   MemoryUsage.msg
+   MemoryUsageHistory.msg
+   NetworkInfo.msg
+   NetworkUsage.msg
+   NetworkUsageHistory.msg
+   ProcessTotal.msg
+   ProcessTotalHistory.msg
 )
 
 ## Generate services in the 'srv' folder
@@ -74,6 +89,10 @@ add_service_files(
     # waypoints
     WaypointListDirectory.srv
     WaypointListFile.srv
+    # systemmonitor
+    AdapterList.srv
+    AggregationList.srv
+    MountpointList.srv
 )
 
 ## Generate actions in the 'action' folder
@@ -168,6 +187,11 @@ add_library(ects_plugin_control SHARED
         plugins/control/Control.cpp
 )
 
+add_library(ects_plugin_systemmonitor SHARED
+        plugins/systemmonitor/SystemMonitor.cpp
+        plugins/systemmonitor/SystemMonitorMessages.cpp
+        )
+
 set(ECTS_PLUGIN_WAYPOINT_SOURCES
         plugins/waypoint/WaypointManager.cpp
         plugins/waypoint/Waypoint.cpp
@@ -185,6 +209,8 @@ set_target_properties(ects_plugin_battery PROPERTIES PUBLIC_HEADER "include/Plug
 add_dependencies(ects_plugin_battery ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 set_target_properties(ects_plugin_control PROPERTIES PUBLIC_HEADER "include/Plugin.hpp")
 add_dependencies(ects_plugin_control ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+set_target_properties(ects_plugin_systemmonitor PROPERTIES PUBLIC_HEADER "include/Plugin.hpp")
+add_dependencies(ects_plugin_systemmonitor ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 set_target_properties(ects_plugin_waypoints PROPERTIES PUBLIC_HEADER "include/Plugin.hpp")
 add_dependencies(ects_plugin_waypoints ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
