@@ -22,23 +22,23 @@ class NetworkUsageMessage : UsageData {
 
     NetworkUsageMessage(uint64_t up_speed, uint64_t down_speed,
                         float wifi_signal_strength)
-        : UsageData(), _up_speed(up_speed), _down_speed(down_speed),
-          _wifi_signal_strength{wifi_signal_strength} {}
+        : UsageData(), up_speed(up_speed), down_speed(down_speed),
+          wifi_signal_strength{wifi_signal_strength} {}
 
     auto operator+(const NetworkUsageMessage &rhs) const
         -> NetworkUsageMessage {
-        return {_up_speed + rhs._up_speed, _down_speed + rhs._down_speed,
-                _wifi_signal_strength + rhs._wifi_signal_strength};
+        return {up_speed + rhs.up_speed, down_speed + rhs.down_speed,
+                wifi_signal_strength + rhs.wifi_signal_strength};
     }
     auto operator/(const int &rhs) const -> NetworkUsageMessage {
-        return {_up_speed / rhs, _down_speed / rhs,
-                _wifi_signal_strength / rhs};
+        return {up_speed / rhs, down_speed / rhs,
+                wifi_signal_strength / rhs};
     }
 
   private:
-    uint64_t _up_speed;
-    uint64_t _down_speed;
-    float _wifi_signal_strength;
+    uint64_t up_speed;
+    uint64_t down_speed;
+    float wifi_signal_strength;
 };
 
 class NetworkUsageHistoryMessage {

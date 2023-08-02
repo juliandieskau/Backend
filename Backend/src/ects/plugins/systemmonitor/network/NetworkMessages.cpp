@@ -3,9 +3,9 @@
 namespace ects::plugins::systemmonitor {
     auto NetworkUsageMessage::to_ros(const NetworkUsageMessage & msg) -> NetworkUsageMessage::ros_t {
         NetworkUsageMessage::ros_t ros_msg;
-        ros_msg.down_speed = msg._down_speed;
-        ros_msg.up_speed = msg._up_speed;
-        ros_msg.wifi_signal_strength = msg._wifi_signal_strength;
+        ros_msg.down_speed = msg.down_speed;
+        ros_msg.up_speed = msg.up_speed;
+        ros_msg.wifi_signal_strength = msg.wifi_signal_strength;
         return ros_msg;
     }
     auto NetworkUsageHistoryMessage::to_ros(const NetworkUsageHistoryMessage &msg) -> NetworkUsageHistoryMessage::ros_t {
