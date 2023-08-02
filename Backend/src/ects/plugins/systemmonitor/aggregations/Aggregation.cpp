@@ -18,6 +18,16 @@ auto aggregation_from_json(nlohmann::json &j) -> AggregationStrategy * {
     }
 }
 
+template <typename T> auto Window<T>::add(const T &data) -> void {
+    if (window.size() == keep_count)
+        window.erase(window.begin());
+    window.push_back(data);
+}
+template <typename T>
+auto Window<T>::get_window() const -> const std::vector<T> & {
+    return window;
+}
+
 struct ReadingsAggregator : public Aggregator {
     auto new_data(UsageData *data) -> bool override {
         if (++current_count < readings_count)
