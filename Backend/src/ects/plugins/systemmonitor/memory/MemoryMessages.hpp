@@ -19,35 +19,35 @@ class MemoryUsageMessage : UsageData {
                        uint64_t shared, uint64_t buff_cache, uint64_t available,
                        uint64_t swap_total, uint64_t swap_used,
                        uint64_t swap_free)
-        : UsageData(), _total(total), _used(used), _free(free), _shared(shared),
-          _buff_cache(buff_cache), _available(available),
-          _swap_total(swap_total), _swap_used(swap_used),
-          _swap_free(swap_free) {}
+        : UsageData(), total(total), used(used), free(free), shared(shared),
+          buff_cache(buff_cache), available(available),
+          swap_total(swap_total), swap_used(swap_used),
+          swap_free(swap_free) {}
 
     auto operator+(const MemoryUsageMessage &rhs) -> MemoryUsageMessage {
         return MemoryUsageMessage(
-            _total + rhs._total, _used + rhs._used, _free + rhs._free,
-            _shared + rhs._shared, _buff_cache + rhs._buff_cache,
-            _available + rhs._available, _swap_total + rhs._swap_total,
-            _swap_used + rhs._swap_used, _swap_free + rhs._swap_free);
+            total + rhs.total, used + rhs.used, free + rhs.free,
+            shared + rhs.shared, buff_cache + rhs.buff_cache,
+            available + rhs.available, swap_total + rhs.swap_total,
+            swap_used + rhs.swap_used, swap_free + rhs.swap_free);
     }
     auto operator/(const int &rhs) -> MemoryUsageMessage {
-        return MemoryUsageMessage(_total / rhs, _used / rhs, _free / rhs,
-                                  _shared / rhs, _buff_cache / rhs,
-                                  _available / rhs, _swap_total / rhs,
-                                  _swap_used / rhs, _swap_free / rhs);
+        return MemoryUsageMessage(total / rhs, used / rhs, free / rhs,
+                                  shared / rhs, buff_cache / rhs,
+                                  available / rhs, swap_total / rhs,
+                                  swap_used / rhs, swap_free / rhs);
     }
 
   private:
-    uint64_t _total;
-    uint64_t _used;
-    uint64_t _free;
-    uint64_t _shared;
-    uint64_t _buff_cache;
-    uint64_t _available;
-    uint64_t _swap_total;
-    uint64_t _swap_used;
-    uint64_t _swap_free;
+    uint64_t total;
+    uint64_t used;
+    uint64_t free;
+    uint64_t shared;
+    uint64_t buff_cache;
+    uint64_t available;
+    uint64_t swap_total;
+    uint64_t swap_used;
+    uint64_t swap_free;
 };
 
 class MemoryUsageHistoryMessage {
@@ -58,11 +58,11 @@ class MemoryUsageHistoryMessage {
 
     MemoryUsageHistoryMessage(std::vector<MemoryUsageMessage> &usage_history,
                               AggregationMessage &aggregation)
-        : _usage_history(usage_history), _aggregation(aggregation) {}
+        : usage_history(usage_history), aggregation(aggregation) {}
 
   private:
-    std::vector<MemoryUsageMessage> &_usage_history;
-    AggregationMessage &_aggregation;
+    std::vector<MemoryUsageMessage> &usage_history;
+    AggregationMessage &aggregation;
 };
 
 } // namespace ects::plugins::systemmonitor

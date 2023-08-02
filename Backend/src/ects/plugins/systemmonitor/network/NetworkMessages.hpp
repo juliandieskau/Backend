@@ -47,11 +47,11 @@ class NetworkUsageHistoryMessage {
 
     NetworkUsageHistoryMessage(std::vector<NetworkUsageMessage> &usage_history,
                                AggregationMessage &aggregation)
-        : _usage_history(usage_history), _aggregation(aggregation) {}
+        : usage_history(usage_history), aggregation(aggregation) {}
 
   private:
-    std::vector<NetworkUsageMessage> &_usage_history;
-    AggregationMessage &_aggregation;
+    std::vector<NetworkUsageMessage> &usage_history;
+    AggregationMessage &aggregation;
 };
 
 class NetworkInfoMessage {
@@ -62,17 +62,17 @@ class NetworkInfoMessage {
     static auto to_ros(const NetworkInfoMessage &) -> ros_t;
 
     NetworkInfoMessage(std::string interface_name, std::string ip_address,
-                       std::string default_gateway, std::string dns_address,
+                       std::string default_gateway, std::string dns_addresses,
                        bool link_is_up, std::string wlan_ssid)
         : interface_name(interface_name), ip_address(ip_address),
-          default_gateway(default_gateway), dns_address(dns_address),
+          default_gateway(default_gateway), dns_addresses(dns_addresses),
           link_is_up(link_is_up), wlan_ssid(wlan_ssid) {}
 
   private:
     std::string interface_name;
     std::string ip_address;
     std::string default_gateway;
-    std::string dns_address;
+    std::string dns_addresses;
     bool link_is_up;
     std::string wlan_ssid;
 };
@@ -80,8 +80,8 @@ class NetworkInfoMessage {
 using empty_adapterlist_request = EmptyMessage<ects::AdapterList::Request>;
 class AdapterList {
     public:
-    using to_ros_t = ects::AdapterList::Response;
-    static auto to_ros(const AdapterList &) -> to_ros_t;
+    using ros_t = ects::AdapterList::Response;
+    static auto to_ros(const AdapterList &) -> ros_t;
     AdapterList(std::vector<std::string> adapter_list) : adapter_list(adapter_list) {}
     private:
     std::vector<std::string> adapter_list;

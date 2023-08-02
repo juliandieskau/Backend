@@ -5,8 +5,8 @@ namespace ects::plugins::systemmonitor {
 
 class Mountpoint {
   public:
-    auto get_mountpoint() -> std::string { return mountpoint; }
-    auto get_topic_name() -> std::string { return topic_name; }
+    auto get_mountpoint() const -> std::string { return mountpoint; }
+    auto get_topic_name() const -> std::string { return topic_name; }
     Mountpoint(std::string mountpoint, std::string topic_name)
         : mountpoint(mountpoint), topic_name(topic_name) {}
 
