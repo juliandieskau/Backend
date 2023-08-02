@@ -53,6 +53,7 @@ class DiskUsageHistoryMessage {
 class Mountpoint;
 using empty_mountpoint_request = EmptyMessage<ects::MountpointList::Request>;
 class MountpointList {
+  public:
     using ros_t = ects::MountpointList::Response;
     static auto to_ros(const MountpointList &) -> ros_t;
     MountpointList(std::vector<Mountpoint>);
