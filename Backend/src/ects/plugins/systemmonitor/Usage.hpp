@@ -4,13 +4,8 @@
 #include <functional>
 
 namespace ects::plugins::systemmonitor {
-class averageable {
-  public:
-    virtual auto operator/(const averageable rhs) -> averageable;
-    virtual auto operator+(const float rhs) -> averageable;
-};
 
-class UsageData : public averageable {
+class UsageData {
   public:
     auto get_timestamp() const
         -> const std::chrono::time_point<std::chrono::system_clock> & {
@@ -27,6 +22,9 @@ class UsageData : public averageable {
 template <typename T> class UsageProvider {
   public:
     virtual auto get_usage() -> T;
+
+  protected:
+    UsageProvider() = default;
 };
 
 template <typename T> class UsageProviderAdapter : public UsageProvider<T> {
