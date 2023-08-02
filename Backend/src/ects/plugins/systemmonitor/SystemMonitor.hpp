@@ -4,7 +4,7 @@
 #include "ects/ECTS.hpp"
 #include "ects/Plugin.hpp"
 
-#include "cpu/CPU.hpp"
+#include "cpu/Cpu.hpp"
 #include "aggregations/Aggregation.hpp"
 #include "disk/Disk.hpp"
 #include "programs/Programs.hpp"
