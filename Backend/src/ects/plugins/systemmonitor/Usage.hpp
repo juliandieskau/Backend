@@ -1,6 +1,5 @@
 #pragma once
 
-#include "aggregations/Aggregation.hpp"
 #include <chrono>
 #include <functional>
 

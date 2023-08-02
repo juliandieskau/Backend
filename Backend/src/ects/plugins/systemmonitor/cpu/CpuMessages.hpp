@@ -7,22 +7,25 @@
 
 #include "ects/MessageInterface.hpp"
 #include <string>
+#include <utility>
 #include <vector>
 
 namespace ects::plugins::systemmonitor {
 class CpuPercentageMessage : public UsageData {
   public:
     using ros_t = ects::CpuPercentage;
-    using from_ros_t = ros_t;
+    using to_ros_t = ros_t;
+
     static auto to_ros(const CpuPercentageMessage &) -> ros_t;
     CpuPercentageMessage(float total) : UsageData(), percentage(total) {}
     auto get_value() const -> float { return percentage; }
 
-    auto operator+(const CpuPercentageMessage &rhs) -> CpuPercentageMessage {
-        return CpuPercentageMessage(percentage + rhs.percentage);
+    auto operator+(const CpuPercentageMessage &rhs) const
+        -> CpuPercentageMessage {
+        return {percentage + rhs.percentage};
     }
-    auto operator/(const int &rhs) -> CpuPercentageMessage {
-        return CpuPercentageMessage(percentage / rhs);
+    auto operator/(const int &rhs) const -> CpuPercentageMessage {
+        return {percentage / rhs};
     }
 
   private:
@@ -32,40 +35,41 @@ class CpuPercentageMessage : public UsageData {
 class CpuUsageMessage : public UsageData {
   public:
     using ros_t = ects::CpuUsage;
-    using from_ros_t = ros_t;
+    using to_ros_t = ros_t;
+    using history_t = class CpuUsageHistoryMessage;
+
     static auto to_ros(const CpuUsageMessage &) -> ros_t;
 
     CpuUsageMessage(float total, std::vector<float> per_core,
                     std::vector<float> loads)
-        : UsageData(), _total_usage(total), _per_core_usage(per_core),
-          _load_averages(loads) {}
+        : UsageData(), _total_usage(total),
+          _per_core_usage(std::move(per_core)),
+          _load_averages(std::move(loads)) {}
 
     auto get_cpu_percentage() -> CpuPercentageMessage;
 
-    auto operator+(const CpuUsageMessage &rhs) -> CpuUsageMessage {
+    auto operator+(const CpuUsageMessage &rhs) const -> CpuUsageMessage {
         std::vector<float> added_usages;
         for (int i = 0; i < _per_core_usage.size(); i++) {
             added_usages.push_back(_per_core_usage[i] + rhs._per_core_usage[i]);
         }
         std::vector<float> added_loads;
         for (int i = 0; i < _load_averages.size(); i++) {
-            added_loads[i] = _load_averages[i] + rhs._load_averages[i];
+            added_loads.push_back(_load_averages[i] + rhs._load_averages[i]);
         }
-        return CpuUsageMessage(_total_usage + rhs._total_usage, added_usages,
-                               added_loads);
+        return {_total_usage + rhs._total_usage, added_usages, added_loads};
     }
-    auto operator/(const int &rhs) -> CpuUsageMessage {
+    auto operator/(const int &rhs) const -> CpuUsageMessage {
         std::vector<float> divided_usages;
-        for (int i = 0; i < _per_core_usage.size(); i++) {
-            divided_usages.push_back(_per_core_usage[i] / rhs);
+        for (float i : _per_core_usage) {
+            divided_usages.push_back(i / rhs);
         }
         std::vector<float> divided_loads;
-        for (int i = 0; i < _load_averages.size(); i++) {
-            divided_loads[i] = _load_averages[i] / rhs;
+        for (float load_average : _load_averages) {
+            divided_loads.push_back(load_average / rhs);
         }
 
-        return CpuUsageMessage(_total_usage / rhs, divided_usages,
-                               divided_loads);
+        return {_total_usage / rhs, divided_usages, divided_loads};
     }
 
   private:
@@ -77,7 +81,8 @@ class CpuUsageMessage : public UsageData {
 class CpuUsageHistoryMessage {
   public:
     using ros_t = ects::CpuUsageHistory;
-    using from_ros_t = ros_t;
+    using to_ros_t = ros_t;
+
     static auto to_ros(const CpuUsageHistoryMessage &) -> ros_t;
 
     CpuUsageHistoryMessage(std::vector<CpuUsageMessage> &usage_history,

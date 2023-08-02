@@ -9,14 +9,13 @@ namespace ects::plugins::systemmonitor {
 
 class AggregationMessage {
   public:
-    enum AggregationType { INTERVAL, READINGS };
+    enum AggregationType { INTERVAL = 0, READINGS };
     using ros_t = ects::Aggregation;
-    using from_ros_t = ros_t;
+    using to_ros_t = ros_t;
 
     static auto to_ros(const AggregationMessage &) -> ros_t;
     AggregationMessage(std::string &&ects_name, AggregationType type,
-                       float interval, uint16_t nreadings,
-                       uint32_t keep_amount)
+                       float interval, uint16_t nreadings, uint32_t keep_amount)
         : ects_name(ects_name), type(type), interval(interval),
           nreadings(nreadings), keep_amount(keep_amount) {}
 

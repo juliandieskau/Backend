@@ -12,18 +12,19 @@ namespace ects::plugins::systemmonitor {
 
 template <typename T> class UsageDataCollection {
   public:
-    using ros_t = T::history_ros_t;
+    using ros_t = T::history_t::to_ros_t;
     using to_ros_t = ros_t;
 
     UsageDataCollection(AggregationStrategy *strategy)
-        : strategy(strategy->make_aggregator()),
+        : strategy(strategy), aggregator(strategy->make_aggregator()),
           history(strategy->get_keep_count()), current_aggregation() {}
     auto add(T data) -> void;
 
     static auto to_ros(UsageDataCollection<T>) -> ros_t;
 
   private:
-    std::unique_ptr<Aggregator> strategy;
+    AggregationStrategy *strategy;
+    std::unique_ptr<Aggregator> aggregator;
     Window<T> history;
     std::vector<T> current_aggregation;
 };

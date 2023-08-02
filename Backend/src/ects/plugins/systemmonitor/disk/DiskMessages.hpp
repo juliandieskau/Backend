@@ -16,18 +16,19 @@ namespace ects::plugins::systemmonitor {
 class DiskUsageMessage : UsageData {
   public:
     using ros_t = ects::DiskUsage;
-    using from_ros_t = ros_t;
+    using to_ros_t = ros_t;
+    using history_t = class DiskUsageHistoryMessage;
+
     static auto to_ros(const DiskUsageMessage &) -> ros_t;
 
     DiskUsageMessage(uint64_t total_size, uint64_t used)
         : UsageData(), _total_size(total_size), _used(used) {}
 
-    auto operator+(const DiskUsageMessage &rhs) -> DiskUsageMessage {
-        return DiskUsageMessage(_total_size + rhs._total_size,
-                                _used + rhs._used);
+    auto operator+(const DiskUsageMessage &rhs) const -> DiskUsageMessage {
+        return {_total_size + rhs._total_size, _used + rhs._used};
     }
-    auto operator/(const int &rhs) -> DiskUsageMessage {
-        return DiskUsageMessage(_total_size / rhs, _used / rhs);
+    auto operator/(const int &rhs) const -> DiskUsageMessage {
+        return {_total_size / rhs, _used / rhs};
     }
 
   private:
@@ -38,7 +39,8 @@ class DiskUsageMessage : UsageData {
 class DiskUsageHistoryMessage {
   public:
     using ros_t = ects::DiskUsageHistory;
-    using from_ros_t = ros_t;
+    using to_ros_t = ros_t;
+
     static auto to_ros(const DiskUsageHistoryMessage &) -> ros_t;
 
     DiskUsageHistoryMessage(std::vector<DiskUsageMessage> &usage_history,
@@ -55,6 +57,8 @@ using empty_mountpoint_request = EmptyMessage<ects::MountpointList::Request>;
 class MountpointList {
   public:
     using ros_t = ects::MountpointList::Response;
+    using to_ros_t = ros_t;
+
     static auto to_ros(const MountpointList &) -> ros_t;
     MountpointList(std::vector<Mountpoint>);
 

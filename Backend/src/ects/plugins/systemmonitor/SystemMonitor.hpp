@@ -4,10 +4,9 @@
 #include "ects/ECTS.hpp"
 #include "ects/Plugin.hpp"
 
-#include "cpu/Cpu.hpp"
 #include "aggregations/Aggregation.hpp"
+#include "cpu/Cpu.hpp"
 #include "disk/Disk.hpp"
-#include "programs/Programs.hpp"
 #include "memory/Memory.hpp"
 #include "network/Network.hpp"
 #include "programs/Programs.hpp"

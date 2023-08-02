@@ -27,8 +27,7 @@ auto Cpu::get_usage() -> CpuUsageMessage {
     float load1, load5, load15;
     load_file >> load1 >> load5 >> load15;
 
-    return CpuUsageMessage(total_usage, usage_percentages,
-                           {load1, load5, load15});
+    return {total_usage, usage_percentages, {load1, load5, load15}};
 }
 
 } // namespace ects::plugins::systemmonitor

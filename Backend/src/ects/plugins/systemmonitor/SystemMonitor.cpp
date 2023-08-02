@@ -19,7 +19,7 @@ auto SystemMonitor::init(ECTS &ects) -> void {
         ects.config().get_value_or_default<json::array_t>(
             "/systemmonitor/aggregations", json::array());
 
-    auto aggregations = std::vector<AggregationStrategy*>();
+    auto aggregations = std::vector<AggregationStrategy *>();
     for (auto &entry : config_aggregations) {
         aggregations.push_back(aggregation_from_json(entry));
     }

@@ -12,7 +12,9 @@ namespace ects::plugins::systemmonitor {
 class MemoryUsageMessage : UsageData {
   public:
     using ros_t = ects::MemoryUsage;
-    using from_ros_t = ros_t;
+    using to_ros_t = ros_t;
+    using history_t = class MemoryUsageHistoryMessage;
+
     static auto to_ros(const MemoryUsageMessage &) -> ros_t;
 
     MemoryUsageMessage(uint64_t total, uint64_t used, uint64_t free,
@@ -20,22 +22,24 @@ class MemoryUsageMessage : UsageData {
                        uint64_t swap_total, uint64_t swap_used,
                        uint64_t swap_free)
         : UsageData(), total(total), used(used), free(free), shared(shared),
-          buff_cache(buff_cache), available(available),
-          swap_total(swap_total), swap_used(swap_used),
-          swap_free(swap_free) {}
+          buff_cache(buff_cache), available(available), swap_total(swap_total),
+          swap_used(swap_used), swap_free(swap_free) {}
 
-    auto operator+(const MemoryUsageMessage &rhs) -> MemoryUsageMessage {
-        return MemoryUsageMessage(
-            total + rhs.total, used + rhs.used, free + rhs.free,
-            shared + rhs.shared, buff_cache + rhs.buff_cache,
-            available + rhs.available, swap_total + rhs.swap_total,
-            swap_used + rhs.swap_used, swap_free + rhs.swap_free);
+    auto operator+(const MemoryUsageMessage &rhs) const -> MemoryUsageMessage {
+        return {total + rhs.total,
+                used + rhs.used,
+                free + rhs.free,
+                shared + rhs.shared,
+                buff_cache + rhs.buff_cache,
+                available + rhs.available,
+                swap_total + rhs.swap_total,
+                swap_used + rhs.swap_used,
+                swap_free + rhs.swap_free};
     }
-    auto operator/(const int &rhs) -> MemoryUsageMessage {
-        return MemoryUsageMessage(total / rhs, used / rhs, free / rhs,
-                                  shared / rhs, buff_cache / rhs,
-                                  available / rhs, swap_total / rhs,
-                                  swap_used / rhs, swap_free / rhs);
+    auto operator/(const int &rhs) const -> MemoryUsageMessage {
+        return {total / rhs,      used / rhs,       free / rhs,
+                shared / rhs,     buff_cache / rhs, available / rhs,
+                swap_total / rhs, swap_used / rhs,  swap_free / rhs};
     }
 
   private:
@@ -53,7 +57,7 @@ class MemoryUsageMessage : UsageData {
 class MemoryUsageHistoryMessage {
   public:
     using ros_t = ects::MemoryUsageHistory;
-    using from_ros_t = ros_t;
+    using to_ros_t = ros_t;
     static auto to_ros(const MemoryUsageHistoryMessage &) -> ros_t;
 
     MemoryUsageHistoryMessage(std::vector<MemoryUsageMessage> &usage_history,

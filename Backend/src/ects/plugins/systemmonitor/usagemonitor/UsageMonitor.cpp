@@ -14,7 +14,7 @@ template <typename T> auto UsageDataCollection<T>::add(T data) -> void {
         current_aggregation.clear();
         return acc;
     };
-    if (strategy->new_data(&data))
+    if (aggregator->new_data(&data))
         history.add(average());
 }
 
@@ -22,7 +22,7 @@ template <typename T>
 auto UsageDataCollection<T>::to_ros(UsageDataCollection<T> collection)
     -> ros_t {
     ros_t r;
-    r.aggregation = collection.strategy.to_ros();
+    r.aggregation = collection.strategy->to_ros();
     r.measurements = collection.history;
     return r;
 }
