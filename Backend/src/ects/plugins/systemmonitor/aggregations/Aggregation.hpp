@@ -6,7 +6,6 @@
 #include <vector>
 
 namespace ects::plugins::systemmonitor {
-class UsageData;
 template <typename T> class Window {
   public:
     Window(uint32_t keep_count) : keep_count(keep_count) {}
@@ -60,16 +59,6 @@ class IntervalAggregationStrategy : public AggregationStrategy {
     float interval;
 };
 
-auto aggregation_from_json(nlohmann::json&) -> AggregationStrategy *;
+auto aggregation_from_json(nlohmann::json &) -> AggregationStrategy *;
 
-class UsageDataCollection {
-  public:
-    UsageDataCollection(AggregationStrategy &strategy)
-        : strategy(strategy), history(strategy.get_keep_count()) {}
-    auto add(UsageData data) -> void;
-
-  private:
-    AggregationStrategy &strategy;
-    Window<UsageData> history;
-};
 } // namespace ects::plugins::systemmonitor
