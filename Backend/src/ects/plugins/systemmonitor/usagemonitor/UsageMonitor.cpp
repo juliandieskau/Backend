@@ -3,9 +3,19 @@
 namespace ects::plugins::systemmonitor {
 
 template <typename T> auto UsageDataCollection<T>::add(T data) -> void {
-    strategy->new_data();
-    if (strategy->should_aggregate())
-        history.add(data);
+    current_aggregation.push_back(data);
+    // NOTE: this implementation saves all data till it aggregates,
+    //       requires a default constructor uses operators += and /=
+    auto average = [this] {
+        T acc;
+        for (auto d : current_aggregation)
+            acc += d;
+        acc /= current_aggregation.size();
+        current_aggregation.clear();
+        return acc;
+    };
+    if (strategy->new_data(&data))
+        history.add(average());
 }
 
 template <typename T>
@@ -28,8 +38,9 @@ UsageDataMonitor<T>::UsageDataMonitor(
       size(aggregation_strategies.size()) {
     for (auto aggregation : aggregation_strategies) {
         collected_usage_data.emplace_back(aggregation);
-        collection_publishers.emplace_back(
-            aggregation_topic_name + aggregation->get_name() + topic_name);
+        collection_publishers.emplace_back(aggregation_topic_name +
+                                           aggregation->get_name() +
+                                           this->topic_name);
     }
 }
 

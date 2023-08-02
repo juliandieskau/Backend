@@ -4,6 +4,7 @@
 #include "nlohmann/json.hpp"
 #include <chrono>
 #include <cstdint>
+#include <utility>
 #include <vector>
 
 namespace ects::plugins::systemmonitor {
@@ -19,19 +20,28 @@ template <typename T> class Window {
     std::vector<T> window;
 };
 
+class Aggregator {
+  public:
+    virtual auto new_data(UsageData *data) -> bool = 0;
+
+  protected:
+    Aggregator() = default;
+    Aggregator(const Aggregator &) = default;
+    Aggregator(Aggregator &&) = default;
+};
+
 class AggregationStrategy {
   public:
     using ros_t = ects::Aggregation;
 
-    auto get_keep_count() -> uint32_t { return keep_count; }
+    auto get_keep_count() const -> uint32_t { return keep_count; }
     auto get_name() -> std::string & { return name; }
-    virtual auto new_data() -> void = 0;
-    virtual auto should_aggregate() -> bool = 0;
+    virtual auto make_aggregator() -> std::unique_ptr<Aggregator> = 0;
     virtual auto to_ros() -> ros_t = 0;
 
   protected:
     AggregationStrategy(uint32_t keep_count, std::string name)
-        : keep_count(keep_count), name(name) {}
+        : keep_count(keep_count), name(std::move(name)) {}
 
   private:
     uint32_t keep_count;
@@ -42,10 +52,9 @@ class ReadingsAggregationStrategy : public AggregationStrategy {
   public:
     ReadingsAggregationStrategy(uint32_t keep_count, std::string name,
                                 uint32_t readings_count)
-        : AggregationStrategy(keep_count, name),
+        : AggregationStrategy(keep_count, std::move(name)),
           readings_count(readings_count) {}
-    auto new_data() -> void override;
-    auto should_aggregate() -> bool override;
+    auto make_aggregator() -> std::unique_ptr<Aggregator> override;
     auto to_ros() -> ros_t override;
 
   private:
@@ -55,14 +64,14 @@ class ReadingsAggregationStrategy : public AggregationStrategy {
 class IntervalAggregationStrategy : public AggregationStrategy {
   public:
     IntervalAggregationStrategy(uint32_t keep_count, std::string name,
-                                float interval)
-        : AggregationStrategy(keep_count, name), interval(interval) {}
-    auto new_data() -> void override;
-    auto should_aggregate() -> bool override;
+                                std::chrono::duration<float> interval)
+        : AggregationStrategy(keep_count, std::move(name)), interval(interval) {
+    }
+    auto make_aggregator() -> std::unique_ptr<Aggregator> override;
     auto to_ros() -> ros_t override;
 
   private:
-    float interval;
+    std::chrono::duration<float> interval;
 };
 
 auto aggregation_from_json(nlohmann::json &) -> AggregationStrategy *;
