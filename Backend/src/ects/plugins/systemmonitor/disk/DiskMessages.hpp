@@ -3,6 +3,8 @@
 #include "../aggregations/AggregationMessage.hpp"
 #include "ects/DiskUsage.h"
 #include "ects/DiskUsageHistory.h"
+#include "ects/EmptyMessage.hpp"
+#include "ects/MountpointList.h"
 
 #include "ects/MessageInterface.hpp"
 #include <array>
@@ -46,5 +48,16 @@ class DiskUsageHistoryMessage {
   private:
     std::vector<DiskUsageMessage> &_usage_history;
     AggregationMessage &_aggregation;
+};
+
+class Mountpoint;
+using empty_mountpoint_request = EmptyMessage<ects::MountpointList::Request>;
+class MountpointList {
+    using to_ros_t = ects::MountpointList::Response;
+    static auto to_ros(const MountpointList &) -> to_ros_t;
+    MountpointList(std::vector<Mountpoint>);
+
+  private:
+    std::vector<Mountpoint> mountpoints;
 };
 } // namespace ects::plugins::systemmonitor

@@ -2,6 +2,8 @@
 
 #include "ects/ProcessTotal.h"
 #include "ects/ProcessTotalHistory.h"
+#include "../Usage.hpp"
+#include "../aggregations/AggregationMessage.hpp"
 
 #include "ects/MessageInterface.hpp"
 #include <string>

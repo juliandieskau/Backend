@@ -192,6 +192,11 @@ add_library(ects_plugin_systemmonitor SHARED
         plugins/systemmonitor/SystemMonitorMessages.cpp
 
         plugins/systemmonitor/aggregations/Aggregation.cpp
+        plugins/systemmonitor/cpu/Cpu.cpp
+        plugins/systemmonitor/disk/Disk.cpp
+        plugins/systemmonitor/memory/Memory.cpp
+        plugins/systemmonitor/network/Network.cpp
+        plugins/systemmonitor/programs/Programs.cpp
         )
 
 set(ECTS_PLUGIN_WAYPOINT_SOURCES

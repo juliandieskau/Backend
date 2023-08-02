@@ -1,6 +1,8 @@
 #pragma once
 #include "../Usage.hpp"
 #include "../aggregations/AggregationMessage.hpp"
+#include "ects/AdapterList.h"
+#include "ects/EmptyMessage.hpp"
 #include "ects/NetworkInfo.h"
 #include "ects/NetworkUsage.h"
 #include "ects/NetworkUsageHistory.h"
@@ -11,9 +13,9 @@
 namespace ects::plugins::systemmonitor {
 class NetworkUsageMessage : UsageData {
   public:
-    using ros_t = ects::DiskUsage;
+    using ros_t = ects::NetworkUsage;
     using from_ros_t = ros_t;
-    static auto to_ros(const DiskUsageMessage &) -> ros_t;
+    static auto to_ros(const NetworkUsageMessage &) -> ros_t;
 
     NetworkUsageMessage(uint64_t up_speed, uint64_t down_speed,
                         float wifi_signal_strength)
@@ -73,6 +75,17 @@ class NetworkInfoMessage {
     std::string dns_address;
     bool link_is_up;
     std::string wlan_ssid;
+};
+
+using empty_adapterlist_request = EmptyMessage<ects::AdapterList::Request>;
+class AdapterList {
+    public:
+    using to_ros_t = ects::AdapterList::Response;
+    static auto to_ros(const AdapterList &) -> to_ros_t;
+    AdapterList(std::vector<std::string> adapter_list) : adapter_list(adapter_list) {}
+    private:
+    std::vector<std::string> adapter_list;
+
 };
 
 } // namespace ects::plugins::systemmonitor
