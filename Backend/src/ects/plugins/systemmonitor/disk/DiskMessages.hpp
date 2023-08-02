@@ -17,7 +17,7 @@ class DiskUsageMessage : UsageData {
   public:
     using ros_t = ects::DiskUsage;
     using to_ros_t = ros_t;
-    using history_t = class DiskUsageHistoryMessage;
+    using history_ros_t = ects::DiskUsageHistory;
 
     static auto to_ros(const DiskUsageMessage &) -> ros_t;
 
@@ -34,22 +34,6 @@ class DiskUsageMessage : UsageData {
   private:
     uint64_t _total_size;
     uint64_t _used;
-};
-
-class DiskUsageHistoryMessage {
-  public:
-    using ros_t = ects::DiskUsageHistory;
-    using to_ros_t = ros_t;
-
-    static auto to_ros(const DiskUsageHistoryMessage &) -> ros_t;
-
-    DiskUsageHistoryMessage(std::vector<DiskUsageMessage> &usage_history,
-                            AggregationMessage &aggregation)
-        : _usage_history(usage_history), _aggregation(aggregation) {}
-
-  private:
-    std::vector<DiskUsageMessage> &_usage_history;
-    AggregationMessage &_aggregation;
 };
 
 class Mountpoint;

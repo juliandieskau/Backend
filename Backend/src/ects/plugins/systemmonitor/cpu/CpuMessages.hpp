@@ -36,7 +36,7 @@ class CpuUsageMessage : public UsageData {
   public:
     using ros_t = ects::CpuUsage;
     using to_ros_t = ros_t;
-    using history_t = class CpuUsageHistoryMessage;
+    using history_ros_t = ects::CpuUsageHistory;
 
     static auto to_ros(const CpuUsageMessage &) -> ros_t;
 
@@ -78,19 +78,4 @@ class CpuUsageMessage : public UsageData {
     std::vector<float> _load_averages;
 };
 
-class CpuUsageHistoryMessage {
-  public:
-    using ros_t = ects::CpuUsageHistory;
-    using to_ros_t = ros_t;
-
-    static auto to_ros(const CpuUsageHistoryMessage &) -> ros_t;
-
-    CpuUsageHistoryMessage(std::vector<CpuUsageMessage> &usage_history,
-                           AggregationMessage &aggregation)
-        : _usage_history(usage_history), _aggregation(aggregation) {}
-
-  private:
-    std::vector<CpuUsageMessage> &_usage_history;
-    AggregationMessage &_aggregation;
-};
 } // namespace ects::plugins::systemmonitor

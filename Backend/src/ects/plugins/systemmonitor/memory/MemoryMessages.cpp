@@ -14,14 +14,4 @@ auto MemoryUsageMessage::to_ros(const MemoryUsageMessage &msg) -> ros_t {
     ros_msg.swap_free = msg.swap_free;
     return ros_msg;
 }
-
-auto MemoryUsageHistoryMessage::to_ros(const MemoryUsageHistoryMessage &msg)
-    -> ros_t {
-    ros_t ros_msg;
-    ros_msg.aggregation = AggregationMessage::to_ros(msg.aggregation);
-    for (auto &usage : msg.usage_history) {
-        ros_msg.measurements.push_back(MemoryUsageMessage::to_ros(usage));
-    }
-    return ros_msg;
-}
 } // namespace ects::plugins::systemmonitor
