@@ -3,7 +3,8 @@
 #include "CpuMessages.hpp"
 
 namespace ects::plugins::systemmonitor {
-class Cpu : UsageProvider<CpuUsageMessage> {
+class Cpu : public UsageProvider<CpuUsageMessage> {
+  public:
     auto get_usage() -> CpuUsageMessage override;
 };
 

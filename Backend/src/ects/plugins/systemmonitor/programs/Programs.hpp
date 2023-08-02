@@ -2,7 +2,8 @@
 #include "ProgramMessages.hpp"
 
 namespace ects::plugins::systemmonitor {
-class Programs : UsageProvider<ProcessTotalMessage> {
+class Programs : public UsageProvider<ProcessTotalMessage> {
+  public:
     auto get_usage() -> ProcessTotalMessage override;
 };
 

@@ -2,7 +2,8 @@
 #include "MemoryMessages.hpp"
 
 namespace ects::plugins::systemmonitor {
-class Memory : UsageProvider<MemoryUsageMessage> {
+class Memory : public UsageProvider<MemoryUsageMessage> {
+  public:
     auto get_usage() -> MemoryUsageMessage override;
 };
 

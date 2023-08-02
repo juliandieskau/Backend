@@ -6,6 +6,7 @@
 namespace ects::plugins::systemmonitor {
 
 class Network {
+  public:
     auto get_info() -> NetworkInfoMessage;
     auto get_adapters() -> std::vector<std::string>;
     auto get_usage(const std::string &adapter) -> NetworkUsageMessage;

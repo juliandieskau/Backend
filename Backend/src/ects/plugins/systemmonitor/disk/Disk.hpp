@@ -19,6 +19,7 @@ class Mountpoint {
 };
 
 class Disk {
+  public:
     auto get_mountpoints() -> MountpointList;
     auto get_usage(const Mountpoint &mountpoint) -> DiskUsageMessage;
 };
