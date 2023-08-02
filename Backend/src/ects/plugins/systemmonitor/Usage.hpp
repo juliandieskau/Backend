@@ -1,13 +1,10 @@
 #pragma once
-#include <chrono>
-#include <functional>
-#include <string>
-#include <vector>
 
 #include "aggregations/Aggregation.hpp"
+#include <chrono>
+#include <functional>
 
 namespace ects::plugins::systemmonitor {
-class AggregationStrategy;
 class averageable {
   public:
     virtual auto operator/(const averageable rhs) -> averageable;
@@ -40,23 +37,6 @@ template <typename T> class UsageProviderAdapter : public UsageProvider<T> {
 
   private:
     std::function<T()> f;
-};
-
-template <typename T> class UsageDataMonitor {
-  public:
-    virtual auto step() -> void = 0;
-  protected:
-    UsageDataMonitor(std::string topic_name,
-                     std::vector<AggregationStrategy> aggregation_strategies,
-                     UsageProvider<T> data_provider)
-        : topic_name(topic_name),
-          aggregation_strategies(aggregation_strategies),
-          data_providers(data_provider) {}
-
-  private:
-    std::string topic_name;
-    std::vector<AggregationStrategy> aggregation_strategies;
-    std::vector<UsageProvider<T>> data_providers;
 };
 
 } // namespace ects::plugins::systemmonitor

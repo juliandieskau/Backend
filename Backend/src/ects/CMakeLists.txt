@@ -142,7 +142,7 @@ add_service_files(
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
   INCLUDE_DIRS include
-  LIBRARIES ects_plugin_core ects_plugin_battery ects_plugin_control ects_plugin_waypoints
+  LIBRARIES ects_plugin_core ects_plugin_battery ects_plugin_control ects_plugin_waypoints ects_plugin_systemmonitor
   CATKIN_DEPENDS roscpp sensor_msgs std_msgs message_runtime
 #  DEPENDS system_lib
 )
@@ -192,6 +192,7 @@ add_library(ects_plugin_systemmonitor SHARED
         plugins/systemmonitor/SystemMonitorMessages.cpp
 
         plugins/systemmonitor/aggregations/Aggregation.cpp
+        plugins/systemmonitor/usagemonitor/UsageMonitor.cpp
         plugins/systemmonitor/cpu/Cpu.cpp
         plugins/systemmonitor/disk/Disk.cpp
         plugins/systemmonitor/memory/Memory.cpp
