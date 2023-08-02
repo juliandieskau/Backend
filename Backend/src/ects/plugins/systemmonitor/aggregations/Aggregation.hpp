@@ -1,5 +1,6 @@
 #pragma once
 #include "../Usage.hpp"
+#include "ects/Aggregation.h"
 #include "nlohmann/json.hpp"
 #include <chrono>
 #include <cstdint>
@@ -20,10 +21,13 @@ template <typename T> class Window {
 
 class AggregationStrategy {
   public:
+    using ros_t = ects::Aggregation;
+
     auto get_keep_count() -> uint32_t { return keep_count; }
     auto get_name() -> std::string & { return name; }
     virtual auto new_data() -> void = 0;
     virtual auto should_aggregate() -> bool = 0;
+    virtual auto to_ros() -> ros_t = 0;
 
   protected:
     AggregationStrategy(uint32_t keep_count, std::string name)
@@ -42,6 +46,7 @@ class ReadingsAggregationStrategy : public AggregationStrategy {
           readings_count(readings_count) {}
     auto new_data() -> void override;
     auto should_aggregate() -> bool override;
+    auto to_ros() -> ros_t override;
 
   private:
     uint32_t readings_count;
@@ -54,6 +59,7 @@ class IntervalAggregationStrategy : public AggregationStrategy {
         : AggregationStrategy(keep_count, name), interval(interval) {}
     auto new_data() -> void override;
     auto should_aggregate() -> bool override;
+    auto to_ros() -> ros_t override;
 
   private:
     float interval;
