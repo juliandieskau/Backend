@@ -15,21 +15,21 @@ class AggregationMessage {
 
     static auto to_ros(const AggregationMessage &) -> ros_t;
     AggregationMessage(std::string &&ects_name, AggregationType type,
-                       std::chrono::seconds interval, uint16_t nreadings,
+                       float interval, uint16_t nreadings,
                        uint32_t keep_amount)
         : ects_name(ects_name), type(type), interval(interval),
           nreadings(nreadings), keep_amount(keep_amount) {}
 
     auto get_ects_name() const -> const std::string & { return ects_name; }
     auto get_type() const -> const AggregationType { return type; }
-    auto get_interval() const -> const std::chrono::seconds { return interval; }
+    auto get_interval() const -> const float { return interval; }
     auto get_nreadings() const -> const uint16_t { return nreadings; }
     auto get_keep_amount() const -> const uint32_t { return keep_amount; }
 
   private:
     const std::string ects_name;
     const AggregationType type;
-    const std::chrono::seconds interval;
+    const float interval;
     const uint16_t nreadings;
     const uint32_t keep_amount;
 };

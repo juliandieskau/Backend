@@ -190,6 +190,8 @@ add_library(ects_plugin_control SHARED
 add_library(ects_plugin_systemmonitor SHARED
         plugins/systemmonitor/SystemMonitor.cpp
         plugins/systemmonitor/SystemMonitorMessages.cpp
+
+        plugins/systemmonitor/aggregations/Aggregation.cpp
         )
 
 set(ECTS_PLUGIN_WAYPOINT_SOURCES

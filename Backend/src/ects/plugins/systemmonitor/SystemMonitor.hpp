@@ -12,6 +12,9 @@
 #include "network/Network.hpp"
 #include "programs/Programs.hpp"
 
+#include <memory>
+#include <optional>
+
 namespace ects::plugins::systemmonitor {
 class SystemMonitor : public Plugin {
   public:
@@ -21,7 +24,11 @@ class SystemMonitor : public Plugin {
     auto name() const -> const std::string override { return "systemmonitor"; }
 
   private:
-    struct data {};
+    struct data {
+        std::shared_ptr<ects::Timer> timer;
+        std::vector<AggregationStrategy *> aggregations;
+        std::vector<UsageDataMonitor *> monitors;
+    };
     std::optional<data> data;
 };
 

@@ -7,7 +7,7 @@
 #include "aggregations/Aggregation.hpp"
 
 namespace ects::plugins::systemmonitor {
-
+class AggregationStrategy;
 class averageable {
   public:
     virtual auto operator/(const averageable rhs) -> averageable;
@@ -44,16 +44,17 @@ template <typename T> class UsageProviderAdapter : public UsageProvider<T> {
 
 template <typename T> class UsageDataMonitor {
   public:
+    virtual auto step() -> void = 0;
+  protected:
     UsageDataMonitor(std::string topic_name,
                      std::vector<AggregationStrategy> aggregation_strategies,
                      UsageProvider<T> data_provider)
         : topic_name(topic_name),
           aggregation_strategies(aggregation_strategies),
           data_providers(data_provider) {}
-    auto step() -> void;
 
   private:
-    std::string &topic_name;
+    std::string topic_name;
     std::vector<AggregationStrategy> aggregation_strategies;
     std::vector<UsageProvider<T>> data_providers;
 };

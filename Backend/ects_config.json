@@ -5,7 +5,8 @@
             "core",
             "battery",
             "waypoints",
-            "control"
+            "control",
+            "systemmonitor"
         ]
     },
     "battery": {
@@ -16,5 +17,28 @@
     },
     "waypoints": {
         "storage_directory": "/workspace/waypoints"
-    }
+    },
+    "systemmonitor": {
+        "update_interval": 0.5
+    },
+    "aggregations": [
+        { 
+            "name": "second",
+            "type": "interval",
+            "keep_count": 60,
+            "interval": 1.0
+        },
+        {
+            "name": "minute",
+            "type": "interval",
+            "keep_count": 240,
+            "interval": 60.0
+        },
+        { 
+            "name": "smoothed",
+            "type": "readings",
+            "keep_count": 100,
+            "readings": 5
+        }
+    ]
 }
