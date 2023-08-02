@@ -4,6 +4,7 @@
 #include "ects/ECTS.hpp"
 #include "ects/Plugin.hpp"
 
+#include "UsageMonitor.hpp"
 #include "aggregations/Aggregation.hpp"
 #include "cpu/Cpu.hpp"
 #include "disk/Disk.hpp"
@@ -26,7 +27,7 @@ class SystemMonitor : public Plugin {
     struct data {
         std::shared_ptr<ects::Timer> timer;
         std::vector<AggregationStrategy *> aggregations;
-        Cpu cpu;
+        UsageDataMonitor<CpuUsageMessage> cpu_monitor;
         Disk disk;
         Memory memory;
         Network network;

@@ -16,12 +16,13 @@ class UsageData {
     UsageData() : timestamp(std::chrono::system_clock::now()) {}
 
   private:
-    const std::chrono::time_point<std::chrono::system_clock> timestamp;
+    std::chrono::time_point<std::chrono::system_clock> timestamp;
 };
 
 template <typename T> class UsageProvider {
   public:
     virtual auto get_usage() -> T = 0;
+    virtual ~UsageProvider() = default;
 
   protected:
     UsageProvider() = default;

@@ -76,7 +76,7 @@ template <from_ros_message internal_t> struct Subscriber {
 };
 
 template <to_ros_message internal_t> struct Publisher {
-    void publish(internal_t internal_input) {
+    void publish(const internal_t &internal_input) {
         auto r = detail::try_conversion<typename internal_t::to_ros_t>(
             [&] { return internal_t::to_ros(internal_input); }, topic_name);
         if (r)

@@ -12,8 +12,12 @@ template <typename T> class Window {
   public:
     Window(uint32_t keep_count) : keep_count(keep_count) {}
     auto get_keep_count() -> uint32_t { return keep_count; }
-    auto add(const T &) -> void;
-    auto get_window() const -> const std::vector<T> &;
+    auto add(const T &data) -> void {
+        if (window.size() == keep_count)
+            window.erase(window.begin());
+        window.push_back(data);
+    }
+    auto get_window() const -> const std::vector<T> & { return window; }
 
   private:
     const uint32_t keep_count;

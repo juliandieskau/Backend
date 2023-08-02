@@ -5,7 +5,7 @@ namespace ects::plugins::systemmonitor {
 auto aggregation_from_json(nlohmann::json &j) -> AggregationStrategy * {
 
     auto type = j.at("type").get<std::string>();
-    auto keep_amount = j.at("keep_amount").get<uint32_t>();
+    auto keep_amount = j.at("keep_count").get<uint32_t>();
     auto name = j.at("name").get<std::string>();
     if (type == "interval") {
         std::chrono::duration<float> interval{j.at("interval").get<float>()};
@@ -16,16 +16,6 @@ auto aggregation_from_json(nlohmann::json &j) -> AggregationStrategy * {
     } else {
         throw std::runtime_error("Invalid aggregation type specified");
     }
-}
-
-template <typename T> auto Window<T>::add(const T &data) -> void {
-    if (window.size() == keep_count)
-        window.erase(window.begin());
-    window.push_back(data);
-}
-template <typename T>
-auto Window<T>::get_window() const -> const std::vector<T> & {
-    return window;
 }
 
 struct ReadingsAggregator : public Aggregator {
