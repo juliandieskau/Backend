@@ -21,7 +21,7 @@ class UsageData {
 
 template <typename T> class UsageProvider {
   public:
-    virtual auto get_usage() -> T;
+    virtual auto get_usage() -> T = 0;
 
   protected:
     UsageProvider() = default;
