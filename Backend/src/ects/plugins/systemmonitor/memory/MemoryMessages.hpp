@@ -13,7 +13,7 @@ class MemoryUsageMessage : UsageData {
   public:
     using ros_t = ects::MemoryUsage;
     using to_ros_t = ros_t;
-    using history_t = class MemoryUsageHistoryMessage;
+    using history_ros_t = ects::MemoryUsageHistory;
 
     static auto to_ros(const MemoryUsageMessage &) -> ros_t;
 
@@ -52,21 +52,6 @@ class MemoryUsageMessage : UsageData {
     uint64_t swap_total;
     uint64_t swap_used;
     uint64_t swap_free;
-};
-
-class MemoryUsageHistoryMessage {
-  public:
-    using ros_t = ects::MemoryUsageHistory;
-    using to_ros_t = ros_t;
-    static auto to_ros(const MemoryUsageHistoryMessage &) -> ros_t;
-
-    MemoryUsageHistoryMessage(std::vector<MemoryUsageMessage> &usage_history,
-                              AggregationMessage &aggregation)
-        : usage_history(usage_history), aggregation(aggregation) {}
-
-  private:
-    std::vector<MemoryUsageMessage> &usage_history;
-    AggregationMessage &aggregation;
 };
 
 } // namespace ects::plugins::systemmonitor

@@ -13,7 +13,7 @@ class ProcessTotalMessage : public UsageData {
   public:
     using ros_t = ects::ProcessTotal;
     using to_ros_t = ros_t;
-    using history_t = class ProcessTotalHistoryMessage;
+    using history_ros_t = ects::ProcessTotalHistory;
 
     static auto to_ros(const ProcessTotalMessage &) -> ros_t;
 
@@ -31,21 +31,5 @@ class ProcessTotalMessage : public UsageData {
 
   private:
     uint32_t _total;
-};
-
-class ProcessTotalHistoryMessage {
-  public:
-    using ros_t = ects::ProcessTotalHistory;
-    using to_ros_t = ros_t;
-
-    static auto to_ros(const ProcessTotalHistoryMessage &) -> ros_t;
-
-    ProcessTotalHistoryMessage(std::vector<ProcessTotalMessage> &usage_history,
-                               AggregationMessage &aggregation)
-        : _usage_history(usage_history), _aggregation(aggregation) {}
-
-  private:
-    std::vector<ProcessTotalMessage> &_usage_history;
-    AggregationMessage &_aggregation;
 };
 } // namespace ects::plugins::systemmonitor

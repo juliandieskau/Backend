@@ -18,14 +18,4 @@ auto CpuUsageMessage::get_cpu_percentage() -> CpuPercentageMessage {
     return {_total_usage};
 }
 
-auto CpuUsageHistoryMessage::to_ros(const CpuUsageHistoryMessage &msg)
-    -> ros_t {
-    ros_t ros_msg;
-    ros_msg.aggregation = AggregationMessage::to_ros(msg._aggregation);
-    for (const auto &usage : msg._usage_history) {
-        ros_msg.measurements.push_back(CpuUsageMessage::to_ros(usage));
-    }
-    return ros_msg;
-}
-
 } // namespace ects::plugins::systemmonitor

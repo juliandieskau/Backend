@@ -16,7 +16,7 @@ class NetworkUsageMessage : UsageData {
   public:
     using ros_t = ects::NetworkUsage;
     using to_ros_t = ros_t;
-    using history_t = class NetworkUsageHistoryMessage;
+    using history_ros_t = ects::NetworkUsageHistory;
 
     static auto to_ros(const NetworkUsageMessage &) -> ros_t;
 
@@ -39,22 +39,6 @@ class NetworkUsageMessage : UsageData {
     uint64_t _up_speed;
     uint64_t _down_speed;
     float _wifi_signal_strength;
-};
-
-class NetworkUsageHistoryMessage {
-  public:
-    using ros_t = ects::NetworkUsageHistory;
-    using to_ros_t = ros_t;
-
-    static auto to_ros(const NetworkUsageHistoryMessage &) -> ros_t;
-
-    NetworkUsageHistoryMessage(std::vector<NetworkUsageMessage> &usage_history,
-                               AggregationMessage &aggregation)
-        : usage_history(usage_history), aggregation(aggregation) {}
-
-  private:
-    std::vector<NetworkUsageMessage> &usage_history;
-    AggregationMessage &aggregation;
 };
 
 class NetworkInfoMessage {

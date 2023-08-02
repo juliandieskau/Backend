@@ -1,38 +1,30 @@
 #include "NetworkMessages.hpp"
 
 namespace ects::plugins::systemmonitor {
-    auto NetworkUsageMessage::to_ros(const NetworkUsageMessage & msg) -> NetworkUsageMessage::ros_t {
-        NetworkUsageMessage::ros_t ros_msg;
-        ros_msg.down_speed = msg._down_speed;
-        ros_msg.up_speed = msg._up_speed;
-        ros_msg.wifi_signal_strength = msg._wifi_signal_strength;
-        return ros_msg;
-    }
-    auto NetworkUsageHistoryMessage::to_ros(const NetworkUsageHistoryMessage &msg) -> NetworkUsageHistoryMessage::ros_t {
-        NetworkUsageHistoryMessage::ros_t ros_msg;
-        ros_msg.aggregation = AggregationMessage::to_ros(msg.aggregation);
-        std::vector<NetworkUsageMessage::ros_t> m;
-        for (auto &usage : msg.usage_history) {
-            m.push_back(NetworkUsageMessage::to_ros(usage));
-        }
-        ros_msg.measurements = m;
-        return ros_msg;
-    }
+auto NetworkUsageMessage::to_ros(const NetworkUsageMessage &msg)
+    -> NetworkUsageMessage::ros_t {
+    NetworkUsageMessage::ros_t ros_msg;
+    ros_msg.down_speed = msg._down_speed;
+    ros_msg.up_speed = msg._up_speed;
+    ros_msg.wifi_signal_strength = msg._wifi_signal_strength;
+    return ros_msg;
+}
 
-    auto NetworkInfoMessage::to_ros(const NetworkInfoMessage & msg) -> NetworkInfoMessage::ros_t {
-        NetworkInfoMessage::ros_t ros_msg;
-        ros_msg.interface_name = msg.interface_name;
-        ros_msg.human_readable_ip_address = msg.ip_address;
-        ros_msg.default_gateway = msg.default_gateway;
-        ros_msg.dns_addresses = msg.dns_addresses;
-        ros_msg.link_is_up = msg.link_is_up;
-        ros_msg.wlan_ssid = msg.wlan_ssid;
-        return ros_msg;
-    }
+auto NetworkInfoMessage::to_ros(const NetworkInfoMessage &msg)
+    -> NetworkInfoMessage::ros_t {
+    NetworkInfoMessage::ros_t ros_msg;
+    ros_msg.interface_name = msg.interface_name;
+    ros_msg.human_readable_ip_address = msg.ip_address;
+    ros_msg.default_gateway = msg.default_gateway;
+    ros_msg.dns_addresses = msg.dns_addresses;
+    ros_msg.link_is_up = msg.link_is_up;
+    ros_msg.wlan_ssid = msg.wlan_ssid;
+    return ros_msg;
+}
 
-    auto AdapterList::to_ros(const AdapterList & msg) -> AdapterList::ros_t {
-        AdapterList::ros_t ros_msg;
-        ros_msg.adapters = msg.adapter_list;
-        return ros_msg;
-    }
+auto AdapterList::to_ros(const AdapterList &msg) -> AdapterList::ros_t {
+    AdapterList::ros_t ros_msg;
+    ros_msg.adapters = msg.adapter_list;
+    return ros_msg;
+}
 } // namespace ects::plugins::systemmonitor
