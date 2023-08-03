@@ -54,6 +54,7 @@ template <typename T> class UsageDataMonitor {
   public:
     auto step() -> void {
         T data = data_provider->get_usage();
+        last_usage_data = data;
         last_usage_publisher.publish(data);
         for (size_t i = 0; i < size; ++i) {
             collected_usage_data[i].add(data);
