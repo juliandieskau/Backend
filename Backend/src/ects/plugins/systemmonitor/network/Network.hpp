@@ -1,9 +1,9 @@
 #pragma once
 #include "NetworkMessages.hpp"
-#include <string>
-#include <vector>
-#include <unordered_map>
 #include <chrono>
+#include <string>
+#include <unordered_map>
+#include <vector>
 
 namespace ects::plugins::systemmonitor {
 struct NetworkStat {
@@ -16,6 +16,7 @@ class Network {
     auto get_adapters() -> std::vector<std::string>;
     auto get_info(const std::string &adapter) -> NetworkInfoMessage;
     auto get_usage(const std::string &adapter) -> NetworkUsageMessage;
+
   private:
     static auto is_ifname_wifi(const std::string &ifname) -> bool;
     std::unordered_map<std::string, NetworkStat> last_measurements;

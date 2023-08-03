@@ -47,7 +47,7 @@ auto Network::get_adapters() -> std::vector<std::string> {
 }
 auto Network::get_info(const std::string &adapter) -> NetworkInfoMessage {
     bool link_is_up = false;
-    std::string ip_address = "";
+    std::string ip_address;
     try {
         auto ip_result = exec(("ip -j addr show " + adapter).c_str());
         auto ip_result_json = nlohmann::json::parse(ip_result);
@@ -59,9 +59,9 @@ auto Network::get_info(const std::string &adapter) -> NetworkInfoMessage {
                          << adapter << " : " << e.what());
     }
     if (!link_is_up) {
-        return NetworkInfoMessage(adapter, "", "", "", false, "");
+        return {adapter, "", "", "", false, ""};
     }
-    std::string default_gateway = "";
+    std::string default_gateway;
     try {
         auto ip_route_result =
             exec(("ip -j route show default dev " + adapter).c_str());
@@ -86,7 +86,7 @@ auto Network::get_info(const std::string &adapter) -> NetworkInfoMessage {
                          << adapter << " : " << e.what());
     }
 
-    std::string wlan_ssid = "";
+    std::string wlan_ssid;
     if (is_ifname_wifi(adapter)) {
         try {
             wlan_ssid = exec(("iwgetid -r " + adapter).c_str());
@@ -95,24 +95,27 @@ auto Network::get_info(const std::string &adapter) -> NetworkInfoMessage {
         }
     }
 
-    return NetworkInfoMessage(adapter, ip_address, default_gateway,
-                              dns_addresses, link_is_up, wlan_ssid);
+    return {adapter,       ip_address, default_gateway,
+            dns_addresses, link_is_up, wlan_ssid};
 }
 
 auto Network::is_ifname_wifi(const std::string &adapter) -> bool {
-    //FIXME: There must be a better way to do this
+    // FIXME: There must be a better way to do this
     return adapter.starts_with("w");
 }
 
 auto Network::get_usage(const std::string &adapter) -> NetworkUsageMessage {
     int16_t signal_strength = 0;
-    if(is_ifname_wifi(adapter)) {
+    if (is_ifname_wifi(adapter)) {
         try {
-            auto iw_result = exec(("iwconfig " + adapter +" | sed -nr 's/^.*Signal level=([+-]?[0-9]+) dBm/\1/p'").c_str());
+            auto iw_result =
+                exec(("iwconfig " + adapter +
+                      " | sed -nr 's/^.*Signal level=([+-]?[0-9]+) dBm/\1/p'")
+                         .c_str());
             signal_strength = std::stoi(iw_result);
         } catch (const std::exception &e) {
             ROS_INFO_STREAM("Failed to get signal strength for adapter "
-                             << adapter << " : " << e.what());
+                            << adapter << " : " << e.what());
         }
     }
     uint64_t rx_bytes = 0;
@@ -128,22 +131,25 @@ auto Network::get_usage(const std::string &adapter) -> NetworkUsageMessage {
 
     } catch (const std::exception &e) {
         ROS_INFO_STREAM("Failed to get rx/tx bytes for adapter "
-                         << adapter << " : " << e.what());
+                        << adapter << " : " << e.what());
     }
     uint64_t upload_speed = 0;
     uint64_t download_speed = 0;
 
-    if(last_measurements.contains(adapter)) {
+    if (last_measurements.contains(adapter)) {
         auto last_measurement = last_measurements[adapter];
-        auto time_diff = std::chrono::duration_cast<std::chrono::milliseconds>(current_time - last_measurement.timestamp).count();
-        if(time_diff > 0) {
+        auto time_diff = std::chrono::duration_cast<std::chrono::milliseconds>(
+                             current_time - last_measurement.timestamp)
+                             .count();
+        if (time_diff > 0) {
             upload_speed = (tx_bytes - last_measurement.tx_bytes) / time_diff;
             download_speed = (rx_bytes - last_measurement.rx_bytes) / time_diff;
         }
     }
     last_measurements[adapter] = {current_time, rx_bytes, tx_bytes};
-    //FIXME: The message spec says signal_strength is a float, but it's an integer (dBm) in linux
-    return NetworkUsageMessage(upload_speed, download_speed, (float)signal_strength);
+    // FIXME: The message spec says signal_strength is a float, but it's an
+    // integer (dBm) in linux
+    return {upload_speed, download_speed, (float)signal_strength};
 }
-    
+
 } // namespace ects::plugins::systemmonitor

@@ -1,5 +1,4 @@
 #include "Disk.hpp"
-#include <algorithm>
 #include <filesystem>
 #include <fstream>
 #include <sstream>
