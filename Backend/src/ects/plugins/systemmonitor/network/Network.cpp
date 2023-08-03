@@ -64,7 +64,7 @@ auto Network::get_info(const std::string &adapter) -> NetworkInfoMessage {
     std::string default_gateway = "";
     try {
         auto ip_route_result =
-            exec(("ip -j route show default " + adapter).c_str());
+            exec(("ip -j route show default dev " + adapter).c_str());
         auto ip_route_result_json = nlohmann::json::parse(ip_route_result);
         default_gateway = ip_route_result_json[0]["gateway"];
     } catch (const std::exception &e) {

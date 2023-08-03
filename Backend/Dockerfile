@@ -4,6 +4,9 @@ RUN apt-get update && apt-get install -y \
 ros-noetic-desktop-full \
 ros-noetic-rosbridge-server \
 ros-noetic-catkin \
+gdb \
+iproute2 \
+wireless-tools \
 neovim 
 
 RUN useradd -m -s /bin/bash -u 1000 user
