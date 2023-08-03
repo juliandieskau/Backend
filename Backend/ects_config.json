@@ -6,7 +6,8 @@
             "battery",
             "waypoints",
             "control",
-            "systemmonitor"
+            "systemmonitor",
+            "position"
         ]
     },
     "battery": {
@@ -40,5 +41,10 @@
             "keep_count": 100,
             "readings": 5
         }
-    ]
+    ],
+    "position": {
+        "odometry_topic": "/localization/odometry_global",
+        "imu_topic": "/ellipse/imu",
+        "status_topic": "/localization/filter_state_global"
+    }
 }

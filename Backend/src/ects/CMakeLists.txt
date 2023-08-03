@@ -187,6 +187,10 @@ add_library(ects_plugin_control SHARED
         plugins/control/Control.cpp
 )
 
+add_library(ects_plugin_position SHARED
+        plugins/position/Position.cpp
+)
+
 add_library(ects_plugin_systemmonitor SHARED
         plugins/systemmonitor/SystemMonitor.cpp
         plugins/systemmonitor/SystemMonitorMessages.cpp
@@ -223,6 +227,8 @@ set_target_properties(ects_plugin_battery PROPERTIES PUBLIC_HEADER "include/Plug
 add_dependencies(ects_plugin_battery ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 set_target_properties(ects_plugin_control PROPERTIES PUBLIC_HEADER "include/Plugin.hpp")
 add_dependencies(ects_plugin_control ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+set_target_properties(ects_plugin_position PROPERTIES PUBLIC_HEADER "include/Plugin.hpp")
+add_dependencies(ects_plugin_position ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 set_target_properties(ects_plugin_systemmonitor PROPERTIES PUBLIC_HEADER "include/Plugin.hpp")
 add_dependencies(ects_plugin_systemmonitor ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 set_target_properties(ects_plugin_waypoints PROPERTIES PUBLIC_HEADER "include/Plugin.hpp")

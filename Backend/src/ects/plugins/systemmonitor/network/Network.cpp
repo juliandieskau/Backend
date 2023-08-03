@@ -47,7 +47,7 @@ auto Network::get_adapters() -> std::vector<std::string> {
 }
 auto Network::get_info(const std::string &adapter) -> NetworkInfoMessage {
     bool link_is_up = false;
-    std::string ip_address;
+    std::string ip_address = "";
     try {
         auto ip_result = exec(("ip -j addr show " + adapter).c_str());
         auto ip_result_json = nlohmann::json::parse(ip_result);
@@ -59,9 +59,9 @@ auto Network::get_info(const std::string &adapter) -> NetworkInfoMessage {
                          << adapter << " : " << e.what());
     }
     if (!link_is_up) {
-        return {adapter, "", "", "", false, ""};
+        return NetworkInfoMessage(adapter, "", "", "", false, "");
     }
-    std::string default_gateway;
+    std::string default_gateway = "";
     try {
         auto ip_route_result =
             exec(("ip -j route show default dev " + adapter).c_str());
@@ -86,7 +86,7 @@ auto Network::get_info(const std::string &adapter) -> NetworkInfoMessage {
                          << adapter << " : " << e.what());
     }
 
-    std::string wlan_ssid;
+    std::string wlan_ssid = "";
     if (is_ifname_wifi(adapter)) {
         try {
             wlan_ssid = exec(("iwgetid -r " + adapter).c_str());
@@ -95,8 +95,8 @@ auto Network::get_info(const std::string &adapter) -> NetworkInfoMessage {
         }
     }
 
-    return {adapter,       ip_address, default_gateway,
-            dns_addresses, link_is_up, wlan_ssid};
+    return NetworkInfoMessage(adapter, ip_address, default_gateway,
+                              dns_addresses, link_is_up, wlan_ssid);
 }
 
 auto Network::is_ifname_wifi(const std::string &adapter) -> bool {
@@ -149,7 +149,8 @@ auto Network::get_usage(const std::string &adapter) -> NetworkUsageMessage {
     last_measurements[adapter] = {current_time, rx_bytes, tx_bytes};
     // FIXME: The message spec says signal_strength is a float, but it's an
     // integer (dBm) in linux
-    return {upload_speed, download_speed, (float)signal_strength};
+    return NetworkUsageMessage(upload_speed, download_speed,
+                               (float)signal_strength);
 }
 
 } // namespace ects::plugins::systemmonitor
