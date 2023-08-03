@@ -51,19 +51,16 @@ class CpuUsageMessage : public UsageData {
 
     auto operator+(const CpuUsageMessage &rhs) const -> CpuUsageMessage {
         std::vector<float> added_usages;
+        if(_per_core_usage.size() != rhs._per_core_usage.size()) {
+            // This should never happen, if Cpi::Cpu() calls Cpu::get_usage
+            ROS_ERROR("CpuUsageMessage: Tried to add two CpuUsageMessages with different core counts");
+            return *this;
+        }
         for (int i = 0; i < _per_core_usage.size(); i++) {
-            if(i >= rhs._per_core_usage.size()) {
-                added_usages.push_back(_per_core_usage[i]);
-                continue;
-            }
             added_usages.push_back(_per_core_usage[i] + rhs._per_core_usage[i]);
         }
         std::vector<float> added_loads;
         for (int i = 0; i < _load_averages.size(); i++) {
-            if (i >= rhs._load_averages.size()) {
-                added_loads.push_back(_load_averages[i]);
-                continue;
-            }
             added_loads.push_back(_load_averages[i] + rhs._load_averages[i]);
         }
         return {_total_usage + rhs._total_usage, added_usages, added_loads};
