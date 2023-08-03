@@ -169,20 +169,21 @@ template <client_messages internal_t> struct Client {
 
 template <typename ros_t> struct TopicForwarder {
 
-    private:
-    TopicForwarder(std::string from_topic, std::string to_topic, ros::NodeHandle handle)
+  private:
+    TopicForwarder(std::string from_topic, std::string to_topic,
+                   ros::NodeHandle handle)
         : ros_handle(handle),
           ros_publisher(handle.advertise<ros_t>(to_topic, 1000)),
           ros_subscriber(handle.subscribe<ros_t>(
               from_topic, 100,
-              [this](const typename ros_t::ConstPtr &ros_input) {
+              [ros_publisher = this->ros_publisher](
+                  const typename ros_t::ConstPtr &ros_input) {
                   ros_publisher.publish(*ros_input);
               })) {}
     ros::NodeHandle ros_handle;
     ros::Publisher ros_publisher;
     ros::Subscriber ros_subscriber;
     friend RosNode;
-
 };
 
 struct RosNode {
@@ -211,8 +212,10 @@ struct RosNode {
     }
 
     template <typename ros_t>
-    TopicForwarder<ros_t> create_topic_forwarder(std::string from_topic, std::string to_topic) {
-        ROS_INFO_STREAM("Creating topic forwarder from " << from_topic << " to " << to_topic);
+    TopicForwarder<ros_t> create_topic_forwarder(std::string from_topic,
+                                                 std::string to_topic) {
+        ROS_INFO_STREAM("Creating topic forwarder from " << from_topic << " to "
+                                                         << to_topic);
         return TopicForwarder<ros_t>(from_topic, to_topic, ros_handle);
     }
 
