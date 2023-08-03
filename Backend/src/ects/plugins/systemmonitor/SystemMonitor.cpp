@@ -73,12 +73,7 @@ auto SystemMonitor::init(ECTS &ects) -> void {
                 for (auto &network_monitor : data->network_monitors)
                     network_monitor.step();
                 data->program_monitor.step();
-                // FIXME: adapters might change
-                auto adapters = data->network.get_adapters();
-                for (size_t i = 0; i < adapters.size(); ++i) {
-                    data->network_info_publishers[i].publish(
-                        data->network.get_info(adapters[i]));
-                }
+                publish_network_info();
             }),
         aggregations,
         ects.ros_interface().create_server<AggregationListService>(
@@ -109,8 +104,38 @@ auto SystemMonitor::init(ECTS &ects) -> void {
         });
 }
 
-auto SystemMonitor::transmit_all() -> void {}
+auto SystemMonitor::transmit_all() -> void {
+    publish_network_info();
+    data->cpu_monitor.transmit_all();
+    data->memory_monitor.transmit_all();
+    data->program_monitor.transmit_all();
+    for (auto &disk_monitor : data->disk_monitors)
+        disk_monitor.transmit_all();
+    for (auto &network_monitor : data->network_monitors)
+        network_monitor.transmit_all();
+}
 
-auto SystemMonitor::transmit(const std::string &topic_name) -> void {}
+auto SystemMonitor::transmit(const std::string &topic_name) -> void {
+    if (!topic_name.starts_with("/ects/system/"))
+        return;
+    if (topic_name.starts_with("/ects/system/network/") &&
+        topic_name.ends_with("/info"))
+        publish_network_info();
+    data->cpu_monitor.transmit(topic_name);
+    data->memory_monitor.transmit(topic_name);
+    data->program_monitor.transmit(topic_name);
+    for (auto &disk_monitor : data->disk_monitors)
+        disk_monitor.transmit(topic_name);
+    for (auto &network_monitor : data->network_monitors)
+        network_monitor.transmit(topic_name);
+}
+auto SystemMonitor::publish_network_info() -> void {
+    // FIXME: adapters might change
+    auto adapters = data->network.get_adapters();
+    for (size_t i = 0; i < adapters.size(); ++i) {
+        data->network_info_publishers[i].publish(
+            data->network.get_info(adapters[i]));
+    }
+}
 
 } // namespace ects::plugins::systemmonitor

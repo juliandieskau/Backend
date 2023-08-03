@@ -38,6 +38,7 @@ class SystemMonitor : public Plugin {
         Network network;
     };
     std::optional<data> data;
+    void publish_network_info();
 };
 
 } // namespace ects::plugins::systemmonitor

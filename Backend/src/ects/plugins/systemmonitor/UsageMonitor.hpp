@@ -60,20 +60,39 @@ template <typename T> class UsageDataMonitor {
             collection_publishers[i].publish(collected_usage_data[i]);
         }
     }
+    auto transmit_all() -> void {
+        if (last_usage_data.has_value())
+            last_usage_publisher.publish(*last_usage_data);
+        for (size_t i = 0; i < size; ++i) {
+            collection_publishers[0].publish(collected_usage_data[i]);
+        }
+    }
+    auto transmit(const std::string &topic_name) -> void {
+        if (last_usage_data.has_value() &&
+            topic_name == last_usage_topic_name + this->topic_name)
+            last_usage_publisher.publish(*last_usage_data);
+        for (size_t i = 0; i < size; ++i) {
+            if (topic_name == aggregation_topic_name +
+                                  aggregation_strategies[i]->get_name() + "/" +
+                                  this->topic_name)
+                collection_publishers[0].publish(collected_usage_data[i]);
+        }
+    }
 
     // topic_name is like "/cpu/usage", "/processes/total",
     // "/disk/{mountpoint}/usage"
-    UsageDataMonitor(
-        std::string topic_name,
-        const std::vector<AggregationStrategy *> &aggregation_strategies,
-        std::unique_ptr<UsageProvider<T>> data_provider, ECTS &ects)
+    UsageDataMonitor(std::string topic_name,
+                     std::vector<AggregationStrategy *> aggregation_strategies,
+                     std::unique_ptr<UsageProvider<T>> data_provider,
+                     ECTS &ects)
         : topic_name(std::move(topic_name)),
+          aggregation_strategies(std::move(aggregation_strategies)),
           data_provider(std::move(data_provider)), collected_usage_data(),
-          collection_publishers(),
+          collection_publishers(), last_usage_data(std::nullopt),
           last_usage_publisher(ects.ros_interface().create_publisher<T>(
               last_usage_topic_name + this->topic_name)),
-          size(aggregation_strategies.size()) {
-        for (auto aggregation : aggregation_strategies) {
+          size(this->aggregation_strategies.size()) {
+        for (auto aggregation : this->aggregation_strategies) {
             collected_usage_data.emplace_back(aggregation);
             auto pub =
                 ects.ros_interface().create_publisher<UsageDataCollection<T>>(
@@ -85,9 +104,11 @@ template <typename T> class UsageDataMonitor {
 
   private:
     std::string topic_name;
+    std::vector<AggregationStrategy *> aggregation_strategies;
     std::unique_ptr<UsageProvider<T>> data_provider;
     std::vector<UsageDataCollection<T>> collected_usage_data;
     std::vector<Publisher<UsageDataCollection<T>>> collection_publishers;
+    std::optional<T> last_usage_data;
     Publisher<T> last_usage_publisher;
     size_t size;
 
