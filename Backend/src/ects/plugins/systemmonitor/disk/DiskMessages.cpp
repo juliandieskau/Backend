@@ -16,7 +16,9 @@ auto MountpointList::to_ros(const MountpointList &msg) -> ros_t {
     }
     return ros_msg;
 }
-MountpointList::MountpointList(std::vector<Mountpoint>) {
-    // TODO implement
+MountpointList::MountpointList(std::vector<Mountpoint> mountpoints)
+    : mountpoints(mountpoints) {}
+auto MountpointList::get_mountpoints() -> const std::vector<Mountpoint> & {
+    return mountpoints;
 }
 } // namespace ects::plugins::systemmonitor

@@ -12,7 +12,7 @@
 #include <utility>
 
 namespace ects::plugins::systemmonitor {
-class NetworkUsageMessage : UsageData {
+class NetworkUsageMessage : public UsageData {
   public:
     using ros_t = ects::NetworkUsage;
     using to_ros_t = ros_t;
@@ -31,8 +31,7 @@ class NetworkUsageMessage : UsageData {
                 wifi_signal_strength + rhs.wifi_signal_strength};
     }
     auto operator/(const int &rhs) const -> NetworkUsageMessage {
-        return {up_speed / rhs, down_speed / rhs,
-                wifi_signal_strength / rhs};
+        return {up_speed / rhs, down_speed / rhs, wifi_signal_strength / rhs};
     }
 
   private:
@@ -66,6 +65,7 @@ class NetworkInfoMessage {
     std::string wlan_ssid;
 };
 
+struct NetworkAdapterService {};
 using empty_adapterlist_request = EmptyMessage<ects::AdapterList::Request>;
 class AdapterList {
   public:
@@ -81,3 +81,13 @@ class AdapterList {
 };
 
 } // namespace ects::plugins::systemmonitor
+
+namespace ects {
+using namespace ects::plugins::systemmonitor;
+
+template <> struct server_traits<NetworkAdapterService> {
+    using ros_t = ects::AdapterList;
+    using request_from_ros_t = empty_adapterlist_request;
+    using response_to_ros_t = ects::plugins::systemmonitor::AdapterList;
+};
+} // namespace ects

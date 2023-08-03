@@ -27,6 +27,7 @@ template <typename T> class Window {
 class Aggregator {
   public:
     virtual auto new_data(UsageData *data) -> bool = 0;
+    virtual ~Aggregator() = default;
 
   protected:
     Aggregator() = default;
@@ -42,6 +43,7 @@ class AggregationStrategy {
     auto get_name() -> std::string & { return name; }
     virtual auto make_aggregator() -> std::unique_ptr<Aggregator> = 0;
     virtual auto to_ros() -> ros_t = 0;
+    virtual ~AggregationStrategy() = default;
 
   protected:
     AggregationStrategy(uint32_t keep_count, std::string name)

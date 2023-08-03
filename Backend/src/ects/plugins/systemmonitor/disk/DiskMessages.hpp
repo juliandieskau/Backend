@@ -8,12 +8,13 @@
 
 #include "ects/MessageInterface.hpp"
 #include <array>
+#include <ects/AdapterList.h>
 #include <string>
 #include <vector>
 
 namespace ects::plugins::systemmonitor {
 
-class DiskUsageMessage : UsageData {
+class DiskUsageMessage : public UsageData {
   public:
     using ros_t = ects::DiskUsage;
     using to_ros_t = ros_t;
@@ -37,6 +38,7 @@ class DiskUsageMessage : UsageData {
 };
 
 class Mountpoint;
+struct MountpointListService {};
 using empty_mountpoint_request = EmptyMessage<ects::MountpointList::Request>;
 class MountpointList {
   public:
@@ -44,9 +46,20 @@ class MountpointList {
     using to_ros_t = ros_t;
 
     static auto to_ros(const MountpointList &) -> ros_t;
+    auto get_mountpoints() -> const std::vector<Mountpoint> &;
     MountpointList(std::vector<Mountpoint>);
 
   private:
     std::vector<Mountpoint> mountpoints;
 };
 } // namespace ects::plugins::systemmonitor
+
+namespace ects {
+using namespace ects::plugins::systemmonitor;
+
+template <> struct server_traits<MountpointListService> {
+    using ros_t = ects::MountpointList;
+    using request_from_ros_t = empty_mountpoint_request;
+    using response_to_ros_t = ects::plugins::systemmonitor::MountpointList;
+};
+} // namespace ects

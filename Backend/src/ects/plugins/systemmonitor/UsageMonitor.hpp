@@ -20,8 +20,7 @@ template <typename T> class UsageDataCollection {
         : strategy(strategy), aggregator(strategy->make_aggregator()),
           history(strategy->get_keep_count()), current_aggregation() {}
     auto add(T data) -> void {
-        // NOTE: this implementation saves all data till it aggregates,
-        //       requires a default constructor uses operators += and /=
+        // NOTE: this implementation saves all data till it aggregates
         auto average = [this, &data] {
             T acc = data;
             for (auto d : current_aggregation)

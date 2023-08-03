@@ -20,8 +20,8 @@ class Mountpoint {
 
 class Disk {
   public:
-    auto get_mountpoints() -> MountpointList;
-    auto get_usage(const Mountpoint &mountpoint) -> DiskUsageMessage;
+    static auto get_mountpoints() -> MountpointList;
+    static auto get_usage(const Mountpoint &mountpoint) -> DiskUsageMessage;
 };
 
 } // namespace ects::plugins::systemmonitor

@@ -9,7 +9,7 @@
 
 namespace ects::plugins::systemmonitor {
 
-class MemoryUsageMessage : UsageData {
+class MemoryUsageMessage : public UsageData {
   public:
     using ros_t = ects::MemoryUsage;
     using to_ros_t = ros_t;

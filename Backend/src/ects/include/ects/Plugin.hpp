@@ -1,5 +1,7 @@
 #pragma once
+
 #include <string>
+
 namespace ects {
 class ECTS;
 class Plugin {

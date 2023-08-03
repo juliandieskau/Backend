@@ -28,10 +28,14 @@ class SystemMonitor : public Plugin {
         std::shared_ptr<ects::Timer> timer;
         std::vector<AggregationStrategy *> aggregations;
         UsageDataMonitor<CpuUsageMessage> cpu_monitor;
-        Disk disk;
-        Memory memory;
+        Server<MountpointListService> mountpoint_list_server;
+        std::vector<UsageDataMonitor<DiskUsageMessage>> disk_monitors;
+        UsageDataMonitor<MemoryUsageMessage> memory_monitor;
+        Server<NetworkAdapterService> adapter_list_server;
+        std::vector<UsageDataMonitor<NetworkUsageMessage>> network_monitors;
+        std::vector<Publisher<NetworkInfoMessage>> network_info_publishers;
+        UsageDataMonitor<ProcessTotalMessage> program_monitor;
         Network network;
-        Programs programs;
     };
     std::optional<data> data;
 };
