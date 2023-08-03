@@ -32,7 +32,6 @@ auto SystemMonitor::init(ECTS &ects) -> void {
         ects.timer_manager().create_timer(
             interval,
             [this]() {
-                ROS_INFO("SystemMonitor collecting data");
                 this->data->cpu_monitor.step();
             }),
         aggregations,
