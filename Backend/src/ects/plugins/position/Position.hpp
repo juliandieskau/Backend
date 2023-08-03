@@ -2,9 +2,9 @@
 
 #include "ects/ECTS.hpp"
 #include "ects/Plugin.hpp"
-#include "sensor_msgs/Imu.h"
-#include "nav_msgs/Odometry.h"
 #include "iosb_localization_filter/FilterState.h"
+#include "nav_msgs/Odometry.h"
+#include "sensor_msgs/Imu.h"
 
 namespace ects::plugins::position {
 class Position : public Plugin {
@@ -21,9 +21,11 @@ class Position : public Plugin {
         TopicForwarder<iosb_localization_filter::FilterState> status_forwarder;
     };
     std::optional<data> data;
-    static constexpr auto default_odometry_topic = "/localization/odometry_global";
+    static constexpr auto default_odometry_topic =
+        "/localization/odometry_global";
     static constexpr auto default_imu_topic = "/ellipse/imu";
-    static constexpr auto default_status_topic = "/localization/filter_state_global";
+    static constexpr auto default_status_topic =
+        "/localization/filter_state_global";
 
     static constexpr auto forward_odometry_topic = "/ects/control/position";
     static constexpr auto forward_imu_topic = "/ects/imu/current";

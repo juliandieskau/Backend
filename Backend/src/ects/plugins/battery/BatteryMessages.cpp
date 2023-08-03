@@ -64,7 +64,8 @@ ChargePercentage::to_ros_t ChargePercentage::to_ros(const ChargePercentage &c) {
 
 EstimatedRuntime BatteryState::get_estimated_runtime() { return runtime; }
 
-EstimatedRuntime::to_ros_t EstimatedRuntime::to_ros(const EstimatedRuntime &er) {
+EstimatedRuntime::to_ros_t
+EstimatedRuntime::to_ros(const EstimatedRuntime &er) {
     EstimatedRuntime::to_ros_t r{};
     r.data =
         std::chrono::duration_cast<std::chrono::duration<float>>(er.duration)

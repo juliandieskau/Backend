@@ -193,7 +193,6 @@ add_library(ects_plugin_position SHARED
 
 add_library(ects_plugin_systemmonitor SHARED
         plugins/systemmonitor/SystemMonitor.cpp
-        plugins/systemmonitor/SystemMonitorMessages.cpp
 
         plugins/systemmonitor/aggregations/Aggregation.cpp
         plugins/systemmonitor/cpu/Cpu.cpp
@@ -210,7 +209,7 @@ add_library(ects_plugin_systemmonitor SHARED
         plugins/systemmonitor/programs/ProgramMessages.cpp
 )
 
-set(ECTS_PLUGIN_WAYPOINT_SOURCES
+add_library(ects_plugin_waypoints SHARED 
         plugins/waypoint/WaypointManager.cpp
         plugins/waypoint/Waypoint.cpp
         plugins/waypoint/WaypointList.cpp
@@ -218,8 +217,6 @@ set(ECTS_PLUGIN_WAYPOINT_SOURCES
         plugins/waypoint/WaypointListStorage.cpp
         plugins/waypoint/WaypointListFileMessages.cpp
 )
-
-add_library(ects_plugin_waypoints SHARED ${ECTS_PLUGIN_WAYPOINT_SOURCES})
 
 set_target_properties(ects_plugin_core PROPERTIES PUBLIC_HEADER "include/Plugin.hpp")
 add_dependencies(ects_plugin_core ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})

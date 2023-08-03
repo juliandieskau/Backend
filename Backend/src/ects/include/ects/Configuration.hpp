@@ -17,13 +17,14 @@ class Configuration {
     template <typename T> auto get_value(std::string key) const -> T {
         return config_json.at(json::json_pointer(key)).get<T>();
     }
-    template <typename T> auto get_value_or_default(std::string key, T default_value) const -> T {
+    template <typename T>
+    auto get_value_or_default(std::string key, T default_value) const -> T {
         try {
-        auto x = config_json.at(json::json_pointer(key));
-        if (x.is_null())
-            return default_value;
-        return x.get<T>();
-        } catch (json::exception& e) {
+            auto x = config_json.at(json::json_pointer(key));
+            if (x.is_null())
+                return default_value;
+            return x.get<T>();
+        } catch (json::exception &e) {
             return default_value;
         }
     }

@@ -33,4 +33,5 @@ auto FileResponse::to_ros(const FileResponse &internal_input)
     r.error_message = internal_input.error.value_or("");
     return r;
 }
+
 } // namespace ects::plugins::waypoints

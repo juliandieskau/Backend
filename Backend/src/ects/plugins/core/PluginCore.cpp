@@ -36,8 +36,8 @@ auto PluginCore::init(ECTS &ects) -> void {
         });
 }
 
-auto PluginCore::transmit_all() -> void{}
+auto PluginCore::transmit_all() -> void {}
 
-auto PluginCore::transmit(const std::string &topic_name) -> void{}
+auto PluginCore::transmit(const std::string &topic_name) -> void {}
 
 } // namespace ects::plugins::core

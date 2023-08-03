@@ -15,6 +15,7 @@ class Cpu : public UsageProvider<CpuUsageMessage> {
         (void)get_usage();
     }
     auto get_usage() -> CpuUsageMessage override;
+
   private:
     std::vector<CpuStat> last_stats;
 };

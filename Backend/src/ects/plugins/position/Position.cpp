@@ -14,10 +14,11 @@ auto Position::init(ECTS &ects) -> void {
             ects.config().get_value_or_default<std::string>(
                 "/position/imu_topic", default_imu_topic),
             forward_imu_topic),
-        ects.ros_interface().create_topic_forwarder<iosb_localization_filter::FilterState>(
-            ects.config().get_value_or_default<std::string>(
-                "/position/status_topic", default_status_topic),
-            forward_status_topic),
+        ects.ros_interface()
+            .create_topic_forwarder<iosb_localization_filter::FilterState>(
+                ects.config().get_value_or_default<std::string>(
+                    "/position/status_topic", default_status_topic),
+                forward_status_topic),
     };
 }
 } // namespace ects::plugins::position

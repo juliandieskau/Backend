@@ -1,7 +1,8 @@
 #include "ects/Configuration.hpp"
 
 namespace ects {
-auto Configuration::load_configuration(std::string path) -> std::optional<Configuration> {
+auto Configuration::load_configuration(std::string path)
+    -> std::optional<Configuration> {
     json j;
     try {
         std::ifstream i(path);

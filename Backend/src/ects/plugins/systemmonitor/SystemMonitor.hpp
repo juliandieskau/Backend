@@ -1,6 +1,5 @@
 #pragma once
 
-#include "SystemMonitorMessages.hpp"
 #include "ects/ECTS.hpp"
 #include "ects/Plugin.hpp"
 

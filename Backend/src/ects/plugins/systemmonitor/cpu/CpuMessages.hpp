@@ -5,8 +5,8 @@
 #include "ects/CpuUsage.h"
 #include "ects/CpuUsageHistory.h"
 
-#include "ros/ros.h"
 #include "ects/MessageInterface.hpp"
+#include "ros/ros.h"
 #include <string>
 #include <utility>
 #include <vector>
@@ -51,9 +51,10 @@ class CpuUsageMessage : public UsageData {
 
     auto operator+(const CpuUsageMessage &rhs) const -> CpuUsageMessage {
         std::vector<float> added_usages;
-        if(_per_core_usage.size() != rhs._per_core_usage.size()) {
+        if (_per_core_usage.size() != rhs._per_core_usage.size()) {
             // This should never happen, if Cpi::Cpu() calls Cpu::get_usage
-            ROS_ERROR("CpuUsageMessage: Tried to add two CpuUsageMessages with different core counts");
+            ROS_ERROR("CpuUsageMessage: Tried to add two CpuUsageMessages with "
+                      "different core counts");
             return *this;
         }
         for (int i = 0; i < _per_core_usage.size(); i++) {
