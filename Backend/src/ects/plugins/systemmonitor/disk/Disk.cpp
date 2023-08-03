@@ -17,9 +17,14 @@ auto Disk::get_mountpoints() -> MountpointList {
         iss >> device >> mountpoint;
         // TODO: Is this a good idea?
         //  ignoring non-physical devices
-        if (mountpoint.find("/dev") == 0) {
-            auto topic_name = mountpoint;
-            std::replace(topic_name.begin(), topic_name.end(), '/', '_');
+        if (device.starts_with("/dev")) {
+            std::string topic_name(mountpoint);
+            topic_name.erase(std::remove_if(topic_name.begin(),
+                                            topic_name.end(),
+                                            [](auto const &c) -> bool {
+                                                return !std::isalnum(c);
+                                            }),
+                             topic_name.end());
             mountpoint_list.emplace_back(mountpoint, topic_name);
         }
     }
