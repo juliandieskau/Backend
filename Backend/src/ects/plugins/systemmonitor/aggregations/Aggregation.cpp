@@ -75,5 +75,4 @@ auto IntervalAggregationStrategy::to_ros() -> AggregationStrategy::ros_t {
     r.keep_amount = get_keep_count();
     return r;
 }
-
 } // namespace ects::plugins::systemmonitor

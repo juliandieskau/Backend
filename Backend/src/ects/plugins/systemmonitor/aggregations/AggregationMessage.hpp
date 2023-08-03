@@ -1,36 +1,38 @@
 #pragma once
 
+#include "Aggregation.hpp"
 #include "ects/Aggregation.h"
-#include "ects/MessageInterface.hpp"
-#include <chrono>
+#include "ects/AggregationList.h"
+#include "ects/EmptyMessage.hpp"
+#include "ects/RosInterface.hpp"
 #include <string>
 
 namespace ects::plugins::systemmonitor {
 
-class AggregationMessage {
+struct AggregationListService {};
+using empty_aggregation_list_request =
+    EmptyMessage<ects::AggregationList::Request>;
+class AggregationList {
   public:
-    enum AggregationType { INTERVAL = 0, READINGS };
-    using ros_t = ects::Aggregation;
+    using ros_t = ects::AggregationList::Response;
     using to_ros_t = ros_t;
 
-    static auto to_ros(const AggregationMessage &) -> ros_t;
-    AggregationMessage(std::string &&ects_name, AggregationType type,
-                       float interval, uint16_t nreadings, uint32_t keep_amount)
-        : ects_name(ects_name), type(type), interval(interval),
-          nreadings(nreadings), keep_amount(keep_amount) {}
-
-    auto get_ects_name() const -> const std::string & { return ects_name; }
-    auto get_type() const -> const AggregationType { return type; }
-    auto get_interval() const -> const float { return interval; }
-    auto get_nreadings() const -> const uint16_t { return nreadings; }
-    auto get_keep_amount() const -> const uint32_t { return keep_amount; }
+    static auto to_ros(const AggregationList &) -> ros_t;
+    AggregationList(std::vector<AggregationStrategy *> aggregation_list)
+        : aggregation_list(std::move(aggregation_list)) {}
 
   private:
-    const std::string ects_name;
-    const AggregationType type;
-    const float interval;
-    const uint16_t nreadings;
-    const uint32_t keep_amount;
+    std::vector<AggregationStrategy *> aggregation_list;
 };
 
 } // namespace ects::plugins::systemmonitor
+
+namespace ects {
+using namespace ects::plugins::systemmonitor;
+
+template <> struct server_traits<AggregationListService> {
+    using ros_t = ects::AggregationList;
+    using request_from_ros_t = empty_aggregation_list_request;
+    using response_to_ros_t = ects::plugins::systemmonitor::AggregationList;
+};
+} // namespace ects

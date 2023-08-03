@@ -81,6 +81,8 @@ auto SystemMonitor::init(ECTS &ects) -> void {
                 }
             }),
         aggregations,
+        ects.ros_interface().create_server<AggregationListService>(
+            "/ects/system/aggregation"),
         {"cpu/usage", aggregations, make_provider<Cpu, CpuUsageMessage>(),
          ects},
         ects.ros_interface().create_server<MountpointListService>(
@@ -97,6 +99,8 @@ auto SystemMonitor::init(ECTS &ects) -> void {
         net,
     };
 
+    data->aggregation_list_server.register_service(
+        [this](empty_aggregation_list_request) { return data->aggregations; });
     data->mountpoint_list_server.register_service(
         [](empty_mountpoint_request) { return Disk::get_mountpoints(); });
     data->adapter_list_server.register_service(

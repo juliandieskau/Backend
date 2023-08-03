@@ -1,4 +1,5 @@
 #pragma once
+
 #include "../Usage.hpp"
 #include "ects/Aggregation.h"
 #include "nlohmann/json.hpp"
