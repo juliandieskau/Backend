@@ -29,10 +29,10 @@ class BatteryMonitor : public Plugin {
     };
     std::optional<data> data;
     static constexpr auto battery_state_topic = "/ects/battery/usage";
-    static constexpr auto percentage_topic = "/etcs/battery/percentage";
+    static constexpr auto percentage_topic = "/ects/battery/percentage";
     static constexpr auto runtime_topic =
         "/ects/battery/estimated_time_remaining";
-    static constexpr auto warning_topic = "/etcs/battery/is_critical";
+    static constexpr auto warning_topic = "/ects/battery/is_critical";
 };
 
 } // namespace ects::plugins::battery
