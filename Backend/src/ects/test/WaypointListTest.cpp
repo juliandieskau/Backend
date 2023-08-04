@@ -1,4 +1,4 @@
-#include "WaypointList.hpp"
+#include "../plugins/waypoint/WaypointList.hpp"
 #include "gtest/gtest.h"
 #include <nlohmann/json.hpp>
 

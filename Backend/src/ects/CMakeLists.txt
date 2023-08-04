@@ -209,7 +209,7 @@ add_library(ects_plugin_systemmonitor SHARED
         plugins/systemmonitor/programs/ProgramMessages.cpp
 )
 
-add_library(ects_plugin_waypoints SHARED 
+set(ECTS_PLUGIN_WAYPOINT_SOURCES
         plugins/waypoint/WaypointManager.cpp
         plugins/waypoint/Waypoint.cpp
         plugins/waypoint/WaypointList.cpp
@@ -217,6 +217,8 @@ add_library(ects_plugin_waypoints SHARED
         plugins/waypoint/WaypointListStorage.cpp
         plugins/waypoint/WaypointListFileMessages.cpp
 )
+
+add_library(ects_plugin_waypoints SHARED ${ECTS_PLUGIN_WAYPOINT_SOURCES})
 
 set_target_properties(ects_plugin_core PROPERTIES PUBLIC_HEADER "include/Plugin.hpp")
 add_dependencies(ects_plugin_core ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
@@ -307,6 +309,7 @@ catkin_add_gtest(${PROJECT_NAME}-test
         test/WaypointListTest.cpp
         ${ECTS_PLUGIN_WAYPOINT_SOURCES}
         ${ECTS_SOURCES})
+add_dependencies(${PROJECT_NAME}-test ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 if(TARGET ${PROJECT_NAME}-test)
   target_link_libraries(${PROJECT_NAME}-test ${catkin_LIBRARIES} dl)
 endif()
