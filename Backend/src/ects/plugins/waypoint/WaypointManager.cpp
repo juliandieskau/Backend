@@ -12,8 +12,8 @@ void WaypointManager::init(ECTS &ects) {
 
     data = {
         WaypointList{},
-        WaypointListStorage{ects.config().get_value<std::string>(
-            "/waypoints/storage_directory")},
+        WaypointListStorage{ects.config().get_value_or_default<std::string>(
+            "/waypoints/storage_directory", "waypoints")},
         ects.ros_interface().create_subscriber<AddWaypointMessage>(
             add_waypoint_topic_name),
         ects.ros_interface().create_subscriber<RemoveWaypointMessage>(
