@@ -8,6 +8,8 @@ services:
       - "./:/workspace"
     command: sleep infinity
       #    network_mode: "host"
+    ports:
+      - 9090:9090
     ulimits:
       nofile:
         soft: 8192

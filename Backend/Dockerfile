@@ -10,5 +10,6 @@ wireless-tools \
 neovim 
 
 RUN useradd -m -s /bin/bash -u 1000 user
+RUN echo '. /workspace/devel/setup.bash' >> /home/user/.bashrc
 USER user
 WORKDIR /workspace
