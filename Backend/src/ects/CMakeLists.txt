@@ -131,6 +131,14 @@ add_service_files(
 #   cfg/DynReconf2.cfg
 # )
 
+set(ECTS_PLUGINS
+        ects_plugin_core
+        ects_plugin_battery
+        ects_plugin_control
+        ects_plugin_waypoints
+        ects_plugin_systemmonitor
+)
+
 ###################################
 ## catkin specific configuration ##
 ###################################
@@ -142,7 +150,7 @@ add_service_files(
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
   INCLUDE_DIRS include
-  LIBRARIES ects_plugin_core ects_plugin_battery ects_plugin_control ects_plugin_waypoints ects_plugin_systemmonitor
+  LIBRARIES ${ECTS_PLUGINS}
   CATKIN_DEPENDS roscpp sensor_msgs std_msgs message_runtime
 #  DEPENDS system_lib
 )
@@ -209,7 +217,7 @@ add_library(ects_plugin_systemmonitor SHARED
         plugins/systemmonitor/programs/ProgramMessages.cpp
 )
 
-set(ECTS_PLUGIN_WAYPOINT_SOURCES
+add_library(ects_plugin_waypoints SHARED
         plugins/waypoint/WaypointManager.cpp
         plugins/waypoint/Waypoint.cpp
         plugins/waypoint/WaypointList.cpp
@@ -217,8 +225,6 @@ set(ECTS_PLUGIN_WAYPOINT_SOURCES
         plugins/waypoint/WaypointListStorage.cpp
         plugins/waypoint/WaypointListFileMessages.cpp
 )
-
-add_library(ects_plugin_waypoints SHARED ${ECTS_PLUGIN_WAYPOINT_SOURCES})
 
 set_target_properties(ects_plugin_core PROPERTIES PUBLIC_HEADER "include/Plugin.hpp")
 add_dependencies(ects_plugin_core ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
@@ -307,11 +313,11 @@ install(TARGETS ${PROJECT_NAME}
 catkin_add_gtest(${PROJECT_NAME}-test
         test/TestEcts.cpp
         test/WaypointListTest.cpp
-        ${ECTS_PLUGIN_WAYPOINT_SOURCES}
         ${ECTS_SOURCES})
 add_dependencies(${PROJECT_NAME}-test ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 if(TARGET ${PROJECT_NAME}-test)
   target_link_libraries(${PROJECT_NAME}-test ${catkin_LIBRARIES} dl)
+  target_link_libraries(${PROJECT_NAME}-test ${ECTS_PLUGINS} dl)
 endif()
 
 ## Add folders to be run by python nosetests
