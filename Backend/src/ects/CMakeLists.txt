@@ -14,6 +14,7 @@ find_package(catkin REQUIRED COMPONENTS
   std_msgs
   spot_msgs
   iosb_localization_filter
+  iosb_nav_msgs
   message_generation
 )
 
@@ -109,6 +110,7 @@ add_service_files(
    sensor_msgs
    spot_msgs
    iosb_localization_filter
+   iosb_nav_msgs
  )
 
 ################################################

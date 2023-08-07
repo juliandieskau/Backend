@@ -4,3 +4,6 @@
 [submodule "tui"]
 	path = tui
 	url = git@git.scc.kit.edu:pse-robot-monitoring/tui.git
+[submodule "Backend/src/iosb_nav_msgs"]
+	path = Backend/src/iosb_nav_msgs
+	url = git@git.scc.kit.edu:pse-robot-monitoring/iosb_msg_types/iosb_nav_msgs.git
