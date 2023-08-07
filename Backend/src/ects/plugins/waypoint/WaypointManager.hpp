@@ -1,4 +1,11 @@
 #pragma once
+/* ECTS - WaypointManager.hpp
+ * This Plugin allows the user to save, load, create and edit waypoint missions,
+ * that can be executed by the robot.
+ *
+ * (c) 2023 - Peter Bohner, Julian Dieskau, Ole Hocker, Kai Erik
+ * Oelbracht, Liam Derk Rembold
+ */
 
 #include "WaypointList.hpp"
 #include "WaypointListFileMessages.hpp"

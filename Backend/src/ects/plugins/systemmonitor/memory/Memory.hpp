@@ -1,4 +1,11 @@
 #pragma once
+/* ECTS - DiskMessages.hpp
+ * The class Memory provides a UsageProvider, which collects Memory and swap
+ * usage, as shown by the `free` command.
+ *
+ * (c) 2023 - Peter Bohner, Julian Dieskau, Ole Hocker, Kai Erik
+ * Oelbracht, Liam Derk Rembold
+ */
 #include "MemoryMessages.hpp"
 
 namespace ects::plugins::systemmonitor {

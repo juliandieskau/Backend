@@ -1,4 +1,10 @@
 #pragma once
+/* ECTS - Usage.hpp
+ * Template type definitions for usage providers.
+ *
+ * (c) 2023 - Peter Bohner, Julian Dieskau, Ole Hocker, Kai Erik
+ * Oelbracht, Liam Derk Rembold
+ */
 
 #include <chrono>
 #include <functional>

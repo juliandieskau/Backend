@@ -1,4 +1,17 @@
 #pragma once
+/* ECTS - Disk.hpp
+ * The class Disk provides a method for returning all mountpoints,
+ * as well as a method for returning the usage of a given mountpoint.
+ * The usage is returned as a DiskUsageMessage, which consists of total and
+ * free space.
+ *
+ * A Mountpoint consists of the filesystem mount-path and the topic name, in
+ * which non alphanumeric characters are removed, such that this name can be
+ * used in a ROS topic path, without confusion.
+ *
+ * (c) 2023 - Peter Bohner, Julian Dieskau, Ole Hocker, Kai Erik
+ * Oelbracht, Liam Derk Rembold
+ */
 #include <utility>
 
 #include "DiskMessages.hpp"

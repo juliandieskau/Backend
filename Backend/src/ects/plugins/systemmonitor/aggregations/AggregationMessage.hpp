@@ -1,5 +1,11 @@
 #pragma once
 
+/* ECTS - AggregationMessage.hpp
+ * Message defintion for the AggregationList service.
+ *
+ * (c) 2023 - Peter Bohner, Julian Dieskau, Ole Hocker, Kai Erik
+ * Oelbracht, Liam Derk Rembold
+ */
 #include "Aggregation.hpp"
 #include "ects/Aggregation.h"
 #include "ects/AggregationList.h"

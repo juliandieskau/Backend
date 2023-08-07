@@ -1,4 +1,10 @@
 #pragma once
+/* ECTS - WaypointListStorage.hpp
+ * This class provides methods to load and save WaypointLists from and to disk.
+ *
+ * (c) 2023 - Peter Bohner, Julian Dieskau, Ole Hocker, Kai Erik
+ * Oelbracht, Liam Derk Rembold
+ */
 
 #include "WaypointList.hpp"
 

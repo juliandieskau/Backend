@@ -1,4 +1,10 @@
 #pragma once
+/* ECTS - WaypointListFileMessages.hpp
+ * Message definitions relating to the saved waypoint lists.
+ *
+ * (c) 2023 - Peter Bohner, Julian Dieskau, Ole Hocker, Kai Erik
+ * Oelbracht, Liam Derk Rembold
+ */
 
 #include "WaypointList.hpp"
 #include "ects/RosInterface.hpp"

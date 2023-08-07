@@ -1,4 +1,11 @@
 #pragma once
+/* ECTS - Waypoint.hpp
+ * Class desribing a waypoint in the waypoint mission of the robot. This
+ * waypoint has more data (a name), than the IOSB waypoint used by the robot.
+ *
+ * (c) 2023 - Peter Bohner, Julian Dieskau, Ole Hocker, Kai Erik
+ * Oelbracht, Liam Derk Rembold
+ */
 
 #include "JsonHelper.hpp"
 #include "ects/Common.hpp"

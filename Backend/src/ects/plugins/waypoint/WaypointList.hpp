@@ -1,4 +1,11 @@
 #pragma once
+/* ECTS - WaypointList.hpp
+ * Message defintion for WaypointList. This class provides methods
+ * to manipulate the list of waypoints.
+ *
+ * (c) 2023 - Peter Bohner, Julian Dieskau, Ole Hocker, Kai Erik
+ * Oelbracht, Liam Derk Rembold
+ */
 
 #include "Waypoint.hpp"
 #include "ects/WaypointList.h"

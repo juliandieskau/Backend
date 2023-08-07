@@ -1,4 +1,17 @@
 #pragma once
+/* ECTS - SystemMontitor.hpp
+ * SystemMonitor is a plugin for ECTS, which provides usage data from:
+ * - CPU
+ * - Memory
+ * - Disk
+ * - Network
+ * - running processes
+ *
+ * as well as configurable aggregations of this data.
+ *
+ * (c) 2023 - Peter Bohner, Julian Dieskau, Ole Hocker, Kai Erik
+ * Oelbracht, Liam Derk Rembold
+ */
 
 #include "ects/ECTS.hpp"
 #include "ects/Plugin.hpp"

@@ -1,4 +1,11 @@
 #pragma once
+/* ECTS - JsonHelper.hpp
+ * Helper functions for json serialization of std::optional and
+ * std::chrono::duration.
+ *
+ * (c) 2023 - Peter Bohner, Julian Dieskau, Ole Hocker, Kai Erik
+ * Oelbracht, Liam Derk Rembold
+ */
 
 #include "nlohmann/json.hpp"
 #include <chrono>

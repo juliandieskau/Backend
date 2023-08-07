@@ -1,4 +1,16 @@
 #pragma once
+/* ECTS - Aggregation.hpp
+ * Aggregations are the mechanism, by which data can be aggregated over time.
+ * The way data is aggregated is defined by the aggregation strategy.
+ * We provide two aggregation strategies:
+ * - ReadingsAggregationStrategy: Aggregates the last n readings
+ *  (e.g. the last 10 measurements)
+ *  - IntervalAggregationStrategy: Aggregates all readings in a given interval
+ *  (e.g. all readings in the last 10 seconds)
+ *
+ * (c) 2023 - Peter Bohner, Julian Dieskau, Ole Hocker, Kai Erik
+ * Oelbracht, Liam Derk Rembold
+ */
 
 #include "../Usage.hpp"
 #include "ects/Aggregation.h"

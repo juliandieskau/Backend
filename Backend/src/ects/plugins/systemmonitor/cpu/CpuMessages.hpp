@@ -1,4 +1,10 @@
 #pragma once
+/* ECTS - CpuMessages.hpp
+ * Message definition for cpu usage.
+ *
+ * (c) 2023 - Peter Bohner, Julian Dieskau, Ole Hocker, Kai Erik
+ * Oelbracht, Liam Derk Rembold
+ */
 #include "../Usage.hpp"
 #include "../aggregations/AggregationMessage.hpp"
 #include "ects/CpuPercentage.h"

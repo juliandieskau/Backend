@@ -1,4 +1,11 @@
 #pragma once
+/* ECTS - UsageMonitor.hpp
+ * The class UsageMonitor is responsible for aggregating and publishing the
+ * data collected by it's UsageProvider.
+ *
+ * (c) 2023 - Peter Bohner, Julian Dieskau, Ole Hocker, Kai Erik
+ * Oelbracht, Liam Derk Rembold
+ */
 
 #include "Usage.hpp"
 #include "aggregations/Aggregation.hpp"

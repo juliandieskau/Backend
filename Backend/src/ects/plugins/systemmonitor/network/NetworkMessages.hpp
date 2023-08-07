@@ -1,4 +1,10 @@
 #pragma once
+/* ECTS - NetworkMessages.hpp
+ * Message definitions for network usage.
+ *
+ * (c) 2023 - Peter Bohner, Julian Dieskau, Ole Hocker, Kai Erik
+ * Oelbracht, Liam Derk Rembold
+ */
 #include "../Usage.hpp"
 #include "../aggregations/AggregationMessage.hpp"
 #include "ects/AdapterList.h"
@@ -22,8 +28,8 @@ class NetworkUsageMessage : public UsageData {
 
     NetworkUsageMessage(uint64_t up_speed, uint64_t down_speed,
                         float wifi_signal_strength)
-        : UsageData(), up_speed(up_speed),
-          down_speed(down_speed), wifi_signal_strength{wifi_signal_strength} {}
+        : UsageData(), up_speed(up_speed), down_speed(down_speed),
+          wifi_signal_strength{wifi_signal_strength} {}
 
     auto operator+(const NetworkUsageMessage &rhs) const
         -> NetworkUsageMessage {

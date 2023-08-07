@@ -1,4 +1,18 @@
 #pragma once
+/* ECTS - Network.hpp
+ * The class Network provides a way to query all available network adapters,
+ * their current usage (given an adapter) as well as information about an
+ * adapter.
+ *
+ * NetworkInfo contains all the information about an adapter, which can not
+ * be aggregated, eg. the ip address.
+ *
+ * NetworkUsage contains the usage of an adapter, which change over time and are
+ * aggregated, such as the upload and download speed.
+ *
+ * (c) 2023 - Peter Bohner, Julian Dieskau, Ole Hocker, Kai Erik
+ * Oelbracht, Liam Derk Rembold
+ */
 #include "NetworkMessages.hpp"
 #include <chrono>
 #include <string>

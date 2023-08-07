@@ -1,4 +1,13 @@
 #pragma once
+/* ECTS - Cpu.hpp
+ * The class CPU provides a UsageProvider, which collects:
+ * - the total CPU usage
+ * - the per core CPU usage
+ * - the load averages
+ *
+ * (c) 2023 - Peter Bohner, Julian Dieskau, Ole Hocker, Kai Erik
+ * Oelbracht, Liam Derk Rembold
+ */
 #include "../Usage.hpp"
 #include "CpuMessages.hpp"
 

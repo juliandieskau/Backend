@@ -1,4 +1,10 @@
 #pragma once
+/* ECTS - WaypointMessages.hpp
+ * Message definitions for querying and modifying the waypoint list.
+ *
+ * (c) 2023 - Peter Bohner, Julian Dieskau, Ole Hocker, Kai Erik
+ * Oelbracht, Liam Derk Rembold
+ */
 
 #include "Waypoint.hpp"
 #include "WaypointList.hpp"
