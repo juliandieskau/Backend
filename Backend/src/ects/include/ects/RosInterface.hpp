@@ -168,18 +168,29 @@ template <client_messages internal_t> struct Client {
 };
 
 template <typename ros_t> struct TopicForwarder {
+    virtual auto transmit_all() -> void {
+        if (value->has_value())
+            ros_publisher.publish(**value);
+    }
+    virtual auto transmit(const std::string &topic_name) -> void {
+        if (ros_publisher.getTopic() == topic_name)
+            transmit_all();
+    }
 
   private:
     TopicForwarder(std::string from_topic, std::string to_topic,
                    ros::NodeHandle handle)
-        : ros_handle(handle),
+        : value(std::make_unique<std::optional<ros_t>>(std::nullopt)),
+          ros_handle(handle),
           ros_publisher(handle.advertise<ros_t>(to_topic, 1000)),
           ros_subscriber(handle.subscribe<ros_t>(
               from_topic, 100,
-              [ros_publisher = this->ros_publisher](
+              [ros_publisher = this->ros_publisher, val = this->value.get()](
                   const typename ros_t::ConstPtr &ros_input) {
                   ros_publisher.publish(*ros_input);
+                  *val = *ros_input;
               })) {}
+    std::unique_ptr<std::optional<ros_t>> value;
     ros::NodeHandle ros_handle;
     ros::Publisher ros_publisher;
     ros::Subscriber ros_subscriber;
