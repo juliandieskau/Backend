@@ -53,7 +53,8 @@ auto Network::get_info(const std::string &adapter) -> NetworkInfoMessage {
         auto ip_result_json = nlohmann::json::parse(ip_result);
 
         link_is_up = ip_result_json[0]["operstate"] == "UP";
-        ip_address = ip_result_json[0]["addr_info"][0]["local"];
+        if (ip_result_json[0]["addr_info"][0]["local"].is_string())
+            ip_address = ip_result_json[0]["addr_info"][0]["local"];
     } catch (const std::exception &e) {
         ROS_ERROR_STREAM("Failed to get ip address for adapter "
                          << adapter << " : " << e.what());
