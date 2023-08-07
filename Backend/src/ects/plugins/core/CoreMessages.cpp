@@ -1,5 +1,4 @@
 #include "CoreMessages.hpp"
-
 #include <utility>
 
 namespace ects::plugins::core {

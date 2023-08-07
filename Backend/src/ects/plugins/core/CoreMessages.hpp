@@ -1,4 +1,10 @@
 #pragma once
+/* ECTS - CoreMessages.hpp
+ * Message definitions used by the core plugin.
+ *
+ * (c) 2023 - Peter Bohner, Julian Dieskau, Ole Hocker, Kai Erik
+ * Oelbracht, Liam Derk Rembold
+ */
 
 #include "ects/EmptyMessage.hpp"
 #include "ects/MessageInterface.hpp"

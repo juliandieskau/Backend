@@ -1,4 +1,10 @@
 #pragma once
+/* ECTS - BatteryMessages.hpp
+ * Messages used by the battery plugin.
+ *
+ * (c) 2023 - Peter Bohner, Julian Dieskau, Ole Hocker, Kai Erik
+ * Oelbracht, Liam Derk Rembold
+ */
 #include "sensor_msgs/BatteryState.h"
 #include "spot_msgs/BatteryStateArray.h"
 #include "std_msgs/Bool.h"
@@ -48,6 +54,7 @@ struct BatteryState {
     double average_voltage;
     std::vector<double> cell_currents;
     std::vector<double> cell_temperatures;
+    static constexpr auto critical_threshold = 0.15;
 };
 
 } // namespace ects::plugins::battery

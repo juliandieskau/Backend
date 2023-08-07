@@ -1,4 +1,12 @@
 #pragma once
+/* ECTS - Timer.hpp
+ * TimerManager provides instances of Timer, which can be used to periodically
+ * invoke void functions. These can be used by plugins to, for example,
+ * periodically collect data.
+ *
+ * (c) 2023 - Peter Bohner, Julian Dieskau, Ole Hocker, Kai Erik
+ * Oelbracht, Liam Derk Rembold
+ */
 #include "ros/ros.h"
 #include <functional>
 #include <memory>
@@ -20,8 +28,6 @@ class Timer {
             }
         };
         ros_timer = ros_handle.createTimer(ros::Duration(interval), callback);
-
-        ROS_INFO_STREAM("Timer created");
         running = true;
     }
 
@@ -36,8 +42,6 @@ class TimerManager {
   public:
     auto create_timer(float interval, std::function<void()> fn)
         -> std::shared_ptr<Timer> {
-        // auto timer = new Timer<F>(interval, fn);
-        // m_timers.push_back(timer);
         return std::make_shared<Timer>(interval, fn);
     }
 };

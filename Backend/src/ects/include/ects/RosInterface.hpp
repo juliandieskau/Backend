@@ -1,4 +1,17 @@
 #pragma once
+/* ECTS - RosInterface.hpp
+ * RosInterface provides the interface Plugins use to interact with ROS, in a
+ * ROS-version-agnostic way. ROS Subscibers, Publishers, Services, Clients and
+ * Forwarders are provided. These objects can be instantiated via the
+ * RosInterface factory class.
+ *
+ * Forwarders, the only ECTS-specific term, are a convenient way to forward ROS
+ * messages from one topic to another, without having to implement a
+ * ECTS-message for the topic's type.
+ *
+ * (c) 2023 - Peter Bohner, Julian Dieskau, Ole Hocker, Kai Erik
+ * Oelbracht, Liam Derk Rembold
+ */
 
 #include "MessageInterface.hpp"
 #include "ros/ros.h"

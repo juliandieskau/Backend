@@ -1,4 +1,9 @@
 #pragma once
+/* ECTS - Common.hpp
+ * This file contains common message types used by multiple ECTS Plugins.
+ * (c) 2023 - Peter Bohner, Julian Dieskau, Ole Hocker, Kai Erik Oelbracht, Liam Derk Rembold
+ */
+
 
 #include "nlohmann/json.hpp"
 #include <geometry_msgs/Pose2D.h>

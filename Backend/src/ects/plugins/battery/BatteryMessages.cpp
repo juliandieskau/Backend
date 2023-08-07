@@ -73,7 +73,9 @@ EstimatedRuntime::to_ros(const EstimatedRuntime &er) {
     return r;
 }
 
-Warning BatteryState::is_critical() { return {charge.charge < 0.15}; }
+Warning BatteryState::is_critical() {
+    return {charge.charge < BatteryState::critical_threshold};
+}
 
 Warning::to_ros_t Warning::to_ros(const Warning &w) {
     Warning::to_ros_t r{};

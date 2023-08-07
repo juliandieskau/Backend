@@ -1,4 +1,13 @@
 #pragma once
+/* ECTS - PluginCore.hpp
+ * The core plugin provides:
+ * - a way to force retransmission of all or a specific topic (retransmit)
+ * - a way to query the status of the robot (EctsStatusService)
+ * - a way to query the name of the robot (robot_name)
+ *
+ * (c) 2023 - Peter Bohner, Julian Dieskau, Ole Hocker, Kai Erik
+ * Oelbracht, Liam Derk Rembold
+ */
 
 #include "CoreMessages.hpp"
 #include "ects/ECTS.hpp"

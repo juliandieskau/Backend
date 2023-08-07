@@ -1,4 +1,13 @@
 #pragma once
+/* ECTS - Position.hpp
+ * The position plugin provides messages with:
+ * - odometry, the current position and orientation of the robot
+ * - the state of the IMU
+ * - the state of the localization filter (eg. GPS fix)
+ *
+ * (c) 2023 - Peter Bohner, Julian Dieskau, Ole Hocker, Kai Erik
+ * Oelbracht, Liam Derk Rembold
+ */
 
 #include "ects/ECTS.hpp"
 #include "ects/Plugin.hpp"

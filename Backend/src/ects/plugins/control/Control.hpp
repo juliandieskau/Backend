@@ -1,4 +1,11 @@
 #pragma once
+/* ECTS - Control.hpp
+ * The control plugin allows the user to control the basic movement of the robot
+ * with a joystick. (by sending Twist messages)
+ *
+ * (c) 2023 - Peter Bohner, Julian Dieskau, Ole Hocker, Kai Erik
+ * Oelbracht, Liam Derk Rembold
+ */
 
 #include "ects/Common.hpp"
 #include "ects/ECTS.hpp"
@@ -20,8 +27,8 @@ class Control : public Plugin {
         Publisher<Twist> control_publisher;
     };
     std::optional<data> data;
-    static constexpr auto command_topic = "/ects/control/cmd";
-    static constexpr auto command_topic_key = "/control/command_topic";
+    static constexpr auto control_topic = "/ects/control/cmd";
+    static constexpr auto control_topic_key = "/control/topic";
 };
 
 } // namespace ects::plugins::control

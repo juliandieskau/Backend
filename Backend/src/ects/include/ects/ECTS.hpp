@@ -1,4 +1,12 @@
 #pragma once
+
+/* ECTS - ECTS.hpp
+ * Extensible Control and Telemetry System 
+ * This file contains the main class, ECTS, which encompasses the entire API exposed to ECTS plugins.
+ *
+ * (c) 2023 - Peter Bohner, Julian Dieskau, Ole Hocker, Kai Erik Oelbracht, Liam Derk Rembold
+ */
+
 #include "ects/Configuration.hpp"
 #include "ects/RosInterface.hpp"
 #include "ects/Timer.hpp"

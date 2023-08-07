@@ -1,4 +1,11 @@
 #pragma once
+/* ECTS - BatteryMonitor.hpp
+ * The battery plugin provides a way to monitor the battery of the robot,
+ * and issue a warning if the battery is critcally low.
+ *
+ * (c) 2023 - Peter Bohner, Julian Dieskau, Ole Hocker, Kai Erik
+ * Oelbracht, Liam Derk Rembold
+ */
 
 #include "BatteryMessages.hpp"
 #include "ects/ECTS.hpp"
