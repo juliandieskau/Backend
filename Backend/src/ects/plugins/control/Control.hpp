@@ -21,7 +21,7 @@ class Control : public Plugin {
     };
     std::optional<data> data;
     static constexpr auto command_topic = "/ects/control/cmd";
-    static constexpr auto command_topic_key = "/control/topic";
+    static constexpr auto command_topic_key = "/control/command_topic";
 };
 
 } // namespace ects::plugins::control
