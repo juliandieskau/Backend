@@ -11,13 +11,13 @@
         ]
     },
     "battery": {
-        "topic": "/spot/status/battery_states"
+        "battery_topic": "/spot/status/battery_states"
     },
     "control": {
-        "topic": "/spot/cmd_vel"
+        "command_topic": "/spot/cmd_vel"
     },
     "waypoints": {
-        "storage_directory": "/workspace/waypoints"
+        "waypointlist_directory": "/workspace/waypoints"
     },
     "systemmonitor": {
         "update_interval": 0.5
