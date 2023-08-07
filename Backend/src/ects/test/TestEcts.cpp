@@ -3,7 +3,8 @@
 #include "ects/PluginLoader.hpp"
 #include "ros/ros.h"
 #include "gtest/gtest.h"
-TEST(EctsCore, loadConfig) {
+
+TEST(EctsCore, config) {
     std::string configFilePath = std::tmpnam(nullptr);
     {
         std::ofstream configFile(configFilePath);
@@ -27,6 +28,17 @@ TEST(EctsCore, loadConfig) {
     ASSERT_ANY_THROW(config->get_value<int>("/nonexistent"))
         << "throw on nonexistent key";
     ASSERT_EQ(config->get_value_or_default<int>("/nonexistent", -11), -11);
+}
+
+TEST(EctsCore, pluginloader) {
+    // NOTE: The core plugin should always be built, so it can be used to test
+    ects::PluginLoader loader;
+    auto res = loader.load("core");
+    ASSERT_NE(res, nullptr);
+    ASSERT_EQ(res->name(), "core");
+
+    res = loader.load("nonexistent");
+    ASSERT_EQ(res, nullptr);
 }
 
 int main(int argc, char **argv) {
