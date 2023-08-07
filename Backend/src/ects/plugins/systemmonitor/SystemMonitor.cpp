@@ -22,11 +22,11 @@ auto make_provider_adapter(std::function<T()> f)
 auto SystemMonitor::init(ECTS &ects) -> void {
     ROS_INFO("Initializing SystemMonitor");
     auto interval = ects.config().get_value_or_default<float>(
-        "/systemmonitor/update_interval", 3.0);
+        SystemMonitor::update_interval_key, 3.0);
 
     auto config_aggregations =
-        ects.config().get_value_or_default<json::array_t>("/aggregations",
-                                                          json::array());
+        ects.config().get_value_or_default<json::array_t>(
+            SystemMonitor::aggregations_key, json::array());
 
     auto aggregations = std::vector<AggregationStrategy *>();
     for (auto &entry : config_aggregations) {

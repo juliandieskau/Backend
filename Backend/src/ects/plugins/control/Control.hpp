@@ -20,7 +20,8 @@ class Control : public Plugin {
         Publisher<Twist> control_publisher;
     };
     std::optional<data> data;
-    static constexpr auto control_topic = "/ects/control/cmd";
+    static constexpr auto command_topic = "/ects/control/cmd";
+    static constexpr auto command_topic_key = "/control/topic";
 };
 
 } // namespace ects::plugins::control

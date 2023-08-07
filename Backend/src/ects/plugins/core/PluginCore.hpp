@@ -22,6 +22,10 @@ class PluginCore : public Plugin {
         Server<EctsStatusService> status_server;
     };
     std::optional<data> data;
+    static constexpr auto retransmit_topic = "/ects/retransmit";
+    static constexpr auto status_topic = "/ects/ects_status";
+    static constexpr auto robot_name_key = "/core/robot_name";
+    static constexpr auto backend_version = "1.0.0";
 };
 
 } // namespace ects::plugins::core

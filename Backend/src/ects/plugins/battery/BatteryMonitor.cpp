@@ -8,7 +8,7 @@ namespace ects::plugins::battery {
 auto BatteryMonitor::init(ECTS &ects) -> void {
     ROS_INFO("Initializing Plugin BatteryMonitor");
     auto robot_battery_topic =
-        ects.config().get_value<std::string>("/battery/battery_topic");
+        ects.config().get_value<std::string>(BatteryMonitor::battery_topic_key);
     data = {
         std::nullopt,
         ects.ros_interface().create_subscriber<BatteryState>(

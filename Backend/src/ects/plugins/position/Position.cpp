@@ -8,16 +8,16 @@ auto Position::init(ECTS &ects) -> void {
     data = {
         ects.ros_interface().create_topic_forwarder<nav_msgs::Odometry>(
             ects.config().get_value_or_default<std::string>(
-                "/position/odometry_topic", default_odometry_topic),
+                Position::odometry_topic_key, default_odometry_topic),
             forward_odometry_topic),
         ects.ros_interface().create_topic_forwarder<sensor_msgs::Imu>(
             ects.config().get_value_or_default<std::string>(
-                "/position/imu_topic", default_imu_topic),
+                Position::imu_topic_key, default_imu_topic),
             forward_imu_topic),
         ects.ros_interface()
             .create_topic_forwarder<iosb_localization_filter::FilterState>(
                 ects.config().get_value_or_default<std::string>(
-                    "/position/status_topic", default_status_topic),
+                    Position::status_topic_key, default_status_topic),
                 forward_status_topic),
     };
 }

@@ -33,6 +33,7 @@ class BatteryMonitor : public Plugin {
     static constexpr auto runtime_topic =
         "/ects/battery/estimated_time_remaining";
     static constexpr auto warning_topic = "/ects/battery/is_critical";
+    static constexpr auto battery_topic_key = "/battery/battery_topic";
 };
 
 } // namespace ects::plugins::battery

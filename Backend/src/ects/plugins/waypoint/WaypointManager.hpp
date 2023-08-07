@@ -59,6 +59,8 @@ class WaypointManager : public Plugin {
         "/ects/waypoints/waypoint_list";
     static constexpr auto waypoint_count_topic_name =
         "/ects/waypoints/number_of_waypoints";
+    static constexpr auto storage_location_key =
+        "/waypoints/waypointlist_directory";
 };
 
 } // namespace ects::plugins::waypoints
