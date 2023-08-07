@@ -1,4 +1,10 @@
 #pragma once
+/* ECTS - ProgramsMessages.hpp
+ * Message definition for the total number of processes.
+ *
+ * (c) 2023 - Peter Bohner, Julian Dieskau, Ole Hocker, Kai Erik
+ * Oelbracht, Liam Derk Rembold
+ */
 
 #include "../Usage.hpp"
 #include "../aggregations/AggregationMessage.hpp"

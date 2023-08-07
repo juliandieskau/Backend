@@ -216,7 +216,7 @@ add_library(ects_plugin_systemmonitor SHARED
         plugins/systemmonitor/disk/DiskMessages.cpp
         plugins/systemmonitor/memory/MemoryMessages.cpp
         plugins/systemmonitor/network/NetworkMessages.cpp
-        plugins/systemmonitor/programs/ProgramMessages.cpp
+        plugins/systemmonitor/programs/ProgramsMessages.cpp
 )
 
 add_library(ects_plugin_waypoints SHARED
