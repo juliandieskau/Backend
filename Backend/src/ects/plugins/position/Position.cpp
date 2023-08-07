@@ -21,4 +21,14 @@ auto Position::init(ECTS &ects) -> void {
                 forward_status_topic),
     };
 }
+auto Position::transmit_all() -> void {
+    data->imu_forwarder.transmit_all();
+    data->odometry_forwarder.transmit_all();
+    data->status_forwarder.transmit_all();
+}
+auto Position::transmit(const std::string &topic_name) -> void {
+    data->imu_forwarder.transmit(topic_name);
+    data->odometry_forwarder.transmit(topic_name);
+    data->status_forwarder.transmit(topic_name);
+}
 } // namespace ects::plugins::position
