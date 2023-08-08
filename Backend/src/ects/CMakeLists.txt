@@ -313,7 +313,7 @@ install(TARGETS ${PROJECT_NAME}
 
 ## Add gtest based cpp test target and link libraries
 catkin_add_gtest(${PROJECT_NAME}-test
-        test/TestEcts.cpp
+        test/EctsTest.cpp
         test/WaypointListTest.cpp
         test/SystemMonitorTest.cpp
         ${ECTS_SOURCES})
