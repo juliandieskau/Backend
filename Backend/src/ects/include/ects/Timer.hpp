@@ -18,6 +18,7 @@ class Timer {
     void start() { running = true; }
     ~Timer() { stop(); }
 
+  private:
     Timer(float interval, std::function<void()> fn)
         : interval(interval), fn(std::move(fn)) {
         ros_handle = ros::NodeHandle();
@@ -30,8 +31,8 @@ class Timer {
         ros_timer = ros_handle.createTimer(ros::Duration(interval), callback);
         running = true;
     }
+    friend class TimerManager;
 
-  private:
     float interval;
     std::function<void()> fn;
     ros::NodeHandle ros_handle;
@@ -42,7 +43,7 @@ class TimerManager {
   public:
     auto create_timer(float interval, std::function<void()> fn)
         -> std::shared_ptr<Timer> {
-        return std::make_shared<Timer>(interval, fn);
+        return std::make_shared<Timer>(Timer(interval, std::move(fn)));
     }
 };
 } // namespace ects
