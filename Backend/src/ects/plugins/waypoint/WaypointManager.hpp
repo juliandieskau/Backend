@@ -7,6 +7,7 @@
  * Oelbracht, Liam Derk Rembold
  */
 
+#include "ExecutionMessages.hpp"
 #include "WaypointList.hpp"
 #include "WaypointListFileMessages.hpp"
 #include "WaypointListStorage.hpp"
@@ -27,12 +28,12 @@ class WaypointManager : public Plugin {
   private:
     auto publish_waypoint_list() -> void;
     auto publish_waypoint_count() -> void;
-
-    using Empty = EmptyMessage<std_msgs::Empty>;
+    auto publish_is_executing() -> void;
 
     struct data {
         WaypointList waypoints;
         WaypointListStorage storage;
+        bool is_executing = false;
         Subscriber<AddWaypointMessage> add_waypoint_subscriber;
         Subscriber<RemoveWaypointMessage> remove_waypoint_subscriber;
         Subscriber<ReplaceWaypointMessage> replace_waypoint_subscriber;
@@ -44,9 +45,11 @@ class WaypointManager : public Plugin {
         Server<WaypointListFileService> load_waypoints_server;
         Publisher<WaypointList> waypoint_list_publisher;
         Publisher<NumberOfWaypointsMessage> waypoint_count_publisher;
-        Subscriber<Empty> start_execution_subscriber;
+        Subscriber<EmptyStartMessage> start_execution_subscriber;
         Publisher<IOSBWaypointList> start_execution_publisher;
-        TopicForwarder<std_msgs::Empty> stop_execution_forwarder;
+        Subscriber<EmptyStopMessage> stop_execution_subscriber;
+        Publisher<EmptyStopMessage> stop_execution_publisher;
+        Publisher<IsExecutingMessage> is_executing_publisher;
         TopicForwarder<std_msgs::UInt32> current_waypoint_forwarder;
     };
     std::optional<data> data;
@@ -85,6 +88,8 @@ class WaypointManager : public Plugin {
         "/ects/waypoints/number_of_waypoints";
     static constexpr auto current_waypoint_topic_name_key =
         "/waypoints/current_waypoint_topic";
+    static constexpr auto is_executing_topic_name =
+        "/ects/waypoints/is_executing";
 };
 
 } // namespace ects::plugins::waypoints
