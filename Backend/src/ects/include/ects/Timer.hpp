@@ -14,30 +14,20 @@
 namespace ects {
 class Timer {
   public:
-    void stop() { running = false; }
-    void start() { running = true; }
+    void stop() { ros_timer.start(); }
+    void start() { ros_timer.stop(); }
     ~Timer() { stop(); }
 
   private:
-    Timer(float interval, std::function<void()> fn)
-        : interval(interval), fn(std::move(fn)) {
-        ros_handle = ros::NodeHandle();
+    Timer(float interval, std::function<void()> fn) : ros_handle() {
         ROS_INFO_STREAM("Creating timer with interval " << interval);
-        auto callback = [this](auto timerEvent) {
-            if (running) {
-                this->fn();
-            }
-        };
+        auto callback = [f = std::move(fn)](auto timer_event) { f(); };
         ros_timer = ros_handle.createTimer(ros::Duration(interval), callback);
-        running = true;
     }
     friend class TimerManager;
 
-    float interval;
-    std::function<void()> fn;
     ros::NodeHandle ros_handle;
     ros::Timer ros_timer;
-    bool running;
 };
 class TimerManager {
   public:
