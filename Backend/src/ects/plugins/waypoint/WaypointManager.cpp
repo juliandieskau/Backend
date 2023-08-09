@@ -36,6 +36,17 @@ void WaypointManager::init(ECTS &ects) {
             waypoint_list_topic_name),
         ects.ros_interface().create_publisher<NumberOfWaypointsMessage>(
             waypoint_count_topic_name),
+        ects.ros_interface().create_subscriber<Empty>(
+            start_execution_topic_name),
+        ects.ros_interface().create_publisher<IOSBWaypointList>(
+            ects.config().get_value<std::string>(start_execution_topic_key)),
+        ects.ros_interface().create_topic_forwarder<std_msgs::Empty>(
+            stop_execution_topic_name, ects.config().get_value<std::string>(
+                                           stop_execution_topic_name_key)),
+        ects.ros_interface().create_topic_forwarder<std_msgs::UInt32>(
+            ects.config().get_value<std::string>(
+                current_waypoint_topic_name_key),
+            current_waypoint_topic_name),
     };
     data->add_waypoint_subscriber.subscribe([this](AddWaypointMessage message) {
         ROS_INFO_STREAM("called add waypoint subscriber");
@@ -104,6 +115,9 @@ void WaypointManager::init(ECTS &ects) {
             transmit_all();
             return {};
         });
+    data->start_execution_subscriber.subscribe([this](Empty) {
+        data->start_execution_publisher.publish(data->waypoints);
+    });
 }
 void WaypointManager::transmit_all() {
     publish_waypoint_list();

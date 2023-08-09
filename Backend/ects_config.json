@@ -17,7 +17,10 @@
         "command_topic": "/spot/cmd_vel"
     },
     "waypoints": {
-        "waypointlist_directory": "/workspace/waypoints"
+        "waypointlist_directory": "/workspace/waypoints",
+        "start_execution_topic": "/planner/start",
+        "stop_execution_topic": "/planner/stop",
+        "current_waypoint_topic": "/planner/current_waypoint"
     },
     "systemmonitor": {
         "update_interval": 0.5

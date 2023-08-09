@@ -94,4 +94,22 @@ auto WaypointList::check_bounds(Index i) -> void {
     }
 }
 
+auto IOSBWaypointList::to_ros(const IOSBWaypointList &list) -> ros_t {
+    ros_t r{};
+    for (const auto &wp : list.waypoints) {
+        iosb_nav_msgs::Waypoint w;
+        auto heading = wp.get_heading().value_or(Heading2d{0, 0});
+        Waypoint::ros_t::_pose_type p;
+        p.x = wp.get_position().get_x();
+        p.y = wp.get_position().get_y();
+        p.theta = heading.get_heading();
+        w.pose = p;
+        w.radius = wp.get_position().get_radius();
+        w.use_heading = wp.get_heading().has_value();
+        w.heading_accuracy = wp.get_heading()->get_accuracy();
+        w.wait_time = wp.get_wait_time().count();
+        r.waypoints.push_back(w);
+    }
+    return r;
+}
 } // namespace ects::plugins::waypoints

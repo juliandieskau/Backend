@@ -6,6 +6,12 @@ namespace ects::plugins::waypoints {
 
 auto Waypoint::get_position() const -> Position2d { return position; }
 auto Waypoint::get_name() const -> std::string { return name; }
+auto Waypoint::get_heading() const -> std::optional<Heading2d> {
+    return heading;
+}
+auto Waypoint::get_wait_time() const -> std::chrono::duration<double> {
+    return wait_time;
+}
 Waypoint Waypoint::from_ros(const Waypoint::ros_t &ros_input) {
     auto wait = std::chrono::duration<double>(ros_input.wait_time);
     std::optional<Heading2d> heading = std::nullopt;

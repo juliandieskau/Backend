@@ -9,6 +9,7 @@
 
 #include "Waypoint.hpp"
 #include "ects/WaypointList.h"
+#include "iosb_nav_msgs/WaypointList.h"
 #include "nlohmann/json.hpp"
 
 #include <vector>
@@ -22,6 +23,15 @@ class Index {
 
   private:
     size_t index;
+};
+
+struct IOSBWaypointList {
+    using ros_t = iosb_nav_msgs::WaypointList;
+    using to_ros_t = ros_t;
+
+    static auto to_ros(const IOSBWaypointList &) -> ros_t;
+
+    std::vector<Waypoint> waypoints;
 };
 
 class WaypointList {
@@ -43,6 +53,7 @@ class WaypointList {
 
     static auto from_ros(const ros_t &) -> WaypointList;
     static auto to_ros(const WaypointList &) -> ros_t;
+    operator IOSBWaypointList() { return {waypoints}; }
     NLOHMANN_DEFINE_TYPE_INTRUSIVE(WaypointList, waypoints, cyclic);
 
   private:

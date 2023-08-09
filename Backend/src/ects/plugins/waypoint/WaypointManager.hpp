@@ -28,6 +28,8 @@ class WaypointManager : public Plugin {
     auto publish_waypoint_list() -> void;
     auto publish_waypoint_count() -> void;
 
+    using Empty = EmptyMessage<std_msgs::Empty>;
+
     struct data {
         WaypointList waypoints;
         WaypointListStorage storage;
@@ -42,6 +44,10 @@ class WaypointManager : public Plugin {
         Server<WaypointListFileService> load_waypoints_server;
         Publisher<WaypointList> waypoint_list_publisher;
         Publisher<NumberOfWaypointsMessage> waypoint_count_publisher;
+        Subscriber<Empty> start_execution_subscriber;
+        Publisher<IOSBWaypointList> start_execution_publisher;
+        TopicForwarder<std_msgs::Empty> stop_execution_forwarder;
+        TopicForwarder<std_msgs::UInt32> current_waypoint_forwarder;
     };
     std::optional<data> data;
     static constexpr auto add_waypoint_topic_name =
@@ -68,6 +74,17 @@ class WaypointManager : public Plugin {
         "/ects/waypoints/number_of_waypoints";
     static constexpr auto storage_location_key =
         "/waypoints/waypointlist_directory";
+    static constexpr auto start_execution_topic_name =
+        "/ects/waypoints/execute";
+    static constexpr auto start_execution_topic_key =
+        "/waypoints/start_execution_topic";
+    static constexpr auto stop_execution_topic_name = "/ects/waypoints/stop";
+    static constexpr auto stop_execution_topic_name_key =
+        "/waypoints/stop_execution_topic";
+    static constexpr auto current_waypoint_topic_name =
+        "/ects/waypoints/number_of_waypoints";
+    static constexpr auto current_waypoint_topic_name_key =
+        "/waypoints/current_waypoint_topic";
 };
 
 } // namespace ects::plugins::waypoints
