@@ -37,7 +37,7 @@ class WaypointList {
     auto reorder_waypoints(std::vector<Index> permutation) -> void;
     auto reverse_waypoints() -> void;
     auto set_repeat(bool) -> void;
-    auto total_length() -> double;
+    auto total_length() const -> double;
     auto size() -> std::size_t;
     auto get_waypoint(Index) -> Waypoint;
 

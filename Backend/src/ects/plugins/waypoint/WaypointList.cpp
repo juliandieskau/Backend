@@ -50,8 +50,19 @@ auto WaypointList::reverse_waypoints() -> void {
     std::reverse(waypoints.begin(), waypoints.end());
 }
 auto WaypointList::set_repeat(bool repeat) -> void { cyclic = repeat; }
-auto WaypointList::total_length() -> double {
-    return 0; // TODO
+auto WaypointList::total_length() const -> double {
+    // NOTE: this assumes all waypoints are in the same UTM zone
+    std::optional<Position2d> prev;
+    double distance = 0;
+    for (auto &w : waypoints) {
+        if (prev.has_value()) {
+            double diff_x = w.get_position().get_x() - prev->get_x();
+            double diff_y = w.get_position().get_y() - prev->get_y();
+            distance += std::sqrt(diff_x * diff_x + diff_y * diff_y);
+        }
+        prev = w.get_position();
+    }
+    return distance;
 }
 auto WaypointList::size() -> std::size_t { return waypoints.size(); }
 auto WaypointList::get_waypoint(Index i) -> Waypoint {
@@ -71,6 +82,7 @@ auto WaypointList::to_ros(const WaypointList &list) -> WaypointList::ros_t {
     r.cyclic = list.cyclic;
     for (const auto &wp : list.waypoints)
         r.waypoints.push_back(Waypoint::to_ros(wp));
+    r.total_length = list.total_length();
     return r;
 }
 auto WaypointList::check_bounds(Index i) -> void {
