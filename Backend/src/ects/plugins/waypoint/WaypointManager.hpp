@@ -85,7 +85,7 @@ class WaypointManager : public Plugin {
     static constexpr auto stop_execution_topic_name_key =
         "/waypoints/stop_execution_topic";
     static constexpr auto current_waypoint_topic_name =
-        "/ects/waypoints/number_of_waypoints";
+        "/ects/waypoints/current_waypoint";
     static constexpr auto current_waypoint_topic_name_key =
         "/waypoints/current_waypoint_topic";
     static constexpr auto is_executing_topic_name =
