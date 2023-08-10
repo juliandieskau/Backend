@@ -1,7 +1,8 @@
 #pragma once
 /* ECTS - EmptyMessage.hpp
- * EmptyMessage is a convenience class for messages that do not contain any data.
- * (c) 2023 - Peter Bohner, Julian Dieskau, Ole Hocker, Kai Erik Oelbracht, Liam Derk Rembold
+ * EmptyMessage is a convenience class for messages that do not contain any
+ * data. (c) 2023 - Peter Bohner, Julian Dieskau, Ole Hocker, Kai Erik
+ * Oelbracht, Liam Derk Rembold
  */
 
 namespace ects {

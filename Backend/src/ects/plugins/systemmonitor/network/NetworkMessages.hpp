@@ -28,8 +28,8 @@ class NetworkUsageMessage : public UsageData {
 
     NetworkUsageMessage(uint64_t up_speed, uint64_t down_speed,
                         float wifi_signal_strength)
-        : UsageData(), up_speed(up_speed), down_speed(down_speed),
-          wifi_signal_strength{wifi_signal_strength} {}
+        : UsageData(), up_speed(up_speed),
+          down_speed(down_speed), wifi_signal_strength{wifi_signal_strength} {}
 
     auto operator+(const NetworkUsageMessage &rhs) const
         -> NetworkUsageMessage {

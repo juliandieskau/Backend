@@ -1,5 +1,5 @@
-#include "ects/Configuration.hpp"
 #include "ects/ECTS.hpp"
+#include "ects/Configuration.hpp"
 #include "ects/PluginLoader.hpp"
 #include "ros/ros.h"
 #include "gtest/gtest.h"

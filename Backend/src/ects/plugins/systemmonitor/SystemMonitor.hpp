@@ -52,7 +52,8 @@ class SystemMonitor : public Plugin {
     };
     std::optional<data> data;
     void publish_network_info();
-    static constexpr auto update_interval_key = "/systemmonitor/update_interval";
+    static constexpr auto update_interval_key =
+        "/systemmonitor/update_interval";
     static constexpr auto aggregations_key = "/aggregations";
 };
 

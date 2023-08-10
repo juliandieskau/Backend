@@ -5,7 +5,8 @@
 namespace ects {
 using plugin_creator = Plugin *(*)();
 
-auto PluginLoader::load(const std::string &plugin_name) -> std::unique_ptr<Plugin> {
+auto PluginLoader::load(const std::string &plugin_name)
+    -> std::unique_ptr<Plugin> {
     auto plugin_so_name = "libects_plugin_" + plugin_name + ".so";
     void *so = dlopen(plugin_so_name.c_str(), RTLD_NOW);
     plugin_creator create_plugin = nullptr;

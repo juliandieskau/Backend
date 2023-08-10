@@ -1,10 +1,12 @@
 #pragma once
 
 /* ECTS - Configuration.hpp
- * The Configuration class provides an API for loading and accessing the json-based configuration of ECTS.
- * Plugins should use this class (provided via the ects->config() method) to retrieve their configuration.
+ * The Configuration class provides an API for loading and accessing the
+ * json-based configuration of ECTS. Plugins should use this class (provided via
+ * the ects->config() method) to retrieve their configuration.
  *
- * (c) 2023 - Peter Bohner, Julian Dieskau, Ole Hocker, Kai Erik Oelbracht, Liam Derk Rembold
+ * (c) 2023 - Peter Bohner, Julian Dieskau, Ole Hocker, Kai Erik Oelbracht, Liam
+ * Derk Rembold
  */
 
 #include "nlohmann/json.hpp"

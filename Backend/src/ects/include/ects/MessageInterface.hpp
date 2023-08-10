@@ -22,13 +22,18 @@ template <typename internal_t> struct client_traits;
 template <typename T>
 concept from_ros_message =
     requires { typename T::from_ros_t; } && requires(T::from_ros_t r) {
-        { T::from_ros(r) } -> std::same_as<T>;
-    };
+                                                {
+                                                    T::from_ros(r)
+                                                    } -> std::same_as<T>;
+                                            };
 
 template <typename T>
-concept to_ros_message = requires { typename T::to_ros_t; } && requires(T t) {
-    { T::to_ros(t) } -> std::same_as<typename T::to_ros_t>;
-};
+concept to_ros_message = requires { typename T::to_ros_t; } &&
+                         requires(T t) {
+                             {
+                                 T::to_ros(t)
+                                 } -> std::same_as<typename T::to_ros_t>;
+                         };
 
 template <typename T>
 concept server_messages =
