@@ -1,14 +1,13 @@
-# ECTS
+# ECTS - Extensible 
 Web UI and TUI are submodules
 
-## Backend
-Setup dev environment
+## Setup development environment
+### Backend
+Just launch the container
 ```bash
 ~$ ./dev.sh
-source /workspace/devel/setup.bash
-source /workspace/devel/local_setup.bash
 ```
-In this context:
+In the container shel:
 launch roscore:
 ```bash
 roscore -v
@@ -17,12 +16,23 @@ Launch rosbridge:
 ```bash
 roslaunch rosbridge_server rosbridge_websocket.launch
 ```
-Finally use:
+Finally use this to build and run the backend:
 ```bash
 catkin_make && rosrun ects ects /workspace/ects_config.json
 ```
+Run Backend Unit Tests:
+```
+catkin_make run_tests
+```
+Run clang-tidy:
+```
+rm -rf build
+catkin_make --cmake-args -DCMAKE_EXPORT_COMPILE_COMMANDS=1
+find -name '*pp' | grep -v nlohmann | grep './src/' | xargs clang-tidy -p build/ -checks='<YOUR CHECKS HERE>' --fix
+```
+On the host, use `./lint.sh` before committing.
 
-### Testing
+## Testing
 Publish a message
 ```
 rostopic pub /ects/retransmit ects/ForceRetransmit '{header: auto, reload_all: false, topic: "/ects/sometopic"}
@@ -30,9 +40,4 @@ rostopic pub /ects/retransmit ects/ForceRetransmit '{header: auto, reload_all: f
 Call a service
 ```
 rosservice call /ects/ects_status
-```
-
-### Run Backend Unit Tests
-```
-catkin_make run_tests
 ```
