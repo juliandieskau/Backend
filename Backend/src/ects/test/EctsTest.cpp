@@ -41,7 +41,7 @@ TEST(EctsCore, pluginloader) {
     ASSERT_EQ(res, nullptr);
 }
 
-int main(int argc, char **argv) {
+auto main(int argc, char **argv) -> int {
     testing::InitGoogleTest(&argc, argv);
     ros::init(argc, argv, "tester");
     ros::NodeHandle nh;

@@ -19,7 +19,7 @@ namespace ects::plugins::waypoints {
 class Index {
   public:
     Index(size_t);
-    size_t get() const;
+    auto get() const -> size_t;
 
   private:
     size_t index;

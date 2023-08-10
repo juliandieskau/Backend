@@ -109,8 +109,10 @@ template <to_ros_message internal_t> struct Publisher {
 
 template <server_messages internal_t> struct Server {
     using ros_t = typename server_traits<internal_t>::ros_t;
-    using request_from_ros = typename server_traits<internal_t>::request_from_ros_t;
-    using response_to_ros = typename server_traits<internal_t>::response_to_ros_t;
+    using request_from_ros =
+        typename server_traits<internal_t>::request_from_ros_t;
+    using response_to_ros =
+        typename server_traits<internal_t>::response_to_ros_t;
 
     void register_service(
         std::function<response_to_ros(request_from_ros)> callback) {
@@ -159,9 +161,10 @@ template <server_messages internal_t> struct Server {
 template <client_messages internal_t> struct Client {
     using ros_t = typename client_traits<internal_t>::ros_t;
     using request_to_ros = typename client_traits<internal_t>::request_to_ros_t;
-    using response_from_ros = typename client_traits<internal_t>::response_from_ros_t;
+    using response_from_ros =
+        typename client_traits<internal_t>::response_from_ros_t;
 
-    response_from_ros call_service(request_to_ros internal_input) {
+    auto call_service(request_to_ros internal_input) -> response_from_ros {
         ros_t srv;
         srv.request = request_to_ros::to_ros(internal_input);
         if (!ros_client.call(srv)) {
@@ -212,32 +215,32 @@ template <typename ros_t> struct TopicForwarder {
 
 struct RosNode {
     template <from_ros_message internal_t>
-    Subscriber<internal_t> create_subscriber(std::string topic_name) {
+    auto create_subscriber(std::string topic_name) -> Subscriber<internal_t> {
         ROS_INFO_STREAM("Creating subscriber for topic " << topic_name);
         return Subscriber<internal_t>(topic_name, ros_handle);
     }
 
     template <to_ros_message internal_t>
-    Publisher<internal_t> create_publisher(std::string topic_name) {
+    auto create_publisher(std::string topic_name) -> Publisher<internal_t> {
         ROS_INFO_STREAM("Creating publisher for topic " << topic_name);
         return Publisher<internal_t>(topic_name, ros_handle);
     }
 
     template <server_messages internal_t>
-    Server<internal_t> create_server(std::string service_name) {
+    auto create_server(std::string service_name) -> Server<internal_t> {
         ROS_INFO_STREAM("Creating server for service " << service_name);
         return Server<internal_t>(service_name, ros_handle);
     }
 
     template <client_messages internal_t>
-    Client<internal_t> create_client(std::string service_name) {
+    auto create_client(std::string service_name) -> Client<internal_t> {
         ROS_INFO_STREAM("Creating client for service " << service_name);
         return Client<internal_t>(service_name, ros_handle);
     }
 
     template <typename ros_t>
-    TopicForwarder<ros_t> create_topic_forwarder(std::string from_topic,
-                                                 std::string to_topic) {
+    auto create_topic_forwarder(std::string from_topic, std::string to_topic)
+        -> TopicForwarder<ros_t> {
         ROS_INFO_STREAM("Creating topic forwarder from " << from_topic << " to "
                                                          << to_topic);
         return TopicForwarder<ros_t>(from_topic, to_topic, ros_handle);

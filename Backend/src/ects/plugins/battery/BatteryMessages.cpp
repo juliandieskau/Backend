@@ -3,7 +3,8 @@
 
 namespace ects::plugins::battery {
 
-BatteryState BatteryState::from_ros(const BatteryState::from_ros_t &ros_input) {
+auto BatteryState::from_ros(const BatteryState::from_ros_t &ros_input)
+    -> BatteryState {
     if (ros_input.battery_states.empty())
         throw std::runtime_error("no batteries in battery state list");
     BatteryState s{};
@@ -26,7 +27,7 @@ BatteryState BatteryState::from_ros(const BatteryState::from_ros_t &ros_input) {
     return s;
 }
 
-BatteryState::to_ros_t BatteryState::to_ros(const BatteryState &s) {
+auto BatteryState::to_ros(const BatteryState &s) -> BatteryState::to_ros_t {
     auto fl = [](auto d) { return static_cast<float>(d); };
     auto nan = std::numeric_limits<float>::quiet_NaN();
     BatteryState::to_ros_t r{};
@@ -54,18 +55,21 @@ BatteryState::to_ros_t BatteryState::to_ros(const BatteryState &s) {
     return r;
 }
 
-ChargePercentage BatteryState::get_charge() { return charge; }
+auto BatteryState::get_charge() -> ChargePercentage { return charge; }
 
-ChargePercentage::to_ros_t ChargePercentage::to_ros(const ChargePercentage &c) {
+auto ChargePercentage::to_ros(const ChargePercentage &c)
+    -> ChargePercentage::to_ros_t {
     ChargePercentage::to_ros_t r{};
     r.data = static_cast<float>(c.charge);
     return r;
 }
 
-EstimatedRuntime BatteryState::get_estimated_runtime() { return runtime; }
+auto BatteryState::get_estimated_runtime() -> EstimatedRuntime {
+    return runtime;
+}
 
-EstimatedRuntime::to_ros_t
-EstimatedRuntime::to_ros(const EstimatedRuntime &er) {
+auto EstimatedRuntime::to_ros(const EstimatedRuntime &er)
+    -> EstimatedRuntime::to_ros_t {
     EstimatedRuntime::to_ros_t r{};
     r.data =
         std::chrono::duration_cast<std::chrono::duration<float>>(er.duration)
@@ -73,11 +77,11 @@ EstimatedRuntime::to_ros(const EstimatedRuntime &er) {
     return r;
 }
 
-Warning BatteryState::is_critical() {
+auto BatteryState::is_critical() -> Warning {
     return {charge.charge < BatteryState::critical_threshold};
 }
 
-Warning::to_ros_t Warning::to_ros(const Warning &w) {
+auto Warning::to_ros(const Warning &w) -> Warning::to_ros_t {
     Warning::to_ros_t r{};
     r.data = w.is_critical;
     return r;

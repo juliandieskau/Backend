@@ -4,8 +4,8 @@
 
 namespace ects::plugins::waypoints {
 
-Waypoint AddWaypointMessage::get_waypoint() { return waypoint; }
-Index AddWaypointMessage::get_index() { return index; }
+auto AddWaypointMessage::get_waypoint() -> Waypoint { return waypoint; }
+auto AddWaypointMessage::get_index() -> Index { return index; }
 auto AddWaypointMessage::from_ros(const AddWaypointMessage::ros_t &ros_input)
     -> AddWaypointMessage {
     return {{ros_input.index}, Waypoint::from_ros(ros_input.waypoint)};

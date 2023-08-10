@@ -6,7 +6,7 @@
 namespace ects::plugins::waypoints {
 
 Index::Index(size_t index) : index(index) {}
-size_t Index::get() const { return index; }
+auto Index::get() const -> size_t { return index; }
 
 auto WaypointList::add_waypoint(Waypoint w, Index i) -> void {
     if (i.get() > size()) {

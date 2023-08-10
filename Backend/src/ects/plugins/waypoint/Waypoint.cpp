@@ -12,7 +12,7 @@ auto Waypoint::get_heading() const -> std::optional<Heading2d> {
 auto Waypoint::get_wait_time() const -> std::chrono::duration<double> {
     return wait_time;
 }
-Waypoint Waypoint::from_ros(const Waypoint::ros_t &ros_input) {
+auto Waypoint::from_ros(const Waypoint::ros_t &ros_input) -> Waypoint {
     auto wait = std::chrono::duration<double>(ros_input.wait_time);
     std::optional<Heading2d> heading = std::nullopt;
     if (ros_input.use_heading)

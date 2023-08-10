@@ -4,14 +4,14 @@ namespace ects::common {
 
 Position2d::Position2d(double x, double y, double radius)
     : x(x), y(y), radius(radius) {}
-double Position2d::get_x() const { return x; }
-double Position2d::get_y() const { return y; }
-double Position2d::get_radius() const { return radius; }
+auto Position2d::get_x() const -> double { return x; }
+auto Position2d::get_y() const -> double { return y; }
+auto Position2d::get_radius() const -> double { return radius; }
 
 Heading2d::Heading2d(double heading, double accuracy)
     : heading(heading), accuracy(accuracy) {}
-double Heading2d::get_heading() const { return heading; }
-double Heading2d::get_accuracy() const { return accuracy; }
+auto Heading2d::get_heading() const -> double { return heading; }
+auto Heading2d::get_accuracy() const -> double { return accuracy; }
 
 auto Twist::from_ros(const Twist::ros_t &ros) -> Twist {
     return {Vector3D::from_ros(ros.linear), Vector3D::from_ros(ros.angular)};

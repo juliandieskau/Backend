@@ -16,9 +16,9 @@ class Position2d {
   public:
     Position2d(double x, double y, double radius);
     Position2d() = default;
-    double get_x() const;
-    double get_y() const;
-    double get_radius() const;
+    auto get_x() const -> double;
+    auto get_y() const -> double;
+    auto get_radius() const -> double;
     NLOHMANN_DEFINE_TYPE_INTRUSIVE(Position2d, x, y, radius);
 
   private:
@@ -31,8 +31,8 @@ class Heading2d {
   public:
     Heading2d(double heading, double accuracy);
     Heading2d() = default;
-    double get_heading() const;
-    double get_accuracy() const;
+    auto get_heading() const -> double;
+    auto get_accuracy() const -> double;
     NLOHMANN_DEFINE_TYPE_INTRUSIVE(Heading2d, heading, accuracy);
 
   private:
