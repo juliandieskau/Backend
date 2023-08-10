@@ -35,7 +35,7 @@ On the host, use `./lint.sh` before committing.
 ## Testing
 Publish a message
 ```
-rostopic pub /ects/retransmit ects/ForceRetransmit '{header: auto, reload_all: false, topic: "/ects/sometopic"}
+rostopic pub /ects/retransmit ects/ForceRetransmit '{header: auto, reload_all: false, topic: "/ects/sometopic"}'
 ```
 Call a service
 ```
