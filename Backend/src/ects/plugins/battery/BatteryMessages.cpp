@@ -41,14 +41,14 @@ BatteryState::to_ros_t BatteryState::to_ros(const BatteryState &s) {
         r.cell_voltage.push_back(nan);
     }
     r.design_capacity = nan;
-    r.location;
+    r.location = "";
     r.percentage = fl(s.charge.charge);
     r.power_supply_health = BatteryState::to_ros_t::POWER_SUPPLY_HEALTH_UNKNOWN;
     r.power_supply_status = BatteryState::to_ros_t::POWER_SUPPLY_STATUS_UNKNOWN;
     r.power_supply_technology =
         BatteryState::to_ros_t::POWER_SUPPLY_TECHNOLOGY_UNKNOWN;
     r.present = true;
-    r.serial_number;
+    r.serial_number = "";
     r.temperature = fl(*std::max_element(s.cell_temperatures.begin(),
                                          s.cell_temperatures.end()));
     return r;

@@ -67,7 +67,7 @@ template <from_ros_message internal_t> struct Subscriber {
         }
         auto internal_callback =
             [=, name = topic_name](
-                const internal_t::from_ros_t::ConstPtr &ros_input) {
+                const typename internal_t::from_ros_t::ConstPtr &ros_input) {
                 auto r = detail::try_conversion<internal_t>(
                     [&] { return internal_t::from_ros(*ros_input); }, name);
                 if (r)
@@ -108,9 +108,9 @@ template <to_ros_message internal_t> struct Publisher {
 };
 
 template <server_messages internal_t> struct Server {
-    using ros_t = server_traits<internal_t>::ros_t;
-    using request_from_ros = server_traits<internal_t>::request_from_ros_t;
-    using response_to_ros = server_traits<internal_t>::response_to_ros_t;
+    using ros_t = typename server_traits<internal_t>::ros_t;
+    using request_from_ros = typename server_traits<internal_t>::request_from_ros_t;
+    using response_to_ros = typename server_traits<internal_t>::response_to_ros_t;
 
     void register_service(
         std::function<response_to_ros(request_from_ros)> callback) {
@@ -119,8 +119,8 @@ template <server_messages internal_t> struct Server {
                       service_name.c_str());
             return;
         }
-        using from_ros_t = request_from_ros::from_ros_t;
-        using to_ros_t = response_to_ros::to_ros_t;
+        using from_ros_t = typename request_from_ros::from_ros_t;
+        using to_ros_t = typename response_to_ros::to_ros_t;
         auto service = [=, name = service_name](from_ros_t &ros_input,
                                                 to_ros_t &ros_output) -> bool {
             auto r = detail::try_conversion<request_from_ros>(
@@ -157,9 +157,9 @@ template <server_messages internal_t> struct Server {
 };
 
 template <client_messages internal_t> struct Client {
-    using ros_t = client_traits<internal_t>::ros_t;
-    using request_to_ros = client_traits<internal_t>::request_to_ros_t;
-    using response_from_ros = client_traits<internal_t>::response_from_ros_t;
+    using ros_t = typename client_traits<internal_t>::ros_t;
+    using request_to_ros = typename client_traits<internal_t>::request_to_ros_t;
+    using response_from_ros = typename client_traits<internal_t>::response_from_ros_t;
 
     response_from_ros call_service(request_to_ros internal_input) {
         ros_t srv;

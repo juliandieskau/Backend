@@ -20,7 +20,7 @@ namespace ects::plugins::systemmonitor {
 
 template <typename T> class UsageDataCollection {
   public:
-    using ros_t = T::history_ros_t;
+    using ros_t = typename T::history_ros_t;
     using to_ros_t = ros_t;
 
     UsageDataCollection(AggregationStrategy *strategy)
