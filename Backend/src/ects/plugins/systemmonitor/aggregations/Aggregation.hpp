@@ -92,6 +92,7 @@ class IntervalAggregationStrategy : public AggregationStrategy {
     std::chrono::duration<float> interval;
 };
 
-auto aggregation_from_json(nlohmann::json &) -> AggregationStrategy *;
+auto aggregation_from_json(nlohmann::json &)
+    -> std::unique_ptr<AggregationStrategy>;
 
 } // namespace ects::plugins::systemmonitor

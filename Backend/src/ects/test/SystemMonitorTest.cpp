@@ -7,6 +7,10 @@
 using json = nlohmann::json;
 using namespace ects::plugins::systemmonitor;
 
+template <typename T, typename P> auto is(P &d) -> bool {
+    return dynamic_cast<T *>(d.get());
+}
+
 TEST(SystemMonitor, aggregations) {
     json aggregation_json = {{{"name", "second"},
                               {"type", "interval"},
@@ -20,24 +24,24 @@ TEST(SystemMonitor, aggregations) {
                               {"type", "readings"},
                               {"keep_count", 100},
                               {"readings", 5}}};
-    auto aggregations = std::vector<AggregationStrategy *>();
+    auto aggregations = std::vector<std::unique_ptr<AggregationStrategy>>();
     for (auto &entry : aggregation_json)
         ASSERT_NO_THROW(aggregations.push_back(aggregation_from_json(entry)));
 
     ASSERT_EQ(aggregations[0]->get_name(), "second");
     ASSERT_EQ(aggregations[0]->get_keep_count(), 60);
-    ASSERT_TRUE(dynamic_cast<IntervalAggregationStrategy *>(aggregations[0]));
-    ASSERT_FALSE(dynamic_cast<ReadingsAggregationStrategy *>(aggregations[0]));
+    ASSERT_TRUE(is<IntervalAggregationStrategy>(aggregations[0]));
+    ASSERT_FALSE(is<ReadingsAggregationStrategy>(aggregations[0]));
     ASSERT_EQ(aggregations[0]->to_ros().interval, 1.0);
 
     ASSERT_EQ(aggregations[1]->get_name(), "minute");
     ASSERT_EQ(aggregations[1]->get_keep_count(), 240);
-    ASSERT_TRUE(dynamic_cast<IntervalAggregationStrategy *>(aggregations[1]));
+    ASSERT_TRUE(is<IntervalAggregationStrategy>(aggregations[1]));
     ASSERT_EQ(aggregations[1]->to_ros().interval, 60.0);
 
     ASSERT_EQ(aggregations[2]->get_name(), "smoothed");
     ASSERT_EQ(aggregations[2]->get_keep_count(), 100);
-    ASSERT_TRUE(dynamic_cast<ReadingsAggregationStrategy *>(aggregations[2]));
+    ASSERT_TRUE(is<ReadingsAggregationStrategy>(aggregations[2]));
     ASSERT_EQ(aggregations[2]->to_ros().nreadings, 5);
 
     struct Usage : UsageData {};

@@ -38,7 +38,7 @@ class SystemMonitor : public Plugin {
   private:
     struct data {
         std::shared_ptr<ects::Timer> timer;
-        std::vector<AggregationStrategy *> aggregations;
+        std::vector<std::unique_ptr<AggregationStrategy>> aggregations;
         Server<AggregationListService> aggregation_list_server;
         UsageDataMonitor<CpuUsageMessage> cpu_monitor;
         Server<MountpointListService> mountpoint_list_server;

@@ -28,9 +28,11 @@ auto SystemMonitor::init(ECTS &ects) -> void {
         ects.config().get_value_or_default<json::array_t>(
             SystemMonitor::aggregations_key, json::array());
 
-    auto aggregations = std::vector<AggregationStrategy *>();
+    auto aggregations = std::vector<std::unique_ptr<AggregationStrategy>>();
+    auto aggregations_ref = std::vector<AggregationStrategy *>();
     for (auto &entry : config_aggregations) {
-        aggregations.push_back(aggregation_from_json(entry));
+        aggregations.push_back(std::move(aggregation_from_json(entry)));
+        aggregations_ref.push_back((--aggregations.end())->get());
     }
 
     // TODO: we could refresh this every once in a while, instead of checking
@@ -41,7 +43,7 @@ auto SystemMonitor::init(ECTS &ects) -> void {
         auto topic_name = "disk/" + mnt.get_topic_name() + "/usage";
         auto data_provider = make_provider_adapter<DiskUsageMessage>(
             [mnt] { return Disk::get_usage(mnt); });
-        disk_monitors.emplace_back(topic_name, aggregations,
+        disk_monitors.emplace_back(topic_name, aggregations_ref,
                                    std::move(data_provider), ects);
     }
 
@@ -53,7 +55,7 @@ auto SystemMonitor::init(ECTS &ects) -> void {
     for (const auto &adapter : net.get_adapters()) {
         auto topic_name = "network/" + adapter + "/";
         network_monitors.emplace_back(
-            topic_name + "usage", aggregations,
+            topic_name + "usage", aggregations_ref,
             make_provider_adapter<NetworkUsageMessage>(
                 [this, adapter] { return data->network.get_usage(adapter); }),
             ects);
@@ -75,27 +77,29 @@ auto SystemMonitor::init(ECTS &ects) -> void {
                 data->program_monitor.step();
                 publish_network_info();
             }),
-        aggregations,
+        std::move(aggregations),
         ects.ros_interface().create_server<AggregationListService>(
             "/ects/system/aggregation"),
-        {"cpu/usage", aggregations, make_provider<Cpu, CpuUsageMessage>(),
+        {"cpu/usage", aggregations_ref, make_provider<Cpu, CpuUsageMessage>(),
          ects},
         ects.ros_interface().create_server<MountpointListService>(
             "/ects/system/disk/mountpoints"),
         std::move(disk_monitors),
-        {"mem/usage", aggregations, make_provider<Memory, MemoryUsageMessage>(),
-         ects},
+        {"mem/usage", aggregations_ref,
+         make_provider<Memory, MemoryUsageMessage>(), ects},
         ects.ros_interface().create_server<NetworkAdapterService>(
             "/ects/system/network/adapters"),
         std::move(network_monitors),
         std::move(network_info_publishers),
-        {"processes/total", aggregations,
+        {"processes/total", aggregations_ref,
          make_provider<Programs, ProcessTotalMessage>(), ects},
         net,
     };
 
     data->aggregation_list_server.register_service(
-        [this](empty_aggregation_list_request) { return data->aggregations; });
+        [aggregations_ref](empty_aggregation_list_request) {
+            return aggregations_ref;
+        });
     data->mountpoint_list_server.register_service(
         [](empty_mountpoint_request) { return Disk::get_mountpoints(); });
     data->adapter_list_server.register_service(
