@@ -63,11 +63,13 @@ class CpuUsageMessage : public UsageData {
                       "different core counts");
             return *this;
         }
-        for (int i = 0; i < _per_core_usage.size(); i++) {
+        added_usages.reserve(_per_core_usage.size());
+        for (size_t i = 0; i < _per_core_usage.size(); i++) {
             added_usages.push_back(_per_core_usage[i] + rhs._per_core_usage[i]);
         }
         std::vector<float> added_loads;
-        for (int i = 0; i < _load_averages.size(); i++) {
+        added_loads.reserve(_load_averages.size());
+        for (size_t i = 0; i < _load_averages.size(); i++) {
             added_loads.push_back(_load_averages[i] + rhs._load_averages[i]);
         }
         return {_total_usage + rhs._total_usage, added_usages, added_loads};

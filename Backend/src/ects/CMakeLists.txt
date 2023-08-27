@@ -3,7 +3,7 @@ include(FetchContent)
 project(ects VERSION 0.0.1 DESCRIPTION "Extensible Control and Telemetry System")
 
 ## Compile as C++11, supported in ROS Kinetic and newer
-add_compile_options(-std=c++2a)
+add_compile_options(-std=c++2a -Wall -Wextra)
 
 ## Find catkin macros and libraries
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)

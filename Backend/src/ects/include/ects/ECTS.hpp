@@ -35,9 +35,9 @@ class ECTS {
     }
 
   private:
-    std::vector<std::unique_ptr<Plugin>> plugins;
     const Configuration &_config;
     RosNode &_ros_interface;
     TimerManager &_timer_manager;
+    std::vector<std::unique_ptr<Plugin>> plugins;
 };
 } // namespace ects
