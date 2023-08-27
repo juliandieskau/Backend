@@ -32,7 +32,7 @@ auto Disk::get_mountpoints() -> MountpointList {
 auto Disk::get_usage(const Mountpoint &mountpoint) -> DiskUsageMessage {
     auto mountpoint_name = mountpoint.get_mountpoint();
     std::filesystem::space_info space = std::filesystem::space(mountpoint_name);
-    return {space.capacity, space.free};
+    return {space.capacity, space.capacity - space.free};
 }
 
 } // namespace ects::plugins::systemmonitor
