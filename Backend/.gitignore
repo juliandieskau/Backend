@@ -4,3 +4,5 @@ install/
 .vscode/
 .idea/
 pse_data.bag
+code_coverage.info
+code_coverage_report/*

@@ -7,7 +7,8 @@ ros-noetic-catkin \
 gdb \
 iproute2 \
 wireless-tools \
-neovim 
+neovim \
+lcov
 
 RUN useradd -m -s /bin/bash -u 1000 user
 RUN echo '. /workspace/devel/setup.bash' >> /home/user/.bashrc
