@@ -1,3 +1,4 @@
+#include "../plugins/battery/BatteryMessages.hpp"
 #include "TestUtil.hpp"
 #include "ects/Configuration.hpp"
 #include "ects/ECTS.hpp"
@@ -128,4 +129,16 @@ TEST(EctsPlugins, battery) {
     recv_battery_critical = false;
     recv_battery_remaining = false;
     test_topic_retransmit("");
+}
+
+TEST(ECTSPlugins, battery_conversion) {
+    // NOTE: correctness of conversion is tested above
+    auto test_array = spot_msgs::BatteryStateArray();
+    ASSERT_THROW(ects::plugins::battery::BatteryState::from_ros(test_array),
+                 std::runtime_error);
+    auto test_state = spot_msgs::BatteryState();
+    test_state.charge_percentage = 0.69;
+    test_array.battery_states.push_back(test_state);
+    ASSERT_NO_THROW(ects::plugins::battery::BatteryState::from_ros(test_array));
+    auto res = ects::plugins::battery::BatteryState::from_ros(test_array);
 }
