@@ -184,11 +184,11 @@ template <client_messages internal_t> struct Client {
 };
 
 template <typename ros_t> struct TopicForwarder {
-    virtual auto transmit_all() -> void {
+    auto transmit_all() -> void {
         if (value->has_value())
             ros_publisher.publish(**value);
     }
-    virtual auto transmit(const std::string &topic_name) -> void {
+    auto transmit(const std::string &topic_name) -> void {
         if (ros_publisher.getTopic() == topic_name)
             transmit_all();
     }
