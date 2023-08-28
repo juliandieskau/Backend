@@ -17,8 +17,9 @@ TEST(EctsCore, config) {
                       "  }\n"
                       "}\n";
     }
-    auto config = ects::Configuration::load_configuration(configFilePath);
-    ASSERT_TRUE(config.has_value());
+    auto config_opt = ects::Configuration::load_configuration(configFilePath);
+    ASSERT_TRUE(config_opt.has_value());
+    auto config = config_opt.value();
     ASSERT_EQ(config->get_value<std::string>("/core/robot_name"), "test_robot");
     ASSERT_EQ(config->get_value_or_default<std::string>("/core/robot_name",
                                                         "default"),
