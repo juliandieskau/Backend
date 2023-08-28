@@ -2,7 +2,7 @@
 
 namespace ects {
 auto Configuration::load_configuration(std::string path)
-    -> std::optional<Configuration> {
+    -> std::optional<Configuration *> {
     json j;
     try {
         std::ifstream i(path);
@@ -12,6 +12,6 @@ auto Configuration::load_configuration(std::string path)
         ROS_ERROR_STREAM(e.what());
         return std::nullopt;
     }
-    return Configuration{j};
+    return new Configuration{j};
 }
 } // namespace ects

@@ -22,7 +22,7 @@ namespace ects {
 class Configuration {
   public:
     static auto load_configuration(std::string path)
-        -> std::optional<Configuration>;
+        -> std::optional<Configuration *>;
 
     template <typename T> auto get_value(const std::string &key) const -> T {
         return config_json.at(json::json_pointer(key)).get<T>();

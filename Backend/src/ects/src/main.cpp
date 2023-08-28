@@ -19,12 +19,13 @@ auto main(int argc, char **argv) -> int {
         return -1;
     }
     ROS_INFO_STREAM("Starting ECTS with config file " << argv[1]);
-    auto config = Configuration::load_configuration(argv[1]);
-    if (!config) {
+    auto config_opt = Configuration::load_configuration(argv[1]);
+    if (!config_opt.has_value()) {
         ROS_FATAL("Can not continue without valid Configuration.");
         return -1;
     }
-    ROS_INFO_STREAM("Running with config" << config->dump());
+    auto config = config_opt.value();
+    ROS_INFO_STREAM("Running with config: " << config->dump());
 
     ros::init(argc, argv, "ects");
     ROS_INFO("Initialized ROS node");
