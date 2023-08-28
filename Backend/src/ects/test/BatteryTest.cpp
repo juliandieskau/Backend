@@ -15,20 +15,21 @@
 #include <chrono>
 #include <thread>
 
-const auto battery_config = "{\n"
-                            "  \"core\": {\n"
-                            "    \"robot_name\": \"battery_test\",\n"
-                            "    \"load_plugins\": [\n"
-                            "      \"battery\"\n"
-                            "    ]\n"
-                            "  },\n"
-                            "  \"battery\": {\n"
-                            "    \"battery_topic\": \"/test/battery_states\"\n"
-                            "  }\n"
-                            "}\n";
+static const auto battery_config =
+    "{\n"
+    "  \"core\": {\n"
+    "    \"robot_name\": \"battery_test\",\n"
+    "    \"load_plugins\": [\n"
+    "      \"battery\"\n"
+    "    ]\n"
+    "  },\n"
+    "  \"battery\": {\n"
+    "    \"battery_topic\": \"/test/battery_states\"\n"
+    "  }\n"
+    "}\n";
 
-auto recv_battery_state = false, recv_battery_percent = false,
-     recv_battery_critical = false, recv_battery_remaining = false;
+static auto recv_battery_state = false, recv_battery_percent = false,
+            recv_battery_critical = false, recv_battery_remaining = false;
 
 TEST(EctsPlugins, battery) {
     auto ects = ects_with_config(battery_config);
@@ -131,7 +132,7 @@ TEST(EctsPlugins, battery) {
     test_topic_retransmit("");
 }
 
-TEST(ECTSPlugins, battery_conversion) {
+TEST(EctsPlugins, battery_conversion) {
     // NOTE: correctness of conversion is tested above
     auto test_array = spot_msgs::BatteryStateArray();
     ASSERT_THROW(ects::plugins::battery::BatteryState::from_ros(test_array),

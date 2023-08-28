@@ -1,4 +1,7 @@
 #pragma once
+#ifndef ECTS_TESTUTIL_HPP
+#define ECTS_TESTUTIL_HPP
+
 #include "ects/ECTS.hpp"
 #include "ects/PluginLoader.hpp"
 #include "ros/duration.h"
@@ -7,7 +10,7 @@
 #include <functional>
 #include <string>
 
-auto ects_with_config(std::string config) -> ects::ECTS {
+static auto ects_with_config(std::string config) -> ects::ECTS {
     std::string configFilePath = std::tmpnam(nullptr);
     {
         std::ofstream configFile(configFilePath);
@@ -25,7 +28,7 @@ auto ects_with_config(std::string config) -> ects::ECTS {
     return ects;
 }
 
-auto spin_predicate(std::function<bool()> predicate, int timeout_ms) -> void {
+static auto spin_predicate(std::function<bool()> predicate, int timeout_ms) -> void {
     auto spin_count = timeout_ms / 10;
     for (int i = 0; i < spin_count; i++) {
         if (predicate()) {
@@ -36,7 +39,7 @@ auto spin_predicate(std::function<bool()> predicate, int timeout_ms) -> void {
     }
 }
 
-auto load_test_plugin(ects::ECTS &ects, std::string plugin_name) -> void{
+static auto load_test_plugin(ects::ECTS &ects, std::string plugin_name) -> void{
     auto plugin_loader = ects::PluginLoader();
     auto plugin = plugin_loader.load(plugin_name);
     ASSERT_NO_THROW(plugin->init(ects));
@@ -44,3 +47,4 @@ auto load_test_plugin(ects::ECTS &ects, std::string plugin_name) -> void{
     ects.add_plugin(std::move(plugin));
 
 }
+#endif
