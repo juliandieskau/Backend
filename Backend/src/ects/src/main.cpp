@@ -14,7 +14,7 @@
 
 using namespace ects;
 auto main(int argc, char **argv) -> int {
-    if (argc < 1) {
+    if (argc < 2) {
         ROS_ERROR_STREAM("Usage: " << argv[0] << " [config-file]");
         return -1;
     }
