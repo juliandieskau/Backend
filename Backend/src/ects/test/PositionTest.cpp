@@ -49,7 +49,6 @@ TEST(EctsPlugins, position) {
     auto sub_odom = nh.subscribe<nav_msgs::Odometry>(
         "/ects/control/position", 0,
         [&](const nav_msgs::Odometry::ConstPtr &msg) {
-            ("got odom");
             recv_odom = true;
             EXPECT_NEAR(msg->pose.pose.position.x, 39.0, 0.01);
         });
