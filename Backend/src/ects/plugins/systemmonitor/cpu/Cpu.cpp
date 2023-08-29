@@ -34,7 +34,11 @@ auto Cpu::get_usage() -> CpuUsageMessage {
             uint64_t totald = total - last_stat.total;
             uint64_t idled = idle - last_stat.idle;
 
-            float usage = (float)((double)(totald - idled) / (double)totald);
+            float usage;
+            if(totald != 0)
+                usage = (float)((double)(totald - idled) / (double)totald);
+            else
+                usage = 0;
 
             last_stats[usage_percentages.size()] = {total, idle, non_idle};
             usage_percentages.push_back(usage);
