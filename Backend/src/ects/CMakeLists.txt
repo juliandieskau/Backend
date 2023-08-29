@@ -318,6 +318,7 @@ catkin_add_gtest(${PROJECT_NAME}-test
         test/SystemMonitorTest.cpp
         test/BatteryTest.cpp
         test/ControlTest.cpp
+        test/PositionTest.cpp
         ${ECTS_SOURCES})
 add_dependencies(${PROJECT_NAME}-test ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 if(TARGET ${PROJECT_NAME}-test)

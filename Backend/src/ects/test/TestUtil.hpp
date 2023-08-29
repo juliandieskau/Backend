@@ -28,7 +28,8 @@ static auto ects_with_config(std::string config) -> ects::ECTS {
     return ects;
 }
 
-static auto spin_predicate(std::function<bool()> predicate, int timeout_ms) -> void {
+static auto spin_predicate(std::function<bool()> predicate, int timeout_ms)
+    -> void {
     auto spin_count = timeout_ms / 10;
     for (int i = 0; i < spin_count; i++) {
         if (predicate()) {
@@ -39,12 +40,12 @@ static auto spin_predicate(std::function<bool()> predicate, int timeout_ms) -> v
     }
 }
 
-static auto load_test_plugin(ects::ECTS &ects, std::string plugin_name) -> void{
+static auto load_test_plugin(ects::ECTS &ects, std::string plugin_name)
+    -> void {
     auto plugin_loader = ects::PluginLoader();
     auto plugin = plugin_loader.load(plugin_name);
     ASSERT_NO_THROW(plugin->init(ects));
     EXPECT_EQ(plugin->name(), plugin_name);
     ects.add_plugin(std::move(plugin));
-
 }
 #endif
