@@ -54,6 +54,12 @@ TEST(SystemMonitor, aggregations) {
     ASSERT_TRUE(is<ReadingsAggregationStrategy>(aggregations[2]));
     ASSERT_EQ(aggregations[2]->to_ros().nreadings, 5);
 
+    json bad_aggregation = {{"name", "minute"},
+                            {"type", "invalid"},
+                            {"keep_count", 240},
+                            {"interval", 60.0}};
+    ASSERT_ANY_THROW(aggregation_from_json(bad_aggregation));
+
     struct Usage : UsageData {};
 
     Usage u1, u2;
@@ -145,69 +151,75 @@ static const auto systemmonitor_config =
     "  ]\n"
     "}\n";
 
-static bool recv_cpu = false, recv_cpu_percent = false, recv_cpu_agg = false;
+static bool recv_cpu = false, recv_cpu_agg = false, recv_agg = false;
 TEST(EctsPlugins, systemmonitor_cpu) {
     auto ects = ects_with_config(systemmonitor_config);
     load_test_plugin(ects, "systemmonitor");
-
     ros::NodeHandle nh;
-    auto cpu_sub = nh.subscribe<ects::CpuUsage>(
-        "/ects/system/cpu/usage", 0, [&](const ects::CpuUsage::ConstPtr &msg) {
-            ROS_INFO("got cpu");
-            EXPECT_GT(msg->total_usage, 0.0);
-            recv_cpu = true;
-        });
-    auto cpu_percent_sub = nh.subscribe<ects::CpuPercentage>(
-        "/ects/system/cpu/percent", 0,
-        [&](const ects::CpuPercentage::ConstPtr &msg) {
-            ROS_INFO("got cpu percent");
-            EXPECT_GT(msg->usage, 0.0);
-            recv_cpu_percent = true;
-        });
-    auto cpu_agg_sub = nh.subscribe<ects::CpuUsageHistory>(
-        "/ects/system/averages/ta/cpu/usage", 0,
-        [&](const ects::CpuUsageHistory::ConstPtr &msg) {
-            ROS_INFO("got cpu agg");
-            if (msg->measurements.size() > 0) {
-                EXPECT_GT(msg->measurements[0].total_usage, 0.0);
-            }
-            EXPECT_EQ(msg->aggregation.ectsname, "ta");
-            recv_cpu_agg = true;
-        });
-    auto recv_all_cpu = [&]() {
-        return recv_cpu && recv_cpu_percent && recv_cpu_agg;
+    auto pub_retransmit =
+        nh.advertise<ects::ForceRetransmit>("/ects/retransmit", 0);
+    auto retransmit_topic = [&](std::string topic) {
+        ects::ForceRetransmit retransmit;
+        retransmit.topic = topic;
+        retransmit.reload_all = topic == "";
+        pub_retransmit.publish(retransmit);
     };
+    {
+        auto cpu_sub = nh.subscribe<ects::CpuUsage>(
+            "/ects/system/cpu/usage", 0,
+            [&](const ects::CpuUsage::ConstPtr &msg) {
+                ROS_INFO("got cpu");
+                EXPECT_GT(msg->total_usage, 0.0);
+                recv_cpu = true;
+            });
+        auto cpu_agg_sub = nh.subscribe<ects::CpuUsageHistory>(
+            "/ects/system/averages/ta/cpu/usage", 0,
+            [&](const ects::CpuUsageHistory::ConstPtr &msg) {
+                ROS_INFO("got cpu agg");
+                if (msg->measurements.size() > 0) {
+                    EXPECT_GT(msg->measurements[0].total_usage, 0.0);
+                }
+                EXPECT_EQ(msg->aggregation.ectsname, "ta");
+                recv_cpu_agg = true;
+            });
+        auto recv_all_cpu = [&]() { return recv_cpu && recv_cpu_agg; };
 
-    spin_predicate(recv_all_cpu, 1000);
-    EXPECT_TRUE(recv_all_cpu());
-    auto reset_recv = [&]() {
-        recv_cpu = false;
-        recv_cpu_percent = false;
-        recv_cpu_agg = false;
-    };
-    reset_recv();
-    spin_predicate(recv_all_cpu, 50);
-    EXPECT_FALSE(recv_all_cpu());
-
-    auto retransmit_topic =
-        [&](std::string topic) {
-            ects::ForceRetransmit retransmit;
-            retransmit.topic = topic;
-            retransmit.reload_all = topic == "";
-            auto pub_retransmit =
-                nh.advertise<ects::ForceRetransmit>("/ects/retransmit", 0);
-            pub_retransmit.publish(retransmit);
+        spin_predicate(recv_all_cpu, 1000);
+        EXPECT_TRUE(recv_all_cpu());
+        auto reset_recv = [&]() {
+            recv_cpu = false;
+            recv_cpu_agg = false;
         };
+        reset_recv();
+        spin_predicate(recv_all_cpu, 50);
+        EXPECT_FALSE(recv_all_cpu());
 
-    reset_recv();
-    retransmit_topic("/ects/system/cpu/usage");
-    retransmit_topic("/ects/system/cpu/percent");
-    retransmit_topic("/ects/system/averages/ta/cpu/usage");
-    spin_predicate(recv_all_cpu, 100);
-    EXPECT_TRUE(recv_all_cpu());
+        reset_recv();
+        ROS_INFO("retransmitting");
+        retransmit_topic("/ects/system/cpu/usage");
+        retransmit_topic("/ects/system/averages/ta/cpu/usage");
+        spin_predicate(recv_all_cpu, 100);
+        EXPECT_TRUE(recv_all_cpu());
 
-    reset_recv();
-    retransmit_topic("");
-    spin_predicate(recv_all_cpu, 100);
-    EXPECT_TRUE(recv_all_cpu());
+        reset_recv();
+        retransmit_topic("");
+        spin_predicate(recv_all_cpu, 100);
+        EXPECT_TRUE(recv_all_cpu());
+    }
+
+    {
+        std::thread call_thread([&]() {
+            ros::NodeHandle nh;
+            auto agg_caller = nh.serviceClient<ects::AggregationList>(
+                "/ects/system/aggregation");
+            auto agg = ects::AggregationList();
+            ASSERT_TRUE(agg_caller.call(agg));
+            recv_agg = true;
+            ASSERT_EQ(agg.response.available_aggregations.size(), 1);
+            ASSERT_EQ(agg.response.available_aggregations[0].ectsname, "ta");
+        });
+        spin_predicate([&]() { return recv_agg; }, 1000);
+        call_thread.join();
+        EXPECT_TRUE(recv_agg);
+    }
 }
