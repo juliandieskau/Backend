@@ -1,6 +1,4 @@
 #pragma once
-#ifndef ECTS_TESTUTIL_HPP
-#define ECTS_TESTUTIL_HPP
 
 #include "ects/ECTS.hpp"
 #include "ects/PluginLoader.hpp"
@@ -69,4 +67,4 @@ static auto load_test_plugin(ects::ECTS &ects, std::string plugin_name)
     EXPECT_EQ(plugin->name(), plugin_name);
     ects.add_plugin(std::move(plugin));
 }
-#endif
+

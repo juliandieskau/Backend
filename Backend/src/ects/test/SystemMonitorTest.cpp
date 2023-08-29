@@ -4,6 +4,11 @@
 #include "../plugins/systemmonitor/memory/Memory.hpp"
 #include "../plugins/systemmonitor/network/Network.hpp"
 #include "../plugins/systemmonitor/programs/Programs.hpp"
+#include "TestUtil.hpp"
+#include "ects/CpuPercentage.h"
+#include "ects/CpuUsage.h"
+#include "ects/ECTS.hpp"
+#include "ects/ForceRetransmit.h"
 #include "gtest/gtest.h"
 #include <chrono>
 #include <nlohmann/json.hpp>
@@ -117,4 +122,92 @@ TEST(SystemMonitor, programs) {
     ASSERT_NO_THROW(programs.get_usage());
     auto usage = programs.get_usage();
     ASSERT_GT(usage.get_total(), 1);
+}
+
+static const auto systemmonitor_config =
+    "{\n"
+    "  \"core\": {\n"
+    "    \"robot_name\": \"systemmon_test\",\n"
+    "    \"load_plugins\": [\n"
+    "      \"systemmonitor\"\n"
+    "    ]\n"
+    "  },\n"
+    "  \"systemmonitor\": {\n"
+    "    \"update_interval\": 0.5\n"
+    "  },\n"
+    "  \"aggregations\": [\n"
+    "    {\n"
+    "      \"name\": \"ta\",\n"
+    "      \"type\": \"readings\",\n"
+    "      \"keep_count\": 2,\n"
+    "      \"readings\": 2\n"
+    "    }\n"
+    "  ]\n"
+    "}\n";
+
+static bool recv_cpu = false, recv_cpu_percent = false, recv_cpu_agg = false;
+TEST(EctsPlugins, systemmonitor_cpu) {
+    auto ects = ects_with_config(systemmonitor_config);
+    load_test_plugin(ects, "systemmonitor");
+
+    ros::NodeHandle nh;
+    auto cpu_sub = nh.subscribe<ects::CpuUsage>(
+        "/ects/system/cpu/usage", 0, [&](const ects::CpuUsage::ConstPtr &msg) {
+            ROS_INFO("got cpu");
+            EXPECT_GT(msg->total_usage, 0.0);
+            recv_cpu = true;
+        });
+    auto cpu_percent_sub = nh.subscribe<ects::CpuPercentage>(
+        "/ects/system/cpu/percent", 0,
+        [&](const ects::CpuPercentage::ConstPtr &msg) {
+            ROS_INFO("got cpu percent");
+            EXPECT_GT(msg->usage, 0.0);
+            recv_cpu_percent = true;
+        });
+    auto cpu_agg_sub = nh.subscribe<ects::CpuUsageHistory>(
+        "/ects/system/averages/ta/cpu/usage", 0,
+        [&](const ects::CpuUsageHistory::ConstPtr &msg) {
+            ROS_INFO("got cpu agg");
+            if (msg->measurements.size() > 0) {
+                EXPECT_GT(msg->measurements[0].total_usage, 0.0);
+            }
+            EXPECT_EQ(msg->aggregation.ectsname, "ta");
+            recv_cpu_agg = true;
+        });
+    auto recv_all_cpu = [&]() {
+        return recv_cpu && recv_cpu_percent && recv_cpu_agg;
+    };
+
+    spin_predicate(recv_all_cpu, 1000);
+    EXPECT_TRUE(recv_all_cpu());
+    auto reset_recv = [&]() {
+        recv_cpu = false;
+        recv_cpu_percent = false;
+        recv_cpu_agg = false;
+    };
+    reset_recv();
+    spin_predicate(recv_all_cpu, 50);
+    EXPECT_FALSE(recv_all_cpu());
+
+    auto retransmit_topic =
+        [&](std::string topic) {
+            ects::ForceRetransmit retransmit;
+            retransmit.topic = topic;
+            retransmit.reload_all = topic == "";
+            auto pub_retransmit =
+                nh.advertise<ects::ForceRetransmit>("/ects/retransmit", 0);
+            pub_retransmit.publish(retransmit);
+        };
+
+    reset_recv();
+    retransmit_topic("/ects/system/cpu/usage");
+    retransmit_topic("/ects/system/cpu/percent");
+    retransmit_topic("/ects/system/averages/ta/cpu/usage");
+    spin_predicate(recv_all_cpu, 100);
+    EXPECT_TRUE(recv_all_cpu());
+
+    reset_recv();
+    retransmit_topic("");
+    spin_predicate(recv_all_cpu, 100);
+    EXPECT_TRUE(recv_all_cpu());
 }
