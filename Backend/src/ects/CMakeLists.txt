@@ -316,6 +316,7 @@ catkin_add_gtest(${PROJECT_NAME}-test
         test/EctsTest.cpp
         test/WaypointListTest.cpp
         test/SystemMonitorTest.cpp
+        test/CoreTest.cpp
         test/BatteryTest.cpp
         test/ControlTest.cpp
         test/PositionTest.cpp

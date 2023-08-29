@@ -41,7 +41,6 @@ TEST(EctsPlugins, battery) {
     auto sub = nh.subscribe<sensor_msgs::BatteryState>(
         "/ects/battery/usage", 0,
         [&](const sensor_msgs::BatteryState::ConstPtr &msg) {
-            ROS_INFO_STREAM("got battery state");
             recv_battery_state = true;
             EXPECT_NEAR(msg->charge, 0.69, 0.01);
             EXPECT_NEAR(msg->voltage, 39.0, 0.01);

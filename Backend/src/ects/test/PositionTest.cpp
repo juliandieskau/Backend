@@ -40,7 +40,6 @@ TEST(EctsPlugins, position) {
     imu.orientation.x = 0.69;
     auto sub_imu = nh.subscribe<sensor_msgs::Imu>(
         "/ects/imu/current", 0, [&](const sensor_msgs::Imu::ConstPtr &msg) {
-            ROS_INFO("got imu");
             recv_imu = true;
             EXPECT_NEAR(msg->orientation.x, 0.69, 0.01);
         });
@@ -50,7 +49,7 @@ TEST(EctsPlugins, position) {
     auto sub_odom = nh.subscribe<nav_msgs::Odometry>(
         "/ects/control/position", 0,
         [&](const nav_msgs::Odometry::ConstPtr &msg) {
-            ROS_INFO("got odom");
+            ("got odom");
             recv_odom = true;
             EXPECT_NEAR(msg->pose.pose.position.x, 39.0, 0.01);
         });
@@ -60,7 +59,6 @@ TEST(EctsPlugins, position) {
     auto sub_status = nh.subscribe<iosb_localization_filter::FilterState>(
         "/ects/control/filter_state", 0,
         [&](const iosb_localization_filter::FilterState::ConstPtr &msg) {
-            ROS_INFO("got status");
             recv_status = true;
             EXPECT_TRUE(msg->gps_active);
         });
