@@ -10,16 +10,37 @@
 #include <functional>
 #include <string>
 
+struct {
+    struct owned_ects {
+        ects::Configuration configuration;
+        ects::RosNode ros_interface;
+        ects::TimerManager timer_manager = {};
+    };
+    std::optional<owned_ects> ects = std::nullopt;
+
+    auto set_config(const ects::Configuration &config) -> void {
+        this->ects = {config, {}, {}};
+    }
+
+    auto get_ects() -> ects::ECTS {
+        if (!ects)
+            throw std::runtime_error("not created yet");
+        return {ects->configuration, ects->ros_interface, ects->timer_manager};
+    }
+
+} global;
+
 static auto ects_with_config(std::string config) -> ects::ECTS {
     std::string configFilePath = std::tmpnam(nullptr);
     {
         std::ofstream configFile(configFilePath);
         configFile << config;
     }
-    auto cfg = ects::Configuration::load_configuration(configFilePath).value();
-    auto ros_interface = new ects::RosNode();
-    auto timer_manager = new ects::TimerManager();
-    auto ects = ects::ECTS(*cfg, *ros_interface, *timer_manager);
+    auto cfg = ects::Configuration::load_configuration(configFilePath);
+    if (!cfg)
+        throw std::runtime_error("invalid test config");
+    global.set_config(*cfg);
+    auto ects = global.get_ects();
 
     auto plugin_loader = ects::PluginLoader();
     auto core_plugin = plugin_loader.load("core");
