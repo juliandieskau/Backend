@@ -1,4 +1,9 @@
 #include "../plugins/systemmonitor/aggregations/Aggregation.hpp"
+#include "../plugins/systemmonitor/cpu/Cpu.hpp"
+#include "../plugins/systemmonitor/disk/Disk.hpp"
+#include "../plugins/systemmonitor/memory/Memory.hpp"
+#include "../plugins/systemmonitor/network/Network.hpp"
+#include "../plugins/systemmonitor/programs/Programs.hpp"
 #include "gtest/gtest.h"
 #include <chrono>
 #include <nlohmann/json.hpp>
@@ -72,4 +77,44 @@ TEST(SystemMonitor, aggregations) {
         ASSERT_FALSE(a3->new_data(&u4));
         ASSERT_TRUE(a3->new_data(&u5));
     }
+}
+
+TEST(SystemMonitor, cpu) {
+    auto cpu = ects::plugins::systemmonitor::Cpu();
+    ASSERT_NO_THROW(cpu.get_usage());
+    ros::WallDuration(0.1).sleep(); // cpu needs two samples to calculate usage
+    auto usage = cpu.get_usage();
+    ASSERT_GE(usage.get_cpu_percentage().get_value(), 0.0);
+}
+
+TEST(SystemMonitor, disk) {
+    auto mountpoints =
+        ects::plugins::systemmonitor::Disk::get_mountpoints().get_mountpoints();
+    ASSERT_FALSE(mountpoints.empty());
+    for (auto &mountpoint : mountpoints) {
+        ASSERT_NO_THROW(
+            ects::plugins::systemmonitor::Disk::get_usage(mountpoint));
+    }
+}
+
+TEST(SystemMonitor, memory) {
+    auto memory = ects::plugins::systemmonitor::Memory();
+    ASSERT_NO_THROW(memory.get_usage());
+}
+
+TEST(SystemMonitor, network) {
+    auto network = ects::plugins::systemmonitor::Network();
+    auto adapters = network.get_adapters();
+    ASSERT_FALSE(adapters.empty());
+    for (auto &adapter : adapters) {
+        ASSERT_NO_THROW(network.get_usage(adapter));
+        ASSERT_NO_THROW(network.get_info(adapter));
+    }
+}
+
+TEST(SystemMonitor, programs) {
+    auto programs = ects::plugins::systemmonitor::Programs();
+    ASSERT_NO_THROW(programs.get_usage());
+    auto usage = programs.get_usage();
+    ASSERT_GT(usage.get_total(), 1);
 }

@@ -31,6 +31,19 @@ TEST(EctsCore, config) {
     ASSERT_EQ(config->get_value_or_default<int>("/nonexistent", -11), -11);
 }
 
+TEST(EctsCore, config_load_error) {
+    auto config_opt = ects::Configuration::load_configuration("/non/existent");
+    ASSERT_FALSE(config_opt.has_value());
+
+    std::string configFilePath = std::tmpnam(nullptr);
+    {
+        std::ofstream configFile(configFilePath);
+        configFile << "invalid json";
+    }
+    config_opt = ects::Configuration::load_configuration(configFilePath);
+    ASSERT_FALSE(config_opt.has_value());
+}
+
 TEST(EctsCore, pluginloader) {
     // NOTE: The core plugin should always be built, so it can be used to test
     ects::PluginLoader loader;
