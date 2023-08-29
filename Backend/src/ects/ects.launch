@@ -1,0 +1,5 @@
+<launch>
+  <arg name="config" doc="path to ects config file" />
+  <include file="$(find rosbridge_server)/launch/rosbridge_websocket.launch" />
+  <node name="ects" pkg="ects" type="ects" args="$(arg config)" />
+</launch>
