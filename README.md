@@ -8,12 +8,14 @@ Just launch the container
 ~$ ./dev.sh
 ```
 In the container shell:
+
 Build and run the backend with roscore and rosbridge:
 ```bash
 catkin_make && roslaunch ects ects.launch config:=/workspace/ects_config.json
 ```
 
 Alternatively as separate commands:
+
 Launch roscore:
 ```bash
 roscore -v
