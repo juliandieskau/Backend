@@ -139,7 +139,7 @@ static const auto systemmonitor_config =
     "    ]\n"
     "  },\n"
     "  \"systemmonitor\": {\n"
-    "    \"update_interval\": 0.5\n"
+    "    \"update_interval\": 0.1\n"
     "  },\n"
     "  \"aggregations\": [\n"
     "    {\n"
@@ -198,12 +198,12 @@ TEST(EctsPlugins, systemmonitor_cpu) {
         ROS_INFO("retransmitting");
         retransmit_topic("/ects/system/cpu/usage");
         retransmit_topic("/ects/system/averages/ta/cpu/usage");
-        spin_predicate(recv_all_cpu, 100);
+        spin_predicate(recv_all_cpu, 50);
         EXPECT_TRUE(recv_all_cpu());
 
         reset_recv();
         retransmit_topic("");
-        spin_predicate(recv_all_cpu, 100);
+        spin_predicate(recv_all_cpu, 50);
         EXPECT_TRUE(recv_all_cpu());
     }
 
