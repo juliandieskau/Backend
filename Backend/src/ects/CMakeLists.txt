@@ -68,7 +68,6 @@ add_message_files(
 
    # systemmonitor
    Aggregation.msg
-   CpuPercentage.msg
    CpuUsage.msg
    CpuUsageHistory.msg
    DiskUsage.msg

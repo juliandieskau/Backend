@@ -7,7 +7,6 @@
  */
 #include "../Usage.hpp"
 #include "../aggregations/AggregationMessage.hpp"
-#include "ects/CpuPercentage.h"
 #include "ects/CpuUsage.h"
 #include "ects/CpuUsageHistory.h"
 
@@ -18,27 +17,6 @@
 #include <vector>
 
 namespace ects::plugins::systemmonitor {
-class CpuPercentageMessage : public UsageData {
-  public:
-    using ros_t = ects::CpuPercentage;
-    using to_ros_t = ros_t;
-
-    static auto to_ros(const CpuPercentageMessage &) -> ros_t;
-    CpuPercentageMessage(float total) : UsageData(), percentage(total) {}
-    auto get_value() const -> float { return percentage; }
-
-    auto operator+(const CpuPercentageMessage &rhs) const
-        -> CpuPercentageMessage {
-        return {percentage + rhs.percentage};
-    }
-    auto operator/(const int &rhs) const -> CpuPercentageMessage {
-        return {percentage / rhs};
-    }
-
-  private:
-    float percentage;
-};
-
 class CpuUsageMessage : public UsageData {
   public:
     using ros_t = ects::CpuUsage;
@@ -52,8 +30,6 @@ class CpuUsageMessage : public UsageData {
         : UsageData(), _total_usage(total),
           _per_core_usage(std::move(per_core)),
           _load_averages(std::move(loads)) {}
-
-    auto get_cpu_percentage() -> CpuPercentageMessage;
 
     auto operator+(const CpuUsageMessage &rhs) const -> CpuUsageMessage {
         std::vector<float> added_usages;

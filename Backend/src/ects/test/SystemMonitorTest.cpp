@@ -96,7 +96,16 @@ TEST(SystemMonitor, cpu) {
     ASSERT_NO_THROW(cpu.get_usage());
     ros::WallDuration(0.1).sleep(); // cpu needs two samples to calculate usage
     auto usage = cpu.get_usage();
-    ASSERT_GE(usage.get_cpu_percentage().get_value(), 0.0);
+    auto CpuUsage = ects::plugins::systemmonitor::CpuUsageMessage::to_ros(usage);
+    ASSERT_GE(CpuUsage.total_usage, 0.0);
+    ASSERT_GT(CpuUsage.per_core_usage.size(), 0);
+    for (auto &core : CpuUsage.per_core_usage) {
+        ASSERT_GE(core, 0.0);
+    }
+    ASSERT_EQ(CpuUsage.load_averages.size(), 3);
+    for (auto &avg : CpuUsage.load_averages) {
+        ASSERT_GE(avg, 0.0);
+    }
 }
 
 TEST(SystemMonitor, disk) {
