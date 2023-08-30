@@ -5,8 +5,11 @@
 #include "../plugins/systemmonitor/network/Network.hpp"
 #include "../plugins/systemmonitor/programs/Programs.hpp"
 #include "TestUtil.hpp"
+#include "ects/AdapterList.h"
+#include "ects/AggregationList.h"
 #include "ects/CpuUsage.h"
 #include "ects/ForceRetransmit.h"
+#include "ects/MountpointList.h"
 #include "gtest/gtest.h"
 #include <chrono>
 #include <nlohmann/json.hpp>
@@ -203,6 +206,64 @@ TEST(EctsPlugins, systemmonitor_cpu) {
         retransmit_topic("");
         spin_predicate(recv_all_cpu, 50);
         EXPECT_TRUE(recv_all_cpu());
+    }
+    {
+        volatile bool recv_mp = false;
+        std::vector<std::string> rosnames;
+        std::thread mountpoints([&]() {
+            ros::NodeHandle nh;
+            auto mountpoint_caller = nh.serviceClient<ects::MountpointList>(
+                "/ects/system/disk/mountpoints");
+            auto mountpoints = ects::MountpointList();
+            ASSERT_TRUE(mountpoint_caller.call(mountpoints));
+            ASSERT_FALSE(mountpoints.response.rosname.empty());
+            recv_mp = true;
+            rosnames = std::vector(mountpoints.response.rosname.begin(),
+                                   mountpoints.response.rosname.end());
+        });
+        spin_predicate([&]() { return recv_mp; }, 1000);
+        mountpoints.join();
+        EXPECT_TRUE(recv_mp);
+        ASSERT_FALSE(rosnames.empty());
+
+        for (auto rn : rosnames) {
+            auto disk_sub = nh.subscribe<ects::DiskUsage>(
+                "/ects/system/disk/" + rn + "/usage", 0,
+                [&](const ects::DiskUsage::ConstPtr &msg) {
+                    ROS_INFO_STREAM("got disk: " << rn);
+                    EXPECT_GT(msg->size_total, 0);
+                    EXPECT_GT(msg->used, 0);
+                    recv_cpu = true;
+                });
+            auto disk_agg_sub = nh.subscribe<ects::DiskUsageHistory>(
+                "/ects/system/averages/ta/disk/" + rn + "/usage", 0,
+                [&](const ects::DiskUsageHistory::ConstPtr &msg) {
+                    ROS_INFO_STREAM("got disk agg: " << rn);
+                    if (!msg->measurements.empty()) {
+                        EXPECT_GT(msg->measurements[0].size_total, 0);
+                        EXPECT_GT(msg->measurements[0].used, 0);
+                    }
+                    EXPECT_EQ(msg->aggregation.ectsname, "ta");
+                    recv_cpu_agg = true;
+                });
+            auto recv_all_disk = [&]() { return recv_cpu && recv_cpu_agg; };
+            spin_predicate(recv_all_disk, 1000);
+            EXPECT_TRUE(recv_all_disk());
+            auto reset_recv = [&]() {
+                recv_cpu = false;
+                recv_cpu_agg = false;
+            };
+            reset_recv();
+            retransmit_topic("/ects/system/disk/" + rn + "/usage");
+            retransmit_topic("/ects/system/averages/ta/disk/" + rn + "/usage");
+            spin_predicate(recv_all_disk, 50);
+            EXPECT_TRUE(recv_all_disk());
+
+            reset_recv();
+            retransmit_topic("");
+            spin_predicate(recv_all_disk, 50);
+            EXPECT_TRUE(recv_all_disk());
+        }
     }
 
     {
