@@ -1,11 +1,12 @@
 #include "../plugins/waypoint/WaypointList.hpp"
+#include "../plugins/waypoint/WaypointListFileMessages.hpp"
 #include "gtest/gtest.h"
 #include <nlohmann/json.hpp>
 
 using json = nlohmann::json;
 using namespace ects::plugins::waypoints;
 
-TEST(WaypointsList, loadConfig) {
+TEST(Waypoints, waypoint_list) {
     json wp = {{"heading", {{"accuracy", 2.0}, {"heading", 0.0}}},
                {"name", "1"},
                {"position", {{"radius", 1.0}, {"x", 49.01515}, {"y", 8.42657}}},
@@ -61,6 +62,12 @@ TEST(WaypointsList, loadConfig) {
     ASSERT_ANY_THROW(w.reorder_waypoints({0, 1, 3}));
     ASSERT_ANY_THROW(w.reorder_waypoints({0, 1}));
 
+    auto wx = WaypointList::from_ros(WaypointList::to_ros(w));
+    ASSERT_EQ(wx.size(), 3);
+    ASSERT_EQ(wx.get_waypoint(0).get_name(), w1.get_name());
+    ASSERT_EQ(wx.get_waypoint(1).get_name(), w3.get_name());
+    ASSERT_EQ(wx.get_waypoint(2).get_name(), w2.get_name());
+
     ASSERT_EQ(w.size(), 3);
     ASSERT_EQ(w.get_waypoint(0).get_name(), w1.get_name());
     ASSERT_EQ(w.get_waypoint(1).get_name(), w3.get_name());
@@ -70,4 +77,13 @@ TEST(WaypointsList, loadConfig) {
     ASSERT_EQ(w.size(), 2);
     ASSERT_EQ(w.get_waypoint(0).get_name(), w1.get_name());
     ASSERT_EQ(w.get_waypoint(1).get_name(), w2.get_name());
+    ASSERT_NEAR(w.total_length(), 0.0, 0.01);
+}
+
+TEST(Waypoints, FileListResponse) {
+    FileListResponse response{"something went wrong"};
+    auto r = FileListResponse::to_ros(response);
+    ASSERT_TRUE(r.filenames.empty());
+    ASSERT_FALSE(r.success);
+    ASSERT_EQ(r.error_message, "something went wrong");
 }

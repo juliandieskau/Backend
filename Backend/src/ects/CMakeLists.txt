@@ -315,6 +315,7 @@ install(TARGETS ${PROJECT_NAME}
 catkin_add_gtest(${PROJECT_NAME}-test
         test/EctsTest.cpp
         test/WaypointListTest.cpp
+        test/WaypointManagerTest.cpp
         test/SystemMonitorTest.cpp
         test/CoreTest.cpp
         test/BatteryTest.cpp
