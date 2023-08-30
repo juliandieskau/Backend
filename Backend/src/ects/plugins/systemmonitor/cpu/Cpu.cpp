@@ -3,8 +3,6 @@
 #include <sstream>
 #include <vector>
 
-#include "ros/ros.h"
-
 namespace ects::plugins::systemmonitor {
 auto Cpu::get_usage() -> CpuUsageMessage {
     // get cpu usage in Linux
@@ -35,7 +33,7 @@ auto Cpu::get_usage() -> CpuUsageMessage {
             uint64_t idled = idle - last_stat.idle;
 
             float usage;
-            if(totald != 0)
+            if (totald != 0)
                 usage = (float)((double)(totald - idled) / (double)totald);
             else
                 usage = 0;

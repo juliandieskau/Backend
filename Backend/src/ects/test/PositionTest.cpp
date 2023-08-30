@@ -1,13 +1,10 @@
-#include "../plugins/battery/BatteryMessages.hpp"
 #include "TestUtil.hpp"
-#include "ects/ECTS.hpp"
 #include "ects/ForceRetransmit.h"
 #include "iosb_localization_filter/FilterState.h"
 #include "nav_msgs/Odometry.h"
 #include "ros/ros.h"
 #include "sensor_msgs/Imu.h"
 #include "gtest/gtest.h"
-#include <chrono>
 #include <thread>
 
 static const auto position_config = "{\n"
@@ -74,10 +71,10 @@ TEST(EctsPlugins, position) {
     auto pub_retransmit =
         nh.advertise<ects::ForceRetransmit>("/ects/retransmit", 0);
 
-    auto test_topic_retransmit = [&](std::string topic) {
+    auto test_topic_retransmit = [&](const std::string &topic) {
         auto retransmit = ects::ForceRetransmit();
         retransmit.topic = topic;
-        retransmit.reload_all = topic == "";
+        retransmit.reload_all = topic.empty();
         pub_retransmit.publish(retransmit);
         spin_predicate(recv_all, 1000);
         EXPECT_TRUE(recv_all());

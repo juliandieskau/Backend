@@ -1,10 +1,8 @@
 #include "TestUtil.hpp"
 #include "ects/Configuration.hpp"
-#include "ects/ECTS.hpp"
 #include "ects/ForceRetransmit.h"
 #include "geometry_msgs/Twist.h"
 #include "gtest/gtest.h"
-#include <chrono>
 #include <thread>
 
 static const auto control_config = "{\n"

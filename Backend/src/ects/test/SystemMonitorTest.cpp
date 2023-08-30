@@ -5,9 +5,7 @@
 #include "../plugins/systemmonitor/network/Network.hpp"
 #include "../plugins/systemmonitor/programs/Programs.hpp"
 #include "TestUtil.hpp"
-#include "ects/CpuPercentage.h"
 #include "ects/CpuUsage.h"
-#include "ects/ECTS.hpp"
 #include "ects/ForceRetransmit.h"
 #include "gtest/gtest.h"
 #include <chrono>
@@ -158,10 +156,10 @@ TEST(EctsPlugins, systemmonitor_cpu) {
     ros::NodeHandle nh;
     auto pub_retransmit =
         nh.advertise<ects::ForceRetransmit>("/ects/retransmit", 0);
-    auto retransmit_topic = [&](std::string topic) {
+    auto retransmit_topic = [&](const std::string &topic) {
         ects::ForceRetransmit retransmit;
         retransmit.topic = topic;
-        retransmit.reload_all = topic == "";
+        retransmit.reload_all = topic.empty();
         pub_retransmit.publish(retransmit);
     };
     {
@@ -176,7 +174,7 @@ TEST(EctsPlugins, systemmonitor_cpu) {
             "/ects/system/averages/ta/cpu/usage", 0,
             [&](const ects::CpuUsageHistory::ConstPtr &msg) {
                 ROS_INFO("got cpu agg");
-                if (msg->measurements.size() > 0) {
+                if (!msg->measurements.empty()) {
                     EXPECT_GT(msg->measurements[0].total_usage, 0.0);
                 }
                 EXPECT_EQ(msg->aggregation.ectsname, "ta");

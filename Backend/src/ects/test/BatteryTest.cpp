@@ -1,7 +1,5 @@
 #include "../plugins/battery/BatteryMessages.hpp"
 #include "TestUtil.hpp"
-#include "ects/Configuration.hpp"
-#include "ects/ECTS.hpp"
 #include "ects/ForceRetransmit.h"
 #include "ects/PluginLoader.hpp"
 #include "ros/duration.h"
@@ -12,8 +10,6 @@
 #include "std_msgs/Float32.h"
 #include "std_msgs/String.h"
 #include "gtest/gtest.h"
-#include <chrono>
-#include <thread>
 
 static const auto battery_config =
     "{\n"
@@ -104,10 +100,10 @@ TEST(EctsPlugins, battery) {
     auto pub_retransmit =
         nh.advertise<ects::ForceRetransmit>("/ects/retransmit", 0);
 
-    auto test_topic_retransmit = [&](std::string topic) {
+    auto test_topic_retransmit = [&](const std::string &topic) {
         auto retransmit = ects::ForceRetransmit();
         retransmit.topic = topic;
-        retransmit.reload_all = topic == "";
+        retransmit.reload_all = topic.empty();
         pub_retransmit.publish(retransmit);
         spin_predicate(recv_all, 1000);
         EXPECT_TRUE(recv_all());

@@ -1,6 +1,5 @@
 #include "TestUtil.hpp"
 #include "ects/Configuration.hpp"
-#include "ects/ECTS.hpp"
 #include "ects/ECTSStatus.h"
 #include "gtest/gtest.h"
 #include <thread>
