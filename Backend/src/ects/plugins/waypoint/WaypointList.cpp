@@ -96,6 +96,8 @@ auto WaypointList::check_bounds(Index i) -> void {
 
 auto IOSBWaypointList::to_ros(const IOSBWaypointList &list) -> ros_t {
     ros_t r{};
+    r.header.stamp = ros::Time::now();
+    r.header.frame_id = "utm";
     for (const auto &wp : list.waypoints) {
         iosb_nav_msgs::Waypoint w;
         auto heading = wp.get_heading().value_or(Heading2d{0, 0});
