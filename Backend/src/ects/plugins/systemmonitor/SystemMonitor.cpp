@@ -79,7 +79,7 @@ auto SystemMonitor::init(ECTS &ects) -> void {
             }),
         std::move(aggregations),
         ects.ros_interface().create_server<AggregationListService>(
-            "/ects/system/aggregation"),
+            "/ects/system/aggregations"),
         {"cpu/usage", aggregations_ref, make_provider<Cpu, CpuUsageMessage>(),
          ects},
         ects.ros_interface().create_server<MountpointListService>(

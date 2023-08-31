@@ -433,7 +433,7 @@ TEST(EctsPlugins, systemmonitor) {
         std::thread call_thread([&]() {
             ros::NodeHandle nh;
             auto agg_caller = nh.serviceClient<ects::AggregationList>(
-                "/ects/system/aggregation");
+                "/ects/system/aggregations");
             auto agg = ects::AggregationList();
             ASSERT_TRUE(agg_caller.call(agg));
             recv_agg = true;
