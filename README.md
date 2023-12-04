@@ -1,5 +1,7 @@
-# ECTS - Extensible 
-Web UI and TUI are submodules
+# ECTS
+University project with 4 other students, contributions to the backend not by myself. <br>
+Project in collaboration together with the Fraunhofer IOSB who gave their permission to make our code public.<br>
+Web UI and TUI are submodules.
 
 ## Setup development environment
 ### Backend
